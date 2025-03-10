@@ -1,0 +1,27 @@
+ 
+ .addtask {
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 2.5em;
+ }
+
+ .divider {
+    border: 0.5px solid #e0e0e0;
+    margin: 0.5em 0;
+ }
+ .addbtn {
+    padding: 0.5em;
+    border: 0.5px solid;
+    font-size: 11px;
+ }
+
+ .componentInput {
+    display: flex;
+
+ }
+
+ .icon_plus {
+    width: 1em;
+    margin-right: 0.5em;
+ }

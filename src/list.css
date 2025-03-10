@@ -1,0 +1,47 @@
+
+
+ul {
+    padding: 0;
+    margin: 2em 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+.list-checked {
+    text-decoration: line-through;
+}
+
+.list-unchecked {
+    text-decoration: none;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin: 5px 0;
+}
+.round-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.round-checkbox input{
+    display: none;
+}
+
+.round-checkbox .checkmark {
+    display: inline-block;
+    text-align: center;
+    width: 1em;
+    height: 1em;
+    margin-right: 5px;
+    background: url("./assets/checkbox-unselected.svg") no-repeat center/contain;
+}
+
+.round-checkbox input:checked + .checkmark {
+    background: url("./assets/checkbox-selected.svg") no-repeat center/contain;
+}
+
