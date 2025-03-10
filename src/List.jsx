@@ -4,35 +4,10 @@ import star_unselected from './assets/star-unselected.svg';
 import star_selected from './assets/star-selected.svg';
 import checkbox_unchecked from './assets/checkbox-unselected.svg';
 import checkbox_checked from './assets/checkbox-selected.svg';
-import ItemData from './ItemData';
+import ItemData, { ItemDataList } from './ItemData';
 
 
-function List({list, taskchange}) {
-  
-    function handleChange(id) {
-        // console.log(`item with id ${id} was ${checked ? 'checked' : 'unchecked'}`);
-        
-        const newlist = list.map((item) => {
-            if (item.id === id) {
-                item.setChecked(!item.checked);
-            }
-            return item;
-        });
-        taskchange(newlist);
-    }
-
-    function handleLiftUp(id) { 
-        console.log(`item with id ${id} was lifted up`);
-
-        const newlist = list.map((item) => {
-            if (item.id === id) {
-                item.setImportant(!item.important);
-            }
-            return item;
-        });
-        taskchange(newlist);
-        
-    }
+function List({list, taskchange, handleLiftUp}) {
 
   return (
     <div className='container'>
@@ -40,7 +15,7 @@ function List({list, taskchange}) {
         {list.map((item) => 
           <li className={item.checked ? 'list-checked' : 'list-unchecked'}
           key={item.id}>
-            <ListItem item={item} handleChange_={handleChange} handleLiftUp_={handleLiftUp} />
+            <ListItem item={item} handleChange_={taskchange} handleLiftUp_={handleLiftUp} />
             </li>
         )}
       </ul>
