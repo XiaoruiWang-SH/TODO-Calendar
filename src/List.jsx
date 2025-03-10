@@ -13,6 +13,7 @@ function List({list, completeList, taskchange, handleLiftUp}) {
 
   return (
     <div className='container'>
+    {list.length == 0 ? <></> : 
       <ul className='list-area'>
         {list.map((item) => 
           <li className={item.checked ? 'list-checked' : 'list-unchecked'}
@@ -21,7 +22,11 @@ function List({list, completeList, taskchange, handleLiftUp}) {
             </li>
         )}
       </ul>
-      <ComponentComplete completeList={completeList} taskchange={taskchange} />
+       }
+      {completeList.length == 0 ? 
+      <></>
+      :
+      <ComponentComplete completeList={completeList} taskchange={taskchange} />}
     </div>
   );
 
@@ -69,9 +74,16 @@ function LiftUPBtn({important, handleLiftUp}) {
 
 
 function ComponentComplete({completeList, taskchange}) {
+    const [hiden, setHiden] = useState(true);
+
+    function listShowClick(){
+        setHiden(!hiden);
+    }
+
     return (
         <div className='container-complete'>
-            <ComponentCompleteHeader num={completeList.length}/>
+            <ComponentCompleteHeader num={completeList.length} hiden={hiden} listShowClick={listShowClick}/>
+            {hiden ? <></> : 
             <ul className='list-area'>
                 {completeList.map((item) => 
                 <li className={item.checked ? 'list-checked' : 'list-unchecked'}
@@ -79,16 +91,16 @@ function ComponentComplete({completeList, taskchange}) {
                     <ListItem item={item} handleChange_={taskchange} handleLiftUp_={null} />
                     </li>
                 )}
-            </ul>
+            </ul>}
         </div>
     );
 }
 
-function ComponentCompleteHeader({num}) {
+function ComponentCompleteHeader({num, hiden, listShowClick}) {
     return (
-        <div className='container-complete-header'>
+        <div className='container-complete-header' onClick={listShowClick}>
             <div className='arrow-icon'>
-                <img src={arrow_down} className='icon_checkbox' alt='icon_checkbox' />
+                <img src={hiden ? arrow_up : arrow_down} className='icon_checkbox' alt='icon_checkbox' />
             </div>
             <div>Completed</div>
              <div className='container-complete-header-num'>{num}</div>
