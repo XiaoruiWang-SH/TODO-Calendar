@@ -1,5 +1,13 @@
 
 
+.list-area {
+    background-color: white;
+     padding: 1em;
+     border: 0.5px solid #e0e0e0;
+     border-radius: 0.5em;
+     margin: 1em 0;
+  }
+
 ul {
     padding: 0;
     margin: 2em 0;
@@ -53,4 +61,20 @@ li {
     width: 1.4em;
     height: 1.4em;
 }
+.container-complete-header {
+    display: flex;
+    align-items: center;
+}
 
+.arrow-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.container-complete-header-num {
+    margin-left: 10px;
+    color: grey
+}

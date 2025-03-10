@@ -5,13 +5,15 @@ import star_selected from './assets/star-selected.svg';
 import checkbox_unchecked from './assets/checkbox-unselected.svg';
 import checkbox_checked from './assets/checkbox-selected.svg';
 import ItemData, { ItemDataList } from './ItemData';
+import arrow_up from './assets/arrow_up.svg';
+import arrow_down from './assets/arrow_down.svg';
 
 
 function List({list, completeList, taskchange, handleLiftUp}) {
 
   return (
     <div className='container'>
-      <ul>
+      <ul className='list-area'>
         {list.map((item) => 
           <li className={item.checked ? 'list-checked' : 'list-unchecked'}
           key={item.id}>
@@ -70,7 +72,7 @@ function ComponentComplete({completeList, taskchange}) {
     return (
         <div className='container-complete'>
             <ComponentCompleteHeader num={completeList.length}/>
-            <ul>
+            <ul className='list-area'>
                 {completeList.map((item) => 
                 <li className={item.checked ? 'list-checked' : 'list-unchecked'}
                 key={item.id}>
@@ -85,7 +87,11 @@ function ComponentComplete({completeList, taskchange}) {
 function ComponentCompleteHeader({num}) {
     return (
         <div className='container-complete-header'>
-            <span>Completed</span> <span>{num}</span>
+            <div className='arrow-icon'>
+                <img src={arrow_down} className='icon_checkbox' alt='icon_checkbox' />
+            </div>
+            <div>Completed</div>
+             <div className='container-complete-header-num'>{num}</div>
         </div>
     );
 }

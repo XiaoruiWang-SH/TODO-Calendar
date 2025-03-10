@@ -26,11 +26,11 @@ function Input({addtask}) {
       }
 
     return (
-    <>
+    <div className='input-area'>
         <ComponentInput task={task} handleInputChange={handleInputChange} handleKeyDown={handleKeyDown}/>
         <hr className='divider' />
         <button className='addbtn' onClick={addTask_}>Add to</button>
-    </>
+    </div>
     );
 }
 

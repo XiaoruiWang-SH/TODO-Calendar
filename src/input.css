@@ -1,4 +1,12 @@
  
+ .input-area {
+   background-color: white;
+    padding: 1em;
+    border: 0.5px solid #e0e0e0;
+    border-radius: 0.5em;
+    margin: 1em 0;
+ }
+
  .addtask {
     border: none;
     outline: none;
