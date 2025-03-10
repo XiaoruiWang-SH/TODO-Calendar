@@ -20,28 +20,37 @@ li {
 .list-item {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 16px;
     margin: 5px 0;
+    height: 40px;
+    border-bottom: solid 0.5px #ccc;
 }
+.list-item span {
+    display: inline-block;
+    width: 400px;
+    margin: 0 8px;
+}
+
 .round-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.round-checkbox img {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.liftup-btn {
+    width: 50px;
+    height: 100%;
     display: flex;
     align-items: center;
 }
 
-.round-checkbox input{
-    display: none;
-}
-
-.round-checkbox .checkmark {
-    display: inline-block;
-    text-align: center;
-    width: 1em;
-    height: 1em;
-    margin-right: 5px;
-    background: url("./assets/checkbox-unselected.svg") no-repeat center/contain;
-}
-
-.round-checkbox input:checked + .checkmark {
-    background: url("./assets/checkbox-selected.svg") no-repeat center/contain;
+.liftup-btn img {
+    width: 1.4em;
+    height: 1.4em;
 }
 

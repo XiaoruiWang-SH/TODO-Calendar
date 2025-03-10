@@ -2,6 +2,7 @@ import { useState } from 'react';
 import List from './List';
 import Input from './Input';
 import './container.css';
+import ItemData from './ItemData';
 
 let taskid = 0;
 
@@ -16,7 +17,7 @@ function Container() {
     function addTask(task) {
         console.log(`add task ${task}`);
         taskid++;
-        const newlist = [...list, {id: taskid, name: task, checked: false}];
+        const newlist = [...list, new ItemData(taskid, task, false, false, new Date(), null)];
         setList(newlist);
     }
 
