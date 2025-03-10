@@ -37,10 +37,13 @@ export class ItemDataList {
     constructor() {
         this.importantMap = new Map();
         this.normalMap = new Map();
+        this.completeMap = new Map();
     }
 
     addTask(itemData) {
-        if (itemData.important) {
+        if (itemData.checked) {
+            this.completeMap = new Map([[itemData.id, itemData], ...this.completeMap])
+        } else if(itemData.important) {
             this.importantMap = new Map([[itemData.id, itemData], ...this.importantMap])
         } else {
             this.normalMap = new Map([[itemData.id, itemData], ...this.normalMap])
@@ -48,26 +51,34 @@ export class ItemDataList {
     }
 
     hasTask(id) {
-        return this.importantMap.has(id) || this.normalMap.has(id);
+        return this.importantMap.has(id) || this.normalMap.has(id) || this.completeMap.has(id);
     }
      
     findTask(id) {
         if (this.importantMap.has(id)) {
             return this.importantMap.get(id);
-        } else {
+        } else if (this.normalMap.has(id)) {
             return this.normalMap.get(id);
+        } else {
+            return this.completeMap.get(id);
         }
     }
 
     removeTask(id) {
         if (this.importantMap.has(id)) {
             this.importantMap.delete(id);
-        } else {
+        } else if (this.normalMap.has(id)){
             this.normalMap.delete(id);
+        } else {
+            this.completeMap.delete(id);
         }
     }
 
     getList() {
         return [...this.importantMap.values(), ...this.normalMap.values()];
+    }
+
+    getCompleteList() {
+        return [...this.completeMap.values()];
     }
 };

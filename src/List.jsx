@@ -7,7 +7,7 @@ import checkbox_checked from './assets/checkbox-selected.svg';
 import ItemData, { ItemDataList } from './ItemData';
 
 
-function List({list, taskchange, handleLiftUp}) {
+function List({list, completeList, taskchange, handleLiftUp}) {
 
   return (
     <div className='container'>
@@ -19,6 +19,7 @@ function List({list, taskchange, handleLiftUp}) {
             </li>
         )}
       </ul>
+      <ComponentComplete completeList={completeList} taskchange={taskchange} />
     </div>
   );
 
@@ -60,6 +61,31 @@ function LiftUPBtn({important, handleLiftUp}) {
     return (
         <div className='liftup-btn' onClick={handleLiftUp}> 
             <img src={important ? star_selected : star_unselected} className='icon_liftup' alt='icon_liftup' />
+        </div>
+    );
+}
+
+
+function ComponentComplete({completeList, taskchange}) {
+    return (
+        <div className='container-complete'>
+            <ComponentCompleteHeader num={completeList.length}/>
+            <ul>
+                {completeList.map((item) => 
+                <li className={item.checked ? 'list-checked' : 'list-unchecked'}
+                key={item.id}>
+                    <ListItem item={item} handleChange_={taskchange} handleLiftUp_={null} />
+                    </li>
+                )}
+            </ul>
+        </div>
+    );
+}
+
+function ComponentCompleteHeader({num}) {
+    return (
+        <div className='container-complete-header'>
+            <span>Completed</span> <span>{num}</span>
         </div>
     );
 }

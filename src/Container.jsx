@@ -11,6 +11,7 @@ const itemDataList = new ItemDataList();
 function Container() {
 
     const [list, setList] = useState([]);
+    const [completeList, setCompleteList] = useState([]);
 
     function taskchange(id) {
         if (!itemDataList.hasTask(id)) {
@@ -22,6 +23,7 @@ function Container() {
         itemDataList.addTask(newItem);
         
         setList(itemDataList.getList());
+        setCompleteList(itemDataList.getCompleteList());
     }
 
     function handleLiftUp(id) { 
@@ -37,6 +39,7 @@ function Container() {
         itemDataList.addTask(newItem);
         
         setList(itemDataList.getList());
+        setCompleteList(itemDataList.getCompleteList());
         
     }
 
@@ -51,7 +54,7 @@ function Container() {
     return (
         <div className='container'>
             <Input addtask={addTask} />
-            <List list={list} taskchange={taskchange} handleLiftUp={handleLiftUp} />
+            <List list={list} completeList={completeList} taskchange={taskchange} handleLiftUp={handleLiftUp} />
         </div>
     );
 }
