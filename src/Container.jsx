@@ -23,15 +23,21 @@ export default function Container() {
                 task: item
             });
         } else {
-            normalDispatch({
-                type: 'add',
-                task: item
-            });
             completedDispatch({
                 type: 'undo',
                 id: item.id
             });
-            handleImportanceChange(item);
+            if (item.important) {
+                normalDispatch({
+                    type: 'addtotop',
+                    task: item
+                });
+            } else {
+                normalDispatch({
+                    type: 'add',
+                    task: item
+                });
+            }
         }
     }
 
@@ -52,11 +58,18 @@ export default function Container() {
     function addTask(task) {
         console.log(`add task ${task}`);
         taskid++;
-
-        normalDispatch({
-            type: 'add',
-            task: new ItemData(taskid, task, false, false, new Date(), null)
-        });
+        const newItem = new ItemData(taskid, task, false, false, new Date(), null);
+        if (newItem.important) {
+            normalDispatch({
+                type: 'addtotop',
+                task: newItem
+            });
+        } else {
+            normalDispatch({
+                type: 'add',
+                task: newItem
+            });
+        }
     }
 
     return (
@@ -72,6 +85,12 @@ export default function Container() {
 export function normalTasksReducer(tasks, action){
     switch (action.type) {
         case 'add': {
+            return [
+                ...tasks,
+                action.task
+            ];
+        }
+        case 'addtotop': {
             return [
                 action.task,
                 ...tasks
