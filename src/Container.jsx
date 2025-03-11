@@ -31,6 +31,7 @@ export default function Container() {
                 type: 'undo',
                 id: item.id
             });
+            handleImportanceChange(item);
         }
     }
 
