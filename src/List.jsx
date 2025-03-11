@@ -4,21 +4,19 @@ import star_unselected from './assets/star-unselected.svg';
 import star_selected from './assets/star-selected.svg';
 import checkbox_unchecked from './assets/checkbox-unselected.svg';
 import checkbox_checked from './assets/checkbox-selected.svg';
-import ItemData, { ItemDataList } from './ItemData';
 import arrow_up from './assets/arrow_up.svg';
 import arrow_down from './assets/arrow_down.svg';
 
 
-function List({list, completeList, taskchange, handleLiftUp}) {
+function List({list, completeList, taskchange, handleImportanceChange}) {
 
   return (
     <div className='container'>
     {list.length == 0 ? <></> : 
       <ul className='list-area'>
         {list.map((item) => 
-          <li className={item.checked ? 'list-checked' : 'list-unchecked'}
-          key={item.id}>
-            <ListItem item={item} handleChange_={taskchange} handleLiftUp_={handleLiftUp} />
+          <li className={item.checked ? 'list-checked' : 'list-unchecked'} key={item.id}>
+            <ListItem item={item} handleChange_={taskchange} handleImportanceChange_={handleImportanceChange} />
             </li>
         )}
       </ul>
@@ -33,15 +31,17 @@ function List({list, completeList, taskchange, handleLiftUp}) {
 }
 
 
-function ListItem({item, handleChange_, handleLiftUp_}) {
+function ListItem({item, handleChange_, handleImportanceChange_}) {
 
     function handleChange(e) {
-        handleChange_(item.id);
+        item.setChecked(!item.checked);
+        handleChange_(item);
         e.stopPropagation();
     }
 
     function handleLiftUp(e) {
-        handleLiftUp_(item.id);
+        item.setImportant(!item.important);
+        handleImportanceChange_(item);
         e.stopPropagation();
     }
 

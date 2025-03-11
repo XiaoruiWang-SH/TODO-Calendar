@@ -1,64 +1,115 @@
 import { useState } from 'react';
+import { useReducer } from 'react';
 import List from './List';
 import Input from './Input';
 import './container.css';
-import ItemData, { ItemDataList } from './ItemData';
+import ItemData from './ItemData';
 
 
-let taskid = 0;
-const itemDataList = new ItemDataList();
+export default function Container() {
 
-function Container() {
+    const [normalTasks, normalDispatch] = useReducer(normalTasksReducer, normalInitialTasks);
+    const [completedTasks, completedDispatch] = useReducer(completeTasksReducer, completedInitialTasks);
 
-    const [list, setList] = useState([]);
-    const [completeList, setCompleteList] = useState([]);
+    function taskchange(item) {
+        if (item.checked) {
+            normalDispatch({
+                type: 'complete',
+                task: item
+            });
 
-    function taskchange(id) {
-        if (!itemDataList.hasTask(id)) {
-            return;
+            completedDispatch({
+                type: 'add',
+                task: item
+            });
+        } else {
+            normalDispatch({
+                type: 'add',
+                task: item
+            });
+            completedDispatch({
+                type: 'undo',
+                id: item.id
+            });
         }
-        const newItem = itemDataList.findTask(id);
-        newItem.setChecked(!newItem.checked);
-        itemDataList.removeTask(id);
-        itemDataList.addTask(newItem);
-        
-        setList(itemDataList.getList());
-        setCompleteList(itemDataList.getCompleteList());
     }
 
-    function handleLiftUp(id) { 
-        console.log(`item with id ${id} was lifted up`);
-        if (!itemDataList.hasTask(id)) {
-            return;
+    function handleImportanceChange(item) { 
+        if (item.important) {
+            normalDispatch({
+                type: 'liftup',
+                task: item
+            });
+        } else {
+            normalDispatch({
+                type: 'liftdown',
+                task: item
+            });
         }
-
-        const newItem = itemDataList.findTask(id);
-        // newItem.setChecked(!newItem.checked);
-        newItem.setImportant(!newItem.important);
-        itemDataList.removeTask(id);
-        itemDataList.addTask(newItem);
-        
-        setList(itemDataList.getList());
-        setCompleteList(itemDataList.getCompleteList());
-        
     }
 
     function addTask(task) {
         console.log(`add task ${task}`);
         taskid++;
-        itemDataList.addTask(new ItemData(taskid, task, false, false, new Date(), null));
-        const newlist = itemDataList.getList();
-        setList(newlist);
+
+        normalDispatch({
+            type: 'add',
+            task: new ItemData(taskid, task, false, false, new Date(), null)
+        });
     }
 
     return (
         <div className='container'>
             <Input addtask={addTask} />
-            <List list={list} completeList={completeList} taskchange={taskchange} handleLiftUp={handleLiftUp} />
+            <List list={normalTasks} completeList={completedTasks} taskchange={taskchange} handleImportanceChange={handleImportanceChange} />
         </div>
     );
 }
 
 
 
-export default Container;
+export function normalTasksReducer(tasks, action){
+    switch (action.type) {
+        case 'add': {
+            return [
+                action.task,
+                ...tasks
+            ];
+        }
+        case 'liftup': {
+            const newlist = tasks.filter((t) => t.id !== action.task.id);
+            return [action.task, ...newlist];
+        }
+        case 'liftdown': {
+            const newlist = tasks.filter((t) => t.id !== action.task.id);
+            return [...newlist, action.task];
+        }
+        case 'complete': {
+            return tasks.filter((t) => t.id !== action.task.id);
+        }
+        default: {
+            throw Error('unknown action: ' + action.type);
+          }
+    }
+}
+
+export function completeTasksReducer(tasks, action){
+    switch (action.type) {
+        case 'add': {
+            return [
+                action.task,
+                ...tasks
+            ];
+        }
+        case 'undo': {
+            return tasks.filter((t) => t.id !== action.id);
+        }
+        default: {
+            throw Error('unknown action: ' + action.type);
+          }
+    }
+}
+
+let taskid = 0;
+const normalInitialTasks = [];
+const completedInitialTasks = [];
