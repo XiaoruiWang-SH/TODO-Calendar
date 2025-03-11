@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useReducer } from 'react';
+import { useState, useReducer, useContext, createContext } from 'react';
 import List from './List';
 import Input from './Input';
 import './container.css';
@@ -10,50 +9,6 @@ export default function Container() {
 
     const [normalTasks, normalDispatch] = useReducer(normalTasksReducer, normalInitialTasks);
     const [completedTasks, completedDispatch] = useReducer(completeTasksReducer, completedInitialTasks);
-
-    function taskchange(item) {
-        if (item.checked) {
-            normalDispatch({
-                type: 'complete',
-                task: item
-            });
-
-            completedDispatch({
-                type: 'add',
-                task: item
-            });
-        } else {
-            completedDispatch({
-                type: 'undo',
-                id: item.id
-            });
-            if (item.important) {
-                normalDispatch({
-                    type: 'addtotop',
-                    task: item
-                });
-            } else {
-                normalDispatch({
-                    type: 'add',
-                    task: item
-                });
-            }
-        }
-    }
-
-    function handleImportanceChange(item) { 
-        if (item.important) {
-            normalDispatch({
-                type: 'liftup',
-                task: item
-            });
-        } else {
-            normalDispatch({
-                type: 'liftdown',
-                task: item
-            });
-        }
-    }
 
     function addTask(task) {
         console.log(`add task ${task}`);
@@ -73,10 +28,15 @@ export default function Container() {
     }
 
     return (
-        <div className='container'>
-            <Input addtask={addTask} />
-            <List list={normalTasks} completeList={completedTasks} taskchange={taskchange} handleImportanceChange={handleImportanceChange} />
-        </div>
+        <NormalTasksContext.Provider value={{normalTasks, normalDispatch}}>
+            <CompletedTasksContext.Provider value={{completedTasks, completedDispatch}}>
+                <div className='container'>
+                    <Input addtask={addTask} />
+                    <List />
+                </div>
+            </CompletedTasksContext.Provider>
+        </NormalTasksContext.Provider>
+        
     );
 }
 
@@ -133,3 +93,6 @@ export function completeTasksReducer(tasks, action){
 let taskid = 0;
 const normalInitialTasks = [];
 const completedInitialTasks = [];
+
+export const NormalTasksContext = createContext(null)
+export const CompletedTasksContext = createContext(null)
