@@ -1,18 +1,34 @@
 import { useState } from 'react';
 import './input.css';
 import icon_plus from './assets/icon_plus.svg';
+import ItemData from './ItemData';
+import { useNormalTasks, useCompletedTasks} from './Context';
 
-function Input({addtask}) {
+let taskid = 0;
 
+function Input() {
     const [task, setTask] = useState('');
+    const {normalTasks, normalDispatch} = useNormalTasks();
 
-    function addTask_(e) {    
+    function addTask(e) {
         if (task === '') {
             return;
         }
-        addtask(task);
+        console.log(`add task ${task}`);
+        taskid++;
+        const newItem = new ItemData(taskid, task, false, false, new Date(), null);
+        if (newItem.important) {
+            normalDispatch({
+                type: 'addtotop',
+                task: newItem
+            });
+        } else {
+            normalDispatch({
+                type: 'add',
+                task: newItem
+            });
+        }
         setTask('');
-
     }
 
     function handleInputChange(e) {
@@ -21,7 +37,7 @@ function Input({addtask}) {
 
     function handleKeyDown(event) {
         if (event.key === "Enter") {
-          addTask_(event);
+          addTask(event);
         }
       }
 
@@ -29,7 +45,7 @@ function Input({addtask}) {
     <div className='input-area'>
         <ComponentInput task={task} handleInputChange={handleInputChange} handleKeyDown={handleKeyDown}/>
         <hr className='divider' />
-        <button className='addbtn' onClick={addTask_}>Add to</button>
+        <button className='addbtn' onClick={addTask}>Add to</button>
     </div>
     );
 }

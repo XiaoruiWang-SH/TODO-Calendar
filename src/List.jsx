@@ -6,13 +6,13 @@ import checkbox_unchecked from './assets/checkbox-unselected.svg';
 import checkbox_checked from './assets/checkbox-selected.svg';
 import arrow_up from './assets/arrow_up.svg';
 import arrow_down from './assets/arrow_down.svg';
-import { NormalTasksContext, CompletedTasksContext } from './Container';
+import { useNormalTasks, useCompletedTasks} from './Context';
 
 
 function List() {
 
-    const {normalTasks, normalDispatch} = useContext(NormalTasksContext);
-    const {completedTasks, completedDispatch} = useContext(CompletedTasksContext);
+    const {normalTasks, normalDispatch} = useNormalTasks();
+    const {completedTasks, completedDispatch} = useCompletedTasks();
 
     function taskchange(item) {
         if (item.checked) {
@@ -123,8 +123,8 @@ function LiftUPBtn({important, handleLiftUp}) {
 
 function ComponentComplete() {
     const [hiden, setHiden] = useState(true);
-    const {normalTasks, normalDispatch} = useContext(NormalTasksContext);
-    const {completedTasks, completedDispatch} = useContext(CompletedTasksContext);
+    const {normalTasks, normalDispatch} = useNormalTasks();
+    const {completedTasks, completedDispatch} = useCompletedTasks();
 
     function listShowClick(){
         setHiden(!hiden);
