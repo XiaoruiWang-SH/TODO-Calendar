@@ -1,22 +1,21 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './input.css';
 import icon_plus from './assets/icon_plus.svg';
 import ItemData from './ItemData';
 import { useNormalTasks, useCompletedTasks} from './Context';
 
-let taskid = 0;
-
 function Input() {
     const [task, setTask] = useState('');
     const {normalTasks, normalDispatch} = useNormalTasks();
+    const taskid = useRef(0);
 
     function addTask(e) {
         if (task === '') {
             return;
         }
         console.log(`add task ${task}`);
-        taskid++;
-        const newItem = new ItemData(taskid, task, false, false, new Date(), null);
+        taskid.current = taskid.current + 1;
+        const newItem = new ItemData(taskid.current, task, false, false, new Date(), null);
         if (newItem.important) {
             normalDispatch({
                 type: 'addtotop',
