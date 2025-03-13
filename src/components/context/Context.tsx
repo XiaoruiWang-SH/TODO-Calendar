@@ -1,21 +1,6 @@
 import { useState, useReducer, useContext, createContext, ReactNode, JSX } from 'react';
-import ItemData from './ItemData';
-
-
-interface DataAction {
-    type: string;
-    id: number;
-    task: ItemData;
-} 
-
-export interface DataContextType {
-    tasks: ItemData[];
-    dispatch: React.Dispatch<DataAction>;
-}
-
-interface TasksProviderProps {
-    children: ReactNode;
-}
+import ItemData from '../../data/ItemData';
+import { DataContextType, DataAction, TasksProviderProps} from './Context.types'
 
 
 const NormalTasksContext = createContext<DataContextType | undefined>(undefined);

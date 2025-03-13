@@ -1,8 +1,8 @@
 import { useState, useRef, JSX } from 'react';
 import './input.css';
-import  icon_plus from './assets/icon_plus.svg';
-import ItemData from './ItemData';
-import { useNormalTasks, useCompletedTasks, DataContextType} from './Context';
+import  icon_plus from '../../assets/icon_plus.svg';
+import ItemData from '../../data/ItemData';
+import { useNormalTasks, useCompletedTasks } from '../context/Context'
 
 function Input() {
     const [task, setTask] = useState('');

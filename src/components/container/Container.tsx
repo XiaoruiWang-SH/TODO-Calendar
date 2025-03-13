@@ -1,6 +1,6 @@
 import { useState, useReducer, useContext, createContext } from 'react';
-import List from './List';
-import Input from './Input';
+import List from '../list/List';
+import Input from '../input/Input';
 import './container.css';
 
 

@@ -1,30 +1,16 @@
 import { JSX, useContext, useState } from 'react';
 import './List.css';
-import star_unselected from './assets/star-unselected.svg';
-import star_selected from './assets/star-selected.svg';
-import checkbox_unchecked from './assets/checkbox-unselected.svg';
-import checkbox_checked from './assets/checkbox-selected.svg';
-import arrow_up from './assets/arrow_up.svg';
-import arrow_down from './assets/arrow_down.svg';
-import { useNormalTasks, useCompletedTasks} from './Context';
-import ItemData from './ItemData';
+import star_unselected from '../../assets/star-unselected.svg';
+import star_selected from '../../assets/star-selected.svg';
+import checkbox_unchecked from '../../assets/checkbox-unselected.svg';
+import checkbox_checked from '../../assets/checkbox-selected.svg';
+import arrow_up from '../../assets/arrow_up.svg';
+import arrow_down from '../../assets/arrow_down.svg';
+import { useNormalTasks, useCompletedTasks} from '../context/Context';
+import ItemData from '../../data/ItemData';
+import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps } from './List.type';
 
-interface ListItemProps {
-    item: ItemData;
-    taskChange: (item: ItemData) => void;
-    handleImportanceChange: (item: ItemData) => void;
-}
 
-interface ItemChangeProps {
-    change: boolean;
-    handleChange: (e: React.MouseEvent) => void;
-}
-
-interface ComponentCompleteHeaderProps {
-    num: number;
-    hiden: boolean;
-    listShowClick: () => void;
-}
 
 function List() {
 
