@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { JSX, useContext, useState } from 'react';
 import './List.css';
 import star_unselected from './assets/star-unselected.svg';
 import star_selected from './assets/star-selected.svg';
@@ -7,53 +7,77 @@ import checkbox_checked from './assets/checkbox-selected.svg';
 import arrow_up from './assets/arrow_up.svg';
 import arrow_down from './assets/arrow_down.svg';
 import { useNormalTasks, useCompletedTasks} from './Context';
+import ItemData from './ItemData';
 
+interface ListItemProps {
+    item: ItemData;
+    taskChange: (item: ItemData) => void;
+    handleImportanceChange: (item: ItemData) => void;
+}
+
+interface ItemChangeProps {
+    change: boolean;
+    handleChange: (e: React.MouseEvent) => void;
+}
+
+interface ComponentCompleteHeaderProps {
+    num: number;
+    hiden: boolean;
+    listShowClick: () => void;
+}
 
 function List() {
 
-    const {normalTasks, normalDispatch} = useNormalTasks();
-    const {completedTasks, completedDispatch} = useCompletedTasks();
+    const {tasks: normalTasks, dispatch: normalDispatch} = useNormalTasks();
+    const {tasks: completedTasks, dispatch: completedDispatch} = useCompletedTasks();
 
-    function taskchange(item) {
+    function taskchange(item: ItemData): void {
         if (item.checked) {
             normalDispatch({
                 type: 'complete',
+                id: item.id,
                 task: item
             });
 
             completedDispatch({
                 type: 'add',
+                id: item.id,
                 task: item
             });
         } else {
             completedDispatch({
                 type: 'undo',
-                id: item.id
+                id: item.id,
+                task: item
             });
             if (item.important) {
                 normalDispatch({
                     type: 'addtotop',
-                    task: item
+                    task: item,
+                    id: item.id
                 });
             } else {
                 normalDispatch({
                     type: 'add',
-                    task: item
+                    task: item,
+                    id: item.id
                 });
             }
         }
     }
 
-    function handleImportanceChange(item) { 
+    function handleImportanceChange(item: ItemData): void { 
         if (item.important) {
             normalDispatch({
                 type: 'liftup',
-                task: item
+                task: item,
+                id: item.id
             });
         } else {
             normalDispatch({
                 type: 'liftdown',
-                task: item
+                task: item,
+                id: item.id
             });
         }
     }
@@ -64,7 +88,7 @@ function List() {
         <ul className='list-area'>
             {normalTasks.map((item) => 
             <li className={item.checked ? 'list-checked' : 'list-unchecked'} key={item.id}>
-                <ListItem item={item} handleChange_={taskchange} handleImportanceChange_={handleImportanceChange} />
+                <ListItem item={item} taskChange={taskchange} handleImportanceChange={handleImportanceChange} />
                 </li>
             )}
         </ul>
@@ -79,31 +103,31 @@ function List() {
 }
 
 
-function ListItem({item, handleChange_, handleImportanceChange_}) {
+function ListItem({item, taskChange, handleImportanceChange}: ListItemProps) {
 
-    function handleChange(e) {
+    function handleChange(e: React.MouseEvent) {
         item.setChecked(!item.checked);
-        handleChange_(item);
+        taskChange(item);
         e.stopPropagation();
     }
 
-    function handleLiftUp(e) {
+    function handleLiftUp(e: React.MouseEvent) {
         item.setImportant(!item.important);
-        handleImportanceChange_(item);
+        handleImportanceChange(item);
         e.stopPropagation();
     }
 
     return (
         <div className='list-item'>
-            <CheckBox id={item.id} checked={item.checked} handleChange={handleChange} />
+            <CheckBox change={item.checked} handleChange={handleChange} />
             <span>{item.name}</span>
-            <LiftUPBtn important={item.important} handleLiftUp={handleLiftUp} />
+            <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
 
         </div>
     );
 }
 
-function CheckBox({checked, handleChange}) { // 参数本质上是一个对象，这里是结构赋值
+function CheckBox({change: checked, handleChange: handleChange}: ItemChangeProps) { // 参数本质上是一个对象，这里是结构赋值
 
     return (
         <div className='round-checkbox' onClick={handleChange}>
@@ -112,7 +136,7 @@ function CheckBox({checked, handleChange}) { // 参数本质上是一个对象�
     );
 }
 
-function LiftUPBtn({important, handleLiftUp}) {
+function LiftUPBtn({change: important,handleChange: handleLiftUp}: ItemChangeProps) {
     return (
         <div className='liftup-btn' onClick={handleLiftUp}> 
             <img src={important ? star_selected : star_unselected} className='icon_liftup' alt='icon_liftup' />
@@ -123,38 +147,43 @@ function LiftUPBtn({important, handleLiftUp}) {
 
 function ComponentComplete() {
     const [hiden, setHiden] = useState(true);
-    const {normalTasks, normalDispatch} = useNormalTasks();
-    const {completedTasks, completedDispatch} = useCompletedTasks();
+    const {tasks: normalTasks, dispatch: normalDispatch} = useNormalTasks();
+    const {tasks: completedTasks, dispatch: completedDispatch} = useCompletedTasks();
 
     function listShowClick(){
         setHiden(!hiden);
     }
 
-    function taskchange(item) {
+    function taskchange(item: ItemData): void {
         if (item.checked) {
             normalDispatch({
                 type: 'complete',
-                task: item
+                task: item,
+                id: item.id
             });
 
             completedDispatch({
                 type: 'add',
-                task: item
+                task: item,
+                id: item.id
             });
         } else {
             completedDispatch({
                 type: 'undo',
+                task: item,
                 id: item.id
             });
             if (item.important) {
                 normalDispatch({
                     type: 'addtotop',
-                    task: item
+                    task: item,
+                    id: item.id
                 });
             } else {
                 normalDispatch({
                     type: 'add',
-                    task: item
+                    task: item,
+                    id: item.id
                 });
             }
         }
@@ -168,7 +197,7 @@ function ComponentComplete() {
                 {completedTasks.map((item) => 
                 <li className={item.checked ? 'list-checked' : 'list-unchecked'}
                 key={item.id}>
-                    <ListItem item={item} handleChange_={taskchange} handleLiftUp_={null} />
+                    <ListItem item={item} taskChange={taskchange} handleImportanceChange={()=>{}} />
                     </li>
                 )}
             </ul>}
@@ -176,7 +205,7 @@ function ComponentComplete() {
     );
 }
 
-function ComponentCompleteHeader({num, hiden, listShowClick}) {
+function ComponentCompleteHeader({num, hiden, listShowClick}: ComponentCompleteHeaderProps): JSX.Element {
     return (
         <div className='container-complete-header' onClick={listShowClick}>
             <div className='arrow-icon'>
