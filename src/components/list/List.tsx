@@ -1,3 +1,14 @@
+/*
+ * @Author: Xiaorui Wang
+ * @Email: xiaorui.wang@usi.ch
+ * @Date: 2025-03-13 10:48:47
+ * @LastEditors: Xiaorui Wang
+ * @LastEditTime: 2025-03-13 12:06:26
+ * @Description: 
+ * 
+ * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
+ */
+
 import { JSX, useContext, useState } from 'react';
 import './List.css';
 import star_unselected from '../../assets/star-unselected.svg';
@@ -9,7 +20,6 @@ import arrow_down from '../../assets/arrow_down.svg';
 import { useNormalTasks, useCompletedTasks} from '../context/Context';
 import ItemData from '../../data/ItemData';
 import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps } from './List.type';
-
 
 
 function List() {
