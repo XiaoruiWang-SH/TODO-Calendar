@@ -3,13 +3,13 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 12:07:29
+ * @LastEditTime: 2025-03-13 16:32:19
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-import { useState, useReducer, useContext, createContext, ReactNode, JSX } from 'react';
+import { useState, useReducer, useContext, createContext, ReactNode, JSX, FC } from 'react';
 import ItemData from '../../data/ItemData';
 import { DataContextType, DataAction, TasksProviderProps} from './Context.types'
 
@@ -17,9 +17,8 @@ import { DataContextType, DataAction, TasksProviderProps} from './Context.types'
 const NormalTasksContext = createContext<DataContextType | undefined>(undefined);
 const CompletedTasksContext = createContext<DataContextType | undefined>(undefined);
 
-export const NormalTasksProvider = ({ children }: TasksProviderProps): JSX.Element => {
-    
-    function tasksReducer(tasks: ItemData[], action: DataAction): ItemData[] {
+export const NormalTasksProvider: FC<TasksProviderProps> = ({ children }) => {
+    const tasksReducer = (tasks: ItemData[], action: DataAction) => {
         switch (action.type) {
             case 'add': {
                 return [
@@ -59,8 +58,8 @@ export const NormalTasksProvider = ({ children }: TasksProviderProps): JSX.Eleme
     );
   };
 
-  export const CompletedTasksProvider = ({children}: TasksProviderProps): JSX.Element => {
-    function tasksReducer(tasks: ItemData[], action: DataAction) {
+  export const CompletedTasksProvider: FC<TasksProviderProps> = ({children}) => {
+    const tasksReducer = (tasks: ItemData[], action: DataAction) => {
         switch (action.type) {
             case 'add': {
                 return [
@@ -85,19 +84,6 @@ export const NormalTasksProvider = ({ children }: TasksProviderProps): JSX.Eleme
         </CompletedTasksContext.Provider>
       );
   }  
- 
-  export function useNormalTasks(): DataContextType  {
-    const context = useContext(NormalTasksContext);
-    if (!context) {
-        throw new Error("useNormalTasks must be used within a <NormalTasksProvider>");
-    }
-    return context;
-  }
 
-  export function useCompletedTasks(): DataContextType {
-    const context = useContext(CompletedTasksContext);
-    if (!context) {
-        throw new Error("CompletedTasksContext must be used within a <CompletedTasksProvider>");
-    }
-    return context; 
-  }
+  export const useNormalTasks = () => useContext(NormalTasksContext)!;
+  export const useCompletedTasks = () => useContext(CompletedTasksContext)!;

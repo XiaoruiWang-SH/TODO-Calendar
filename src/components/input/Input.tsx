@@ -3,24 +3,25 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 12:06:41
+ * @LastEditTime: 2025-03-13 16:45:02
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-import { useState, useRef, JSX } from 'react';
+import { useState, useRef, JSX, FC } from 'react';
 import './input.css';
 import  icon_plus from '../../assets/icon_plus.svg';
 import ItemData from '../../data/ItemData';
 import { useNormalTasks, useCompletedTasks } from '../context/Context'
+import { ComponentInputProps } from './Input.types'
 
-function Input() {
-    const [task, setTask] = useState('');
+export const Input: FC = () => {
+    const [task, setTask] = useState<string>('');
     const {tasks: normalTasks, dispatch: normalDispatch} = useNormalTasks();
-    const taskid = useRef(0);
+    const taskid = useRef<number>(0);
 
-    function addTask(): void {
+    const addTask = () => {
         if (task === '') {
             return;
         }
@@ -43,11 +44,11 @@ function Input() {
         setTask('');
     }
 
-    function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTask(e.target.value);
     }
 
-    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
           addTask();
         }
@@ -62,11 +63,6 @@ function Input() {
     );
 }
 
-interface ComponentInputProps {
-    task: string;
-    handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
-    handleKeyDown: React.KeyboardEventHandler<HTMLInputElement>;
-}
 const ComponentInput: React.FC<ComponentInputProps> = ({task, handleInputChange, handleKeyDown}: ComponentInputProps): JSX.Element => {
     return (
         <div className='componentInput'>
@@ -75,5 +71,3 @@ const ComponentInput: React.FC<ComponentInputProps> = ({task, handleInputChange,
         </div>
     );
 }
-
-export default Input;

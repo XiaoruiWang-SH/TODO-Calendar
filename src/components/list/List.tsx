@@ -3,13 +3,13 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 12:06:26
+ * @LastEditTime: 2025-03-13 16:42:18
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-import { JSX, useContext, useState } from 'react';
+import { JSX, useContext, useState, FC } from 'react';
 import './List.css';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
@@ -22,12 +22,12 @@ import ItemData from '../../data/ItemData';
 import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps } from './List.type';
 
 
-function List() {
+export const List: FC = () => {
 
     const {tasks: normalTasks, dispatch: normalDispatch} = useNormalTasks();
     const {tasks: completedTasks, dispatch: completedDispatch} = useCompletedTasks();
 
-    function taskchange(item: ItemData): void {
+    const taskchange = (item: ItemData) => {
         if (item.checked) {
             normalDispatch({
                 type: 'complete',
@@ -62,7 +62,7 @@ function List() {
         }
     }
 
-    function handleImportanceChange(item: ItemData): void { 
+    const handleImportanceChange = (item: ItemData) => { 
         if (item.important) {
             normalDispatch({
                 type: 'liftup',
@@ -99,15 +99,15 @@ function List() {
 }
 
 
-function ListItem({item, taskChange, handleImportanceChange}: ListItemProps) {
+const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => {
 
-    function handleChange(e: React.MouseEvent) {
+    const handleChange = (e: React.MouseEvent) => {
         item.setChecked(!item.checked);
         taskChange(item);
         e.stopPropagation();
     }
 
-    function handleLiftUp(e: React.MouseEvent) {
+    const handleLiftUp = (e: React.MouseEvent) => {
         item.setImportant(!item.important);
         handleImportanceChange(item);
         e.stopPropagation();
@@ -123,7 +123,7 @@ function ListItem({item, taskChange, handleImportanceChange}: ListItemProps) {
     );
 }
 
-function CheckBox({change: checked, handleChange: handleChange}: ItemChangeProps) { // 参数本质上是一个对象，这里是结构赋值
+const CheckBox = ({change: checked, handleChange: handleChange}: ItemChangeProps) => { // 参数本质上是一个对象，这里是结构赋值
 
     return (
         <div className='round-checkbox' onClick={handleChange}>
@@ -132,7 +132,7 @@ function CheckBox({change: checked, handleChange: handleChange}: ItemChangeProps
     );
 }
 
-function LiftUPBtn({change: important,handleChange: handleLiftUp}: ItemChangeProps) {
+const LiftUPBtn = ({change: important,handleChange: handleLiftUp}: ItemChangeProps) => {
     return (
         <div className='liftup-btn' onClick={handleLiftUp}> 
             <img src={important ? star_selected : star_unselected} className='icon_liftup' alt='icon_liftup' />
@@ -141,16 +141,16 @@ function LiftUPBtn({change: important,handleChange: handleLiftUp}: ItemChangePro
 }
 
 
-function ComponentComplete() {
-    const [hiden, setHiden] = useState(true);
+const ComponentComplete = () => {
+    const [hiden, setHiden] = useState<boolean>(true);
     const {tasks: normalTasks, dispatch: normalDispatch} = useNormalTasks();
     const {tasks: completedTasks, dispatch: completedDispatch} = useCompletedTasks();
 
-    function listShowClick(){
+    const listShowClick = () => {
         setHiden(!hiden);
     }
 
-    function taskchange(item: ItemData): void {
+    const taskchange = (item: ItemData) => {
         if (item.checked) {
             normalDispatch({
                 type: 'complete',
@@ -201,7 +201,7 @@ function ComponentComplete() {
     );
 }
 
-function ComponentCompleteHeader({num, hiden, listShowClick}: ComponentCompleteHeaderProps): JSX.Element {
+const ComponentCompleteHeader: FC<ComponentCompleteHeaderProps> = ({num, hiden, listShowClick}) => {
     return (
         <div className='container-complete-header' onClick={listShowClick}>
             <div className='arrow-icon'>
@@ -212,6 +212,3 @@ function ComponentCompleteHeader({num, hiden, listShowClick}: ComponentCompleteH
         </div>
     );
 }
-
-
-export default List;
