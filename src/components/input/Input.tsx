@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 21:53:05
+ * @LastEditTime: 2025-03-14 12:26:00
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -58,7 +58,7 @@ export const Input: FC = () => {
     <div className='input-area'>
         <ComponentInput task={task} handleInputChange={handleInputChange} handleKeyDown={handleKeyDown}/>
         <hr className='divider' />
-        <button className='p-1 text-xs outline-none border-1 ' onClick={addTask}>Add to</button>
+        <button className='addbtn' onClick={addTask}>Add to</button>
     </div>
     );
 }
