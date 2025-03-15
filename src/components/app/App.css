@@ -3,20 +3,12 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-11 14:33:38
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 12:07:53
+ * @LastEditTime: 2025-03-15 16:23:28
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  font: 400 16px system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #f5f5f5;
-}
 
 
 .card {

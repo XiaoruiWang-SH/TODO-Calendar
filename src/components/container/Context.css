@@ -3,12 +3,14 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-08 15:17:38
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 12:07:41
+ * @LastEditTime: 2025-03-15 16:32:30
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-.container {
-    text-align: start;
+ @import "tailwindcss";
+
+.context {
+    @apply text-start mx-2.5 bg-white font-sans text-gray-900 font-medium;
 }
