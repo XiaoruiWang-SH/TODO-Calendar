@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 14:54:57
+ * @LastEditTime: 2025-03-17 17:12:45
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -29,7 +29,7 @@ export const Input: FC = () => {
         console.log(`add task ${task}`);
         taskid.current = taskid.current + 1;
         const newItem: ItemData = {
-            id: taskid.current,
+            taskId: taskid.current,
             name: task,
             checked: false,
             important: false,
