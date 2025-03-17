@@ -3,14 +3,14 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-15 16:47:28
+ * @LastEditTime: 2025-03-17 15:04:25
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
 import { DayItemProps, DataItemProps} from './Calendar.types';
-import ItemData from '../../data/ItemData';
+import { ItemData } from '../../data/ItemData';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
 
@@ -51,9 +51,17 @@ const DayItem = ({item, date}: DayItemProps) => {
             <div className="w-full text-center">{date}</div>
             <div className='my-2 mx-2'>
             {item.map((task, index) => {
-                return (
-                    // <div key={index}>{task}</div>
-                    <TaskItem dataItem={new ItemData(1, task, false, false, new Date(), null, new Date())} />
+                const itemData: ItemData = {
+                    id: 1,
+                    name: task,
+                    checked: false,
+                    important: false,
+                    createTime: new Date().toISOString(),
+                    expireTime: null,
+                    updateTime: new Date().toISOString(),
+                };
+                return (                    
+                    <TaskItem key={index} dataItem={itemData} />
                 );
             }
             )}

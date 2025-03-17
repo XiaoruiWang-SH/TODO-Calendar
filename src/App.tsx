@@ -11,16 +11,15 @@
 
 
 import Container from './components/container/Container';
-import { NormalTasksProvider, CompletedTasksProvider, useNormalTasks, useCompletedTasks } from './context/Context';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 function App() {
 
   return (
-    <NormalTasksProvider>
-      <CompletedTasksProvider>
-        <Container />
-      </CompletedTasksProvider>
-    </NormalTasksProvider>
+    <Provider store={store}>
+      <Container />
+    </Provider>
   )
 }
 

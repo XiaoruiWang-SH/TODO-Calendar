@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-14 12:26:00
+ * @LastEditTime: 2025-03-17 14:54:57
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -12,14 +12,15 @@
 import { useState, useRef, JSX, FC } from 'react';
 import './input.css';
 import  icon_plus from '../../assets/icon_plus.svg';
-import ItemData from '../../data/ItemData';
-import { useNormalTasks, useCompletedTasks } from '../../context/Context'
+import {ItemData} from '../../data/ItemData';
 import { ComponentInputProps } from './Input.types'
+import { useAppDispatch } from '../../app/hooks';
+import { add_normal, addtotop } from '../../features/task/taskSlice';
 
 export const Input: FC = () => {
     const [task, setTask] = useState<string>('');
-    const {tasks: normalTasks, dispatch: normalDispatch} = useNormalTasks();
     const taskid = useRef<number>(0);
+    const dispatch = useAppDispatch();
 
     const addTask = () => {
         if (task === '') {
@@ -27,19 +28,19 @@ export const Input: FC = () => {
         }
         console.log(`add task ${task}`);
         taskid.current = taskid.current + 1;
-        const newItem = new ItemData(taskid.current, task, false, false, new Date(), null, new Date());
+        const newItem: ItemData = {
+            id: taskid.current,
+            name: task,
+            checked: false,
+            important: false,
+            createTime: new Date().toISOString(),
+            expireTime: null,
+            updateTime: new Date().toISOString()
+        };
         if (newItem.important) {
-            normalDispatch({
-                type: 'addtotop',
-                task: newItem,
-                id: newItem.id
-            });
+            dispatch(addtotop(newItem));
         } else {
-            normalDispatch({
-                type: 'add',
-                task: newItem,
-                id: newItem.id
-            });
+            dispatch(add_normal(newItem));
         }
         setTask('');
     }
