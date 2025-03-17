@@ -10,7 +10,7 @@
  */
 
 import { ReactNode } from 'react';
-import ItemData from '../../data/ItemData';
+import ItemData from '../data/ItemData';
 
 export interface DataAction {
     type: string;

@@ -10,7 +10,7 @@
  */
 
 import { useState, useReducer, useContext, createContext, ReactNode, JSX, FC } from 'react';
-import ItemData from '../../data/ItemData';
+import ItemData from '../data/ItemData';
 import { DataContextType, DataAction, TasksProviderProps} from './Context.types'
 
 

@@ -17,7 +17,7 @@ import checkbox_unchecked from '../../assets/checkbox-unselected.svg';
 import checkbox_checked from '../../assets/checkbox-selected.svg';
 import arrow_up from '../../assets/arrow_up.svg';
 import arrow_down from '../../assets/arrow_down.svg';
-import { useNormalTasks, useCompletedTasks} from '../context/Context';
+import { useNormalTasks, useCompletedTasks} from '../../context/Context';
 import ItemData from '../../data/ItemData';
 import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps } from './List.type';
 

@@ -10,9 +10,8 @@
  */
 
 
-import './App.css';
-import Container from '../container/Container';
-import { NormalTasksProvider, CompletedTasksProvider, useNormalTasks, useCompletedTasks } from '../context/Context';
+import Container from './components/container/Container';
+import { NormalTasksProvider, CompletedTasksProvider, useNormalTasks, useCompletedTasks } from './context/Context';
 
 function App() {
 

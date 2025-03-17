@@ -13,7 +13,7 @@ import { useState, useRef, JSX, FC } from 'react';
 import './input.css';
 import  icon_plus from '../../assets/icon_plus.svg';
 import ItemData from '../../data/ItemData';
-import { useNormalTasks, useCompletedTasks } from '../context/Context'
+import { useNormalTasks, useCompletedTasks } from '../../context/Context'
 import { ComponentInputProps } from './Input.types'
 
 export const Input: FC = () => {
