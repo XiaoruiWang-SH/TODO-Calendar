@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 11:45:25
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:03:36
+ * @LastEditTime: 2025-03-18 17:02:24
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -45,11 +45,16 @@ export const normalTasksSlice = createSlice({
         },
         complete: (state, action: PayloadAction<ItemData>) => {
             state.tasks = state.tasks.filter((t: ItemData) => t.id !== action.payload.id);
+        },
+        add_normalTasks: (state, action: PayloadAction<ItemData[]>) => {
+            action.payload.filter((item) => !item.checked).filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id)).forEach((item) => {
+                state.tasks.push(item);
+            });
         }
     }
 });
 
-export const { add_normal, addtotop, liftup, liftdown, complete } = normalTasksSlice.actions;
+export const { add_normal, addtotop, liftup, liftdown, complete, add_normalTasks } = normalTasksSlice.actions;
 export const normalTasksReducer = normalTasksSlice.reducer;
 
 export const completedTasksSlice = createSlice({
@@ -61,9 +66,14 @@ export const completedTasksSlice = createSlice({
         },
         undo: (state, action: PayloadAction<ItemData>) => {
             state.tasks = state.tasks.filter((t:ItemData) => t.id !== action.payload.id);
+        },
+        add_completedTasks: (state, action: PayloadAction<ItemData[]>) => {
+            action.payload.filter((item) => item.checked).filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id)).forEach((item) => {
+                state.tasks.push(item);
+            });
         }
     }
 });
 
-export const { add_completed, undo } = completedTasksSlice.actions;
+export const { add_completed, undo, add_completedTasks } = completedTasksSlice.actions;
 export const completedTasksReducer = completedTasksSlice.reducer;
