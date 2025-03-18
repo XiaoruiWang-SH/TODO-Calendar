@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:49:09
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 17:18:34
+ * @LastEditTime: 2025-03-18 12:06:44
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -162,36 +162,63 @@ app.post("/additem", async (req, res) => {
     updateTime
   } = req.body;
 
-  const day = 11;
-  const month = 3;
-  const year = 2025;
-
-  console.log("Received data:", { taskId, name, checked, important, createTime, expireTime, updateTime, day, month, year });
-
-  try {
-    // Add an item
-    const newItemId = await addItem(
-      taskId,
-      name,
-      checked,
-      important,
-      createTime,
-      expireTime,
-      updateTime,
-      day,
-      month,
-      year
-    );
-    console.log("New Item ID:", newItemId);
-  } catch (err) {
-    console.error("Error:", err);
+  // Validate createTime
+  if (!createTime) {
+    return res.status(400).json({ 
+      error: "Invalid request: createTime is required"
+    });
   }
 
-  // Respond to the client
-  res.json({
-    message: "Item created successfully",
-    data: { taskId, name, checked, important, createTime, expireTime, updateTime, day, month, year },
-  });
+  try {
+    // Parse day, month, year from createTime
+    const createDate = new Date(createTime);
+    
+    // Check if date is valid
+    if (isNaN(createDate.getTime())) {
+      return res.status(400).json({ 
+        error: "Invalid date format for createTime"
+      });
+    }
+    
+    const day = createDate.getDate();
+    const month = createDate.getMonth() + 1; // getMonth() returns 0-11
+    const year = createDate.getFullYear();
+
+    console.log("Received data:", { taskId, name, checked, important, createTime, expireTime, updateTime, day, month, year });
+
+    try {
+      // Add an item
+      const newItemId = await addItem(
+        taskId,
+        name,
+        checked,
+        important,
+        createTime,
+        expireTime,
+        updateTime,
+        day,
+        month,
+        year
+      );
+      console.log("New Item ID:", newItemId);
+      
+      // Respond to the client
+      return res.json({
+        message: "Item created successfully",
+        data: { taskId, name, checked, important, createTime, expireTime, updateTime, day, month, year },
+      });
+    } catch (err) {
+      console.error("Error adding item:", err);
+      return res.status(500).json({ 
+        error: "Failed to create item" 
+      });
+    }
+  } catch (err) {
+    console.error("Error parsing date:", err);
+    return res.status(400).json({ 
+      error: "Invalid date format"
+    });
+  }
 });
 
 // 404 Error Handling

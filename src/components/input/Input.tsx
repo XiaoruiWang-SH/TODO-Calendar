@@ -16,13 +16,14 @@ import {ItemData} from '../../data/ItemData';
 import { ComponentInputProps } from './Input.types'
 import { useAppDispatch } from '../../app/hooks';
 import { add_normal, addtotop } from '../../features/task/taskSlice';
+import { addItem } from '../../data/api';
 
 export const Input: FC = () => {
     const [task, setTask] = useState<string>('');
     const taskid = useRef<number>(0);
     const dispatch = useAppDispatch();
 
-    const addTask = () => {
+    const addTask = async() => {
         if (task === '') {
             return;
         }
@@ -42,6 +43,9 @@ export const Input: FC = () => {
         } else {
             dispatch(add_normal(newItem));
         }
+
+        const result = await addItem(newItem);
+        console.log(result);
         setTask('');
     }
 
