@@ -35,8 +35,7 @@ const createDatabaseQuery = `CREATE DATABASE IF NOT EXISTS ${config.database};`;
 // SQL query to create the table
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS calendar (
-      id INT AUTO_INCREMENT PRIMARY KEY,       
-      TaskId BIGINT DEFAULT 0,      
+      id INT AUTO_INCREMENT PRIMARY KEY,     
       Name VARCHAR(255) NOT NULL,             
       Checked BOOLEAN DEFAULT FALSE,                                
       Important BOOLEAN DEFAULT FALSE,

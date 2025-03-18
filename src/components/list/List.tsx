@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 17:12:59
+ * @LastEditTime: 2025-03-18 15:03:22
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -56,7 +56,7 @@ export const List: FC = () => {
         {normalTasks.length == 0 ? <></> : 
         <ul className='list-area'>
             {normalTasks.map((item) => 
-            <li className={item.checked ? 'list-checked' : 'list-unchecked'} key={item.taskId}>
+            <li className={item.checked ? 'list-checked' : 'list-unchecked'} key={item.id}>
                 <ListItem item={item} taskChange={taskchange} handleImportanceChange={handleImportanceChange} />
                 </li>
             )}
@@ -151,7 +151,7 @@ const ComponentComplete = () => {
             <ul className='list-area'>
                 {completedTasks.map((item) => 
                 <li className={item.checked ? 'list-checked' : 'list-unchecked'}
-                key={item.taskId}>
+                key={item.id}>
                     <ListItem item={item} taskChange={taskchange} handleImportanceChange={()=>{}} />
                     </li>
                 )}

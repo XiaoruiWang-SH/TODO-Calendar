@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 17:12:45
+ * @LastEditTime: 2025-03-18 15:21:32
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -20,7 +20,6 @@ import { addItem } from '../../data/api';
 
 export const Input: FC = () => {
     const [task, setTask] = useState<string>('');
-    const taskid = useRef<number>(0);
     const dispatch = useAppDispatch();
 
     const addTask = async() => {
@@ -28,9 +27,8 @@ export const Input: FC = () => {
             return;
         }
         console.log(`add task ${task}`);
-        taskid.current = taskid.current + 1;
         const newItem: ItemData = {
-            taskId: taskid.current,
+            id: 0,
             name: task,
             checked: false,
             important: false,
@@ -38,14 +36,13 @@ export const Input: FC = () => {
             expireTime: null,
             updateTime: new Date().toISOString()
         };
-        if (newItem.important) {
-            dispatch(addtotop(newItem));
-        } else {
-            dispatch(add_normal(newItem));
-        }
-
-        const result = await addItem(newItem);
+        const result: ItemData = await addItem(newItem);
         console.log(result);
+        if (result.important) {
+            dispatch(addtotop(result));
+        } else {
+            dispatch(add_normal(result));
+        }
         setTask('');
     }
 

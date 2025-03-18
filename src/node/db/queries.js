@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 16:07:48
+ * @LastEditTime: 2025-03-18 15:09:04
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -74,7 +74,7 @@ const getItemById = async (id) => {
     try {
       const pool = await poolPromise;
       const [result] = await pool.query(
-        "UPDATE calendar SET UpdateTime = ?, ExpireTime = ?, Checked = ?, Important = ? WHERE TaskId = ?",
+        "UPDATE calendar SET UpdateTime = ?, ExpireTime = ?, Checked = ?, Important = ? WHERE id = ?",
         [updateTime, expireTime, checked, important, id]
       );
       return result.affectedRows;
@@ -86,12 +86,12 @@ const getItemById = async (id) => {
   
 
 // Insert a new item
-const addItem = async (taskId, name, checked, important, createTime, expireTime, updateTime, day, month, year) => {
+const addItem = async (name, checked, important, createTime, expireTime, updateTime, day, month, year) => {
   try {
     const pool = await poolPromise;
     const [result] = await pool.query(
-      "INSERT INTO calendar (TaskId, Name, Checked, Important, CreateTime, ExpireTime, UpdateTime, Day, Month, Year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [taskId, name, checked, important, createTime, expireTime, updateTime, day, month, year]
+      "INSERT INTO calendar (Name, Checked, Important, CreateTime, ExpireTime, UpdateTime, Day, Month, Year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [name, checked, important, createTime, expireTime, updateTime, day, month, year]
     );
     return result.insertId;
   } catch (err) {

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 11:56:13
+ * @LastEditTime: 2025-03-18 15:02:17
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -46,7 +46,7 @@ export const Calendar = () => {
     const add_Item = async () => {
         
         const result = await addItem({
-            taskId: 1,
+            id: 1,
             name: "test", 
             checked: false,
             important: false,
@@ -106,7 +106,7 @@ const DayItem = ({ item, date }: DayItemProps) => {
             <div className='my-2 mx-2'>
                 {item.map((task, index) => {
                     const itemData: ItemData = {
-                        taskId: 1,
+                        id: 1,
                         name: task,
                         checked: false,
                         important: false,
