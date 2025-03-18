@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 17:12:31
+ * @LastEditTime: 2025-03-18 11:56:13
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -63,12 +63,7 @@ export const Calendar = () => {
 
     return (
         <div>
-            <div>
-                <button className='w-[120px] h-[30px] border border-gray-300 rounded-sm hover:bg-blue-200 active:border-blue-500' onClick={add_Item}>Add Item</button>
-            </div>
-            <div>
-                <button className='w-[120px] h-[30px] border border-gray-300 rounded-sm hover:bg-blue-200 active:border-blue-500' onClick={get_Items}>Get Item</button>
-            </div>
+            
             <Header />
             <WeekTitle />
             {/* <DayBlocks titles={dayTitle} tasks={dayTasks} /> */}
