@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-17 18:11:20
+ * @LastEditTime: 2025-03-18 16:17:48
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -36,15 +36,15 @@ const createDatabaseQuery = `CREATE DATABASE IF NOT EXISTS ${config.database};`;
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS calendar (
       id INT AUTO_INCREMENT PRIMARY KEY,     
-      Name VARCHAR(255) NOT NULL,             
-      Checked BOOLEAN DEFAULT FALSE,                                
-      Important BOOLEAN DEFAULT FALSE,
-      CreateTime VARCHAR(255) NOT NULL,              
-      ExpireTime VARCHAR(255),                
-      UpdateTime VARCHAR(255) NOT NULL, 
-      Day VARCHAR(255) NOT NULL,
-      Month VARCHAR(255) NOT NULL,
-      Year VARCHAR(255) NOT NULL
+      name VARCHAR(255) NOT NULL,             
+      checked BOOLEAN DEFAULT FALSE,                                
+      important BOOLEAN DEFAULT FALSE,
+      createTime VARCHAR(255) NOT NULL,              
+      expireTime VARCHAR(255),                
+      updateTime VARCHAR(255) NOT NULL, 
+      day VARCHAR(255) NOT NULL,
+      month VARCHAR(255) NOT NULL,
+      year VARCHAR(255) NOT NULL
   );
 `;
 

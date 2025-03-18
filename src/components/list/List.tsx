@@ -3,13 +3,13 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:03:22
+ * @LastEditTime: 2025-03-18 16:07:24
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-import { JSX, useContext, useState, FC } from 'react';
+import { JSX, useContext, useEffect, useState, FC } from 'react';
 import './List.css';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
@@ -18,16 +18,33 @@ import checkbox_checked from '../../assets/checkbox-selected.svg';
 import arrow_up from '../../assets/arrow_up.svg';
 import arrow_down from '../../assets/arrow_down.svg';
 import {ItemData} from '../../data/ItemData';
-import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps } from './List.type';
+import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps, ListProps } from './List.type';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, addtotop, liftup, liftdown, complete, add_completed, undo, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
+import { getItemsByDay } from '../../data/api';
 
 
-export const List: FC = () => {
+export const List: FC<ListProps> = ({day}) => {
 
     const normalTasks = useAppSelector(selectNormalTasks);
     const completedTasks = useAppSelector(selectCompletedTasks);
     const dispatch = useAppDispatch();
+
+    const fetchItems = async () => {
+        const items = await getItemsByDay(day);
+        console.log(items);
+        items.forEach((item) => {
+            if (item.important) {
+                dispatch(addtotop(item));
+            } else {
+                dispatch(add_normal(item));
+            }
+        });
+    };
+
+    useEffect(() => {
+        fetchItems();
+    }, [day]);
 
     const taskchange = (item: ItemData) => {
         if (item.checked) {

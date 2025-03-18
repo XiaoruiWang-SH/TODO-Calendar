@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:09:04
+ * @LastEditTime: 2025-03-18 16:18:14
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -38,7 +38,7 @@ const getItemById = async (id) => {
     try {
       const pool = await poolPromise;
       // Parameterized query to fetch the item by id
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE Day = ?", [day]);
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE day = ?", [day]);
       return rows; // Return the first matching row (or undefined if not found)
     } catch (err) {
       console.error("Error fetching item by id:", err);
@@ -50,7 +50,7 @@ const getItemById = async (id) => {
     try {
       const pool = await poolPromise;
       // Parameterized query to fetch the item by id
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE Month = ?", [month]);
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE month = ?", [month]);
       return rows; // Return the first matching row (or undefined if not found)
     } catch (err) {
       console.error("Error fetching item by id:", err);
@@ -61,7 +61,7 @@ const getItemById = async (id) => {
   const getItemsByYear = async (year) => {
     try {
       const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE Year = ?", [year]);
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE year = ?", [year]);
       return rows; // Return the first matching row (or undefined if not found)
     } catch (err) {
       console.error("Error fetching item by id:", err);
@@ -74,7 +74,7 @@ const getItemById = async (id) => {
     try {
       const pool = await poolPromise;
       const [result] = await pool.query(
-        "UPDATE calendar SET UpdateTime = ?, ExpireTime = ?, Checked = ?, Important = ? WHERE id = ?",
+        "UPDATE calendar SET updateTime = ?, expireTime = ?, checked = ?, important = ? WHERE id = ?",
         [updateTime, expireTime, checked, important, id]
       );
       return result.affectedRows;
@@ -90,7 +90,7 @@ const addItem = async (name, checked, important, createTime, expireTime, updateT
   try {
     const pool = await poolPromise;
     const [result] = await pool.query(
-      "INSERT INTO calendar (Name, Checked, Important, CreateTime, ExpireTime, UpdateTime, Day, Month, Year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO calendar (name, checked, important, createTime, expireTime, updateTime, day, month, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [name, checked, important, createTime, expireTime, updateTime, day, month, year]
     );
     return result.insertId;
