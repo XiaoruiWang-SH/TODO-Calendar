@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 16:18:14
+ * @LastEditTime: 2025-03-18 17:50:51
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -14,7 +14,7 @@ import poolPromise from "./config.js";
 const getItems = async () => {
   try {
     const pool = await poolPromise;
-    const [rows] = await pool.query("SELECT * FROM calendar"); // Corrected table name
+    const [rows] = await pool.query("SELECT * FROM calendar ORDER BY important DESC, updateTime DESC");
     return rows;
   } catch (err) {
     console.error("Error fetching items:", err);
@@ -25,7 +25,6 @@ const getItems = async () => {
 const getItemById = async (id) => {
     try {
       const pool = await poolPromise;
-      // Parameterized query to fetch the item by id
       const [rows] = await pool.query("SELECT * FROM calendar WHERE id = ?", [id]);
       return rows[0]; // Return the first matching row (or undefined if not found)
     } catch (err) {
@@ -37,11 +36,10 @@ const getItemById = async (id) => {
   const getItemsByDay = async (day) => {
     try {
       const pool = await poolPromise;
-      // Parameterized query to fetch the item by id
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE day = ?", [day]);
-      return rows; // Return the first matching row (or undefined if not found)
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE day = ? ORDER BY important DESC, updateTime DESC", [day]);
+      return rows;
     } catch (err) {
-      console.error("Error fetching item by id:", err);
+      console.error("Error fetching items by day:", err);
       throw err;
     }
   };
@@ -49,11 +47,10 @@ const getItemById = async (id) => {
   const getItemsByMonth = async (month) => {
     try {
       const pool = await poolPromise;
-      // Parameterized query to fetch the item by id
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE month = ?", [month]);
-      return rows; // Return the first matching row (or undefined if not found)
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE month = ? ORDER BY important DESC, updateTime DESC", [month]);
+      return rows;
     } catch (err) {
-      console.error("Error fetching item by id:", err);
+      console.error("Error fetching items by month:", err);
       throw err;
     }
   };
@@ -61,10 +58,10 @@ const getItemById = async (id) => {
   const getItemsByYear = async (year) => {
     try {
       const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE year = ?", [year]);
-      return rows; // Return the first matching row (or undefined if not found)
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE year = ? ORDER BY important DESC, updateTime DESC", [year]);
+      return rows;
     } catch (err) {
-      console.error("Error fetching item by id:", err);
+      console.error("Error fetching items by year:", err);
       throw err;
     }
   };

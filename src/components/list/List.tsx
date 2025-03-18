@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 17:05:59
+ * @LastEditTime: 2025-03-18 18:17:37
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -20,8 +20,8 @@ import arrow_down from '../../assets/arrow_down.svg';
 import {ItemData} from '../../data/ItemData';
 import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps, ListProps } from './List.type';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { add_normal, addtotop, liftup, liftdown, complete, add_completed, undo, add_completedTasks, add_normalTasks, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
-import { getItemsByDay } from '../../data/api';
+import { add_normal, change_importance, complete, add_completed, undo, add_completedTasks, add_normalTasks, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
+import { getItemsByDay, updateItem } from '../../data/api';
 
 
 export const List: FC<ListProps> = ({day}) => {
@@ -40,26 +40,24 @@ export const List: FC<ListProps> = ({day}) => {
         fetchItems();
     }, [day]);
 
-    const taskchange = (item: ItemData) => {
+    // const { id, updateTime, expireTime, checked, important } = req.body
+    const taskchange = async (item: ItemData) => {
+        const updatedItem = await updateItem(item);
+        console.log(updatedItem);
+        
         if (item.checked) {
             dispatch(complete(item));
             dispatch(add_completed(item));
         } else {
             dispatch(undo(item));
-            if (item.important) {
-                dispatch(addtotop(item));
-            } else {
-                dispatch(add_normal(item));
-            }
+            dispatch(add_normal(item));
         }
     }
 
-    const handleImportanceChange = (item: ItemData) => { 
-        if (item.important) {
-            dispatch(liftup(item));
-        } else {
-            dispatch(liftdown(item));
-        }
+    const handleImportanceChange = async (item: ItemData) => {
+        const updatedItem = await updateItem(item);
+        console.log(updatedItem);
+        dispatch(change_importance(item));
     }
 
     return (
@@ -88,7 +86,8 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     const handleChange = (e: React.MouseEvent) => {
         const updatedItem = {
             ...item,
-            checked: !item.checked
+            checked: !item.checked,
+            updateTime: new Date().toISOString()
         };
         taskChange(updatedItem);
         e.stopPropagation();
@@ -97,7 +96,8 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     const handleLiftUp = (e: React.MouseEvent) => {
         const updatedItem = {
             ...item,
-            important: !item.important
+            important: !item.important,
+            updateTime: new Date().toISOString()
         };
         handleImportanceChange(updatedItem);
         e.stopPropagation();
@@ -141,17 +141,16 @@ const ComponentComplete = () => {
         setHiden(!hiden);
     }
 
-    const taskchange = (item: ItemData) => {
+    const taskchange = async (item: ItemData) => {
+        const updatedItem = await updateItem(item);
+        console.log(updatedItem);
+
         if (item.checked) {
             dispatch(complete(item));
             dispatch(add_completed(item));
         } else {
             dispatch(undo(item));
-            if (item.important) {
-                dispatch(addtotop(item));
-            } else {
-                dispatch(add_normal(item));
-            }
+            dispatch(add_normal(item));
         }
     }
 

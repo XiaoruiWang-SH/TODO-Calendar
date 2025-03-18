@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:58:06
+ * @LastEditTime: 2025-03-18 17:08:43
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -61,6 +61,21 @@ export const addItem = async (item: ItemData): Promise<ItemData> => {
             throw new Error(`Network error: ${axiosError.message}`);
         }
         throw error;
+    }
+};
+
+export const updateItem = async (item: ItemData): Promise<ItemData> => {
+    try {
+        const response = await axios.post<ApiResponse<ItemData>>(`${API_URL}/updateitem`, item);
+        if (response.data.success && response.data.data) {
+            return response.data.data;
+        } else {
+            throw new Error(response.data.message || "Failed to update item");
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        console.error("Error updating item:", axiosError.message);
+        throw new Error(`Failed to update item: ${axiosError.message}`);
     }
 };
 

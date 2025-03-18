@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:21:32
+ * @LastEditTime: 2025-03-18 17:59:28
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -15,7 +15,7 @@ import  icon_plus from '../../assets/icon_plus.svg';
 import {ItemData} from '../../data/ItemData';
 import { ComponentInputProps } from './Input.types'
 import { useAppDispatch } from '../../app/hooks';
-import { add_normal, addtotop } from '../../features/task/taskSlice';
+import { add_normal, change_importance } from '../../features/task/taskSlice';
 import { addItem } from '../../data/api';
 
 export const Input: FC = () => {
@@ -38,11 +38,7 @@ export const Input: FC = () => {
         };
         const result: ItemData = await addItem(newItem);
         console.log(result);
-        if (result.important) {
-            dispatch(addtotop(result));
-        } else {
-            dispatch(add_normal(result));
-        }
+        dispatch(add_normal(result));
         setTask('');
     }
 

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 11:45:25
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 17:02:24
+ * @LastEditTime: 2025-03-18 18:24:46
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -31,30 +31,58 @@ export const normalTasksSlice = createSlice({
     reducers: {
         add_normal: (state, action: PayloadAction<ItemData>) => {
             state.tasks.push(action.payload);
+            state.tasks = [...state.tasks].sort((a, b) => {
+                // First sort by importance
+                if (a.important !== b.important) {
+                    return a.important ? -1 : 1;
+                }
+                // Then sort by updateTime (most recent first)
+                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
+            });
         },
-        addtotop: (state, action: PayloadAction<ItemData>) => {
-            state.tasks.unshift(action.payload);
-        },
-        liftup: (state, action: PayloadAction<ItemData>) => {
-            state.tasks = state.tasks.filter((t: ItemData) => t.id !== action.payload.id);
-            state.tasks.unshift(action.payload);
-        },
-        liftdown: (state, action: PayloadAction<ItemData>) => {
+        change_importance: (state, action: PayloadAction<ItemData>) => {
             state.tasks = state.tasks.filter((t: ItemData) => t.id !== action.payload.id);
             state.tasks.push(action.payload);
+            state.tasks = [...state.tasks].sort((a, b) => {
+                // First sort by importance
+                if (a.important !== b.important) {
+                    return a.important ? -1 : 1;
+                }
+                // Then sort by updateTime (most recent first)
+                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
+            });
         },
         complete: (state, action: PayloadAction<ItemData>) => {
             state.tasks = state.tasks.filter((t: ItemData) => t.id !== action.payload.id);
         },
         add_normalTasks: (state, action: PayloadAction<ItemData[]>) => {
-            action.payload.filter((item) => !item.checked).filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id)).forEach((item) => {
-                state.tasks.push(item);
+            const newTasks = action.payload
+                .filter((item) => !item.checked)
+                .filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id));
+            
+            state.tasks = [...state.tasks, ...newTasks].sort((a, b) => {
+                // First sort by importance
+                if (a.important !== b.important) {
+                    return a.important ? -1 : 1;
+                }
+                // Then sort by updateTime (most recent first)
+                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
+            });
+        },
+        sort_tasks: (state) => {
+            state.tasks.sort((a, b) => {
+                // First sort by importance
+                if (a.important !== b.important) {
+                    return a.important ? -1 : 1;
+                }
+                // Then sort by updateTime (most recent first)
+                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
             });
         }
     }
 });
 
-export const { add_normal, addtotop, liftup, liftdown, complete, add_normalTasks } = normalTasksSlice.actions;
+export const { add_normal, change_importance, complete, add_normalTasks, sort_tasks } = normalTasksSlice.actions;
 export const normalTasksReducer = normalTasksSlice.reducer;
 
 export const completedTasksSlice = createSlice({
@@ -63,13 +91,30 @@ export const completedTasksSlice = createSlice({
     reducers: {
         add_completed: (state, action: PayloadAction<ItemData>) => {
             state.tasks.push(action.payload);
+            state.tasks = [...state.tasks].sort((a, b) => {
+                // First sort by importance
+                if (a.important !== b.important) {
+                    return a.important ? -1 : 1;
+                }
+                // Then sort by updateTime (most recent first)
+                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
+            });
         },
         undo: (state, action: PayloadAction<ItemData>) => {
             state.tasks = state.tasks.filter((t:ItemData) => t.id !== action.payload.id);
         },
         add_completedTasks: (state, action: PayloadAction<ItemData[]>) => {
-            action.payload.filter((item) => item.checked).filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id)).forEach((item) => {
-                state.tasks.push(item);
+            const newTasks = action.payload
+                .filter((item) => item.checked)
+                .filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id));
+            
+            state.tasks = [...state.tasks, ...newTasks].sort((a, b) => {
+                // First sort by importance
+                if (a.important !== b.important) {
+                    return a.important ? -1 : 1;
+                }
+                // Then sort by updateTime (most recent first)
+                return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
             });
         }
     }
