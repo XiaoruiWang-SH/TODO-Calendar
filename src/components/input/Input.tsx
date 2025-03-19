@@ -34,7 +34,8 @@ export const Input: FC = () => {
             important: false,
             createTime: new Date().toISOString(),
             expireTime: null,
-            updateTime: new Date().toISOString()
+            updateTime: new Date().toISOString(),
+            createDate: new Date().toDateString()
         };
         const result: ItemData = await addItem(newItem);
         console.log(result);

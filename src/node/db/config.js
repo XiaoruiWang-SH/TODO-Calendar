@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 16:17:48
+ * @LastEditTime: 2025-03-19 13:34:14
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -39,12 +39,10 @@ const createTableQuery = `
       name VARCHAR(255) NOT NULL,             
       checked BOOLEAN DEFAULT FALSE,                                
       important BOOLEAN DEFAULT FALSE,
+      createDate VARCHAR(255) NOT NULL,              
       createTime VARCHAR(255) NOT NULL,              
       expireTime VARCHAR(255),                
-      updateTime VARCHAR(255) NOT NULL, 
-      day VARCHAR(255) NOT NULL,
-      month VARCHAR(255) NOT NULL,
-      year VARCHAR(255) NOT NULL
+      updateTime VARCHAR(255) NOT NULL
   );
 `;
 

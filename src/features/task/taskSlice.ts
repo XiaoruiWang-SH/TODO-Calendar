@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 11:45:25
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 18:24:46
+ * @LastEditTime: 2025-03-19 14:06:18
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -57,10 +57,8 @@ export const normalTasksSlice = createSlice({
         },
         add_normalTasks: (state, action: PayloadAction<ItemData[]>) => {
             const newTasks = action.payload
-                .filter((item) => !item.checked)
-                .filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id));
-            
-            state.tasks = [...state.tasks, ...newTasks].sort((a, b) => {
+                .filter((item) => !item.checked);
+            state.tasks = [...newTasks].sort((a, b) => {
                 // First sort by importance
                 if (a.important !== b.important) {
                     return a.important ? -1 : 1;
@@ -105,10 +103,9 @@ export const completedTasksSlice = createSlice({
         },
         add_completedTasks: (state, action: PayloadAction<ItemData[]>) => {
             const newTasks = action.payload
-                .filter((item) => item.checked)
-                .filter((item) => !state.tasks.some((t: ItemData) => t.id === item.id));
+                .filter((item) => item.checked);
             
-            state.tasks = [...state.tasks, ...newTasks].sort((a, b) => {
+            state.tasks = [...newTasks].sort((a, b) => {
                 // First sort by importance
                 if (a.important !== b.important) {
                     return a.important ? -1 : 1;

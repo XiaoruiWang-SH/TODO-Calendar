@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 12:02:47
+ * @LastEditTime: 2025-03-19 13:55:03
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -16,19 +16,7 @@ import star_selected from '../../assets/star-selected.svg';
 import { getToday, getCurrentWeekDatesArray, getCurrentDate } from './util';
 import { addItem, getItems, getItemsByDayRange } from '../../data/api';
 import { useEffect, useState } from 'react';
-
-
-const dayTasks: Map<string, ItemData[]> = new Map([
-    ["Sun", []],
-    ["Mon", []],
-    ["Tue", []],
-    ["Wed", []],
-    ["Thu", []],
-    ["Fri", []],
-    ["Sat", []]
-]);
-
-const dayData: string[][] = [["你是谁啊你在哪你为什么这样ddd做", "你是谁啊你在哪你为什么这样做你是谁啊你在哪你为什么这样做", "ccc"], ["aaa", "bbb"], ["aaa", "bbb", "ccc"], ["aaa"], ["aaa", "bbb", "ccc", "ddd"], ["aaa", "ccc"], ["aaa", "bbb", "ccc", "ddd", "eee"]];
+import { useNavigate } from 'react-router';
 
 export const Calendar = () => {
 
@@ -41,17 +29,6 @@ export const Calendar = () => {
         const tasksMap = await getItemsByDayRange(startDate, endDate);
         return tasksMap;
     };
-
-    /**
-     * const tasksMap = new Map();
-            tasks.forEach(task => {
-                const date = new Date(task.createTime).toDateString();
-                if (!tasksMap.has(date)) {
-                    tasksMap.set(date, []);
-                }
-                tasksMap.get(date).push(task);
-            });
-     */
 
     useEffect(() => {
         const currentDate = getCurrentDate();
@@ -107,11 +84,18 @@ const WeekTitle = () => {
 
 
 const DayBlocks = ({ tasks }: DayTasksProps) => {
+
+    const navigate = useNavigate();
+
+    const handleClick = (date: string) => {
+        navigate('/task', { state: { date: date } });
+    };
+
     return (
-        // <div className="flex flex-col justify-start items-start border-s-[1px] border-y-[1px] last:border-e-[1px] border-gray-300 w-full h-full">
         <div className="flex justify-around items-center h-[75vh] mt-2">
             {Array.from(tasks.entries()).map(([date, daytasks]) => (
-                <div className={ `flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}>
+                <div className={ `flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
+                 onClick={() => handleClick(date)}>
                     <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
                     <div className='my-2 mx-2'>
                         {

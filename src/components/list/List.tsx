@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 18:43:34
+ * @LastEditTime: 2025-03-19 13:58:40
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -21,24 +21,24 @@ import {ItemData} from '../../data/ItemData';
 import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps, ListProps } from './List.type';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, change_importance, complete, add_completed, undo, add_completedTasks, add_normalTasks, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
-import { getItemsByDay, updateItem } from '../../data/api';
+import { getItemsByDate, updateItem } from '../../data/api';
 
 
-export const List: FC<ListProps> = ({day}) => {
+export const List: FC<ListProps> = ({date}) => {
 
     const normalTasks = useAppSelector(selectNormalTasks);
     const completedTasks = useAppSelector(selectCompletedTasks);
     const dispatch = useAppDispatch();
 
-    const fetchItems = async () => {
-        const items = await getItemsByDay(day);
+    const fetchItems = async (date: string) => {
+        const items = await getItemsByDate(date);
         dispatch(add_normalTasks(items));
         dispatch(add_completedTasks(items));
     };
 
     useEffect(() => {
-        fetchItems();
-    }, [day]);
+        fetchItems(date);
+    }, [date]);
 
     // const { id, updateTime, expireTime, checked, important } = req.body
     const taskchange = async (item: ItemData) => {

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 10:34:17
+ * @LastEditTime: 2025-03-19 13:35:28
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -33,13 +33,13 @@ const getItemById = async (id) => {
     }
   };
 
-  const getItemsByDay = async (day) => {
+  const getItemsByDate = async (date) => {
     try {
       const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE day = ? ORDER BY important DESC, updateTime DESC", [day]);
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE createDate = ? ORDER BY important DESC, updateTime DESC", [date]);
       return rows;
     } catch (err) {
-      console.error("Error fetching items by day:", err);
+      console.error("Error fetching items by date:", err);
       throw err;
     }
   };
@@ -54,32 +54,8 @@ const getItemById = async (id) => {
       throw err;
     }
   };
-  
 
-  const getItemsByMonth = async (month) => {
-    try {
-      const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE month = ? ORDER BY important DESC, updateTime DESC", [month]);
-      return rows;
-    } catch (err) {
-      console.error("Error fetching items by month:", err);
-      throw err;
-    }
-  };
-
-  const getItemsByYear = async (year) => {
-    try {
-      const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE year = ? ORDER BY important DESC, updateTime DESC", [year]);
-      return rows;
-    } catch (err) {
-      console.error("Error fetching items by year:", err);
-      throw err;
-    }
-  };
-  
-
-  const updateItemByBid = async (id, updateTime, expireTime, checked, important) => {
+  const updateItemById = async (id, updateTime, expireTime, checked, important) => {
     try {
       const pool = await poolPromise;
       const [result] = await pool.query(
@@ -95,12 +71,12 @@ const getItemById = async (id) => {
   
 
 // Insert a new item
-const addItem = async (name, checked, important, createTime, expireTime, updateTime, day, month, year) => {
+  const addItem = async (name, checked, important, createTime, expireTime, updateTime, createDate) => {
   try {
     const pool = await poolPromise;
     const [result] = await pool.query(
-      "INSERT INTO calendar (name, checked, important, createTime, expireTime, updateTime, day, month, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [name, checked, important, createTime, expireTime, updateTime, day, month, year]
+      "INSERT INTO calendar (name, checked, important, createTime, expireTime, updateTime, createDate) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      [name, checked, important, createTime, expireTime, updateTime, createDate]
     );
     return result.insertId;
   } catch (err) {
@@ -109,5 +85,5 @@ const addItem = async (name, checked, important, createTime, expireTime, updateT
   }
 };
 
-export { getItems, getItemById, getItemsByDay, getItemsByDayRange, getItemsByMonth, getItemsByYear, updateItemByBid, addItem };
+export { getItems, getItemById, getItemsByDate, getItemsByDayRange, updateItemById, addItem };
 

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:49:09
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 10:54:07
+ * @LastEditTime: 2025-03-19 13:40:45
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -14,7 +14,7 @@ import multer from "multer";
 import { join, dirname, extname } from "path";
 import { fileURLToPath } from "url";
 
-import { getItems, getItemById, addItem, getItemsByDay, getItemsByDayRange, getItemsByMonth, getItemsByYear, updateItemByBid } from "./db/queries.js";
+import { getItems, getItemById, addItem, getItemsByDate, getItemsByDayRange, updateItemById } from "./db/queries.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -79,7 +79,7 @@ app.get("/allitems", async (req, res) => {
       success: true,
       message: "Items fetched successfully",
       data: tasks
-    }); 
+    });
   } catch (error) {
     console.error("Error:", error);
     res.json({
@@ -111,12 +111,12 @@ app.get("/item", async (req, res) => {
   }
 });
 
-app.get("/getitemsbyday", async (req, res) => {
-  const { day } = req.query;
-  console.log("Request Details - day:" + day);
+app.get("/getitemsbydate", async (req, res) => {
+  const { date } = req.query;
+  console.log("Request Details - date:" + date);
   let tasks = [];
   try {
-    tasks = await getItemsByDay(day);
+    tasks = await getItemsByDate(date);
     res.json({
       success: true,
       message: "Items fetched successfully",
@@ -153,48 +153,6 @@ app.get("/getitemsbydayrange", async (req, res) => {
   }
 });
 
-app.get("/getitemsbymonth", async (req, res) => {
-  const { month } = req.query;
-  console.log("Request Details - month:" + month);
-  let tasks = [];
-  try {
-    tasks = await getItemsByMonth(month);
-    res.json({
-      success: true,
-      message: "Items fetched successfully",
-      data: tasks
-    });
-  } catch (error) {
-    console.error("Error:", error);
-    res.json({
-      success: false,
-      message: "Failed to fetch items",
-      data: null
-    });
-  }
-});
-
-app.get("/getitemsbyyear", async (req, res) => {
-  const { year } = req.query;
-  console.log("Request Details - year:" + year);
-  let tasks = [];
-  try {
-    tasks = await getItemsByYear(year);
-    res.json({
-      success: true,
-      message: "Items fetched successfully",
-      data: tasks
-    });
-  } catch (error) {
-    console.error("Error:", error);
-    res.json({
-      success: false,
-      message: "Failed to fetch items",
-      data: null
-    });
-  }
-});
-
 
 
 app.post("/updateitem", async (req, res) => {
@@ -202,7 +160,7 @@ app.post("/updateitem", async (req, res) => {
   const { id, updateTime, expireTime, checked, important } = req.body;
   let task = {};
   try {
-    task = await updateItemByBid(id, updateTime, expireTime, checked, important);
+    task = await updateItemById(id, updateTime, expireTime, checked, important);
     console.log("Item Description:", task);
     res.json({
       success: true,
@@ -227,12 +185,13 @@ app.post("/additem", async (req, res) => {
     important,
     createTime,
     expireTime,
-    updateTime
+    updateTime,
+    createDate
   } = req.body;
 
   // Validate createTime
   if (!createTime) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       success: false,
       message: "Invalid request: createTime is required",
       data: null
@@ -240,57 +199,28 @@ app.post("/additem", async (req, res) => {
   }
 
   try {
-    // Parse day, month, year from createTime
-    const createDate = new Date(createTime);
-    
-    // Check if date is valid
-    if (isNaN(createDate.getTime())) {
-      return res.status(400).json({ 
-        success: false,
-        message: "Invalid date format for createTime",
-        data: null
-      });
-    }
-    
-    const day = createDate.getDate();
-    const month = createDate.getMonth() + 1; // getMonth() returns 0-11
-    const year = createDate.getFullYear();
-
-    console.log("Received data:", { name, checked, important, createTime, expireTime, updateTime, day, month, year });
-
-    try {
-      // Add an item
-      const id = await addItem(
-        name,
-        checked,
-        important,
-        createTime,
-        expireTime,
-        updateTime,
-        day,
-        month,
-        year
-      );
-      console.log("New Item ID:", id);
-      // Respond to the client with success structure
-      return res.json({
-        success: true,
-        message: "Item created successfully",
-        data: {id, name, checked, important, createTime, expireTime, updateTime, day, month, year}
-      });
-    } catch (err) {
-      console.error("Error adding item:", err);
-      return res.status(500).json({ 
-        success: false,
-        message: "Failed to create item",
-        data: null
-      });
-    }
+    // Add an item
+    const id = await addItem(
+      name,
+      checked,
+      important,
+      createTime,
+      expireTime,
+      updateTime,
+      createDate
+    );
+    console.log("New Item ID:", id);
+    // Respond to the client with success structure
+    return res.json({
+      success: true,
+      message: "Item created successfully",
+      data: { id, name, checked, important, createTime, expireTime, updateTime, createDate }
+    });
   } catch (err) {
-    console.error("Error parsing date:", err);
-    return res.status(400).json({ 
+    console.error("Error adding item:", err);
+    return res.status(500).json({
       success: false,
-      message: "Invalid date format",
+      message: "Failed to create item",
       data: null
     });
   }

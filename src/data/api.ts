@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 11:43:56
+ * @LastEditTime: 2025-03-19 13:48:56
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -41,7 +41,8 @@ export const addItem = async (item: ItemData): Promise<ItemData> => {
         important: item.important,
         createTime: item.createTime,
         expireTime: item.expireTime,
-        updateTime: item.updateTime
+        updateTime: item.updateTime,
+        createDate: item.createDate
     };
 
     try {
@@ -79,9 +80,9 @@ export const updateItem = async (item: ItemData): Promise<ItemData> => {
     }
 };
 
-export const getItemsByDay = async (day: string): Promise<ItemData[]> => {
+export const getItemsByDate = async (date: string): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ApiResponse<ItemData[]>>(`${API_URL}/getitemsbyday?day=${day}`);
+        const response = await axios.get<ApiResponse<ItemData[]>>(`${API_URL}/getitemsbydate?date=${date}`);
         if (response.data.success && response.data.data) {
             return response.data.data;
         } else {

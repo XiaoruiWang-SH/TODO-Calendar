@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:02:02
+ * @LastEditTime: 2025-03-19 13:38:12
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -17,6 +17,7 @@ export interface ItemData {
     createTime: string;
     expireTime: string | null;
     updateTime: string;
+    createDate: string;
 }
 
 export const isExpired = (taskItem:ItemData): boolean => {
