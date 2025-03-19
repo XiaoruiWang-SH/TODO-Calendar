@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 14:13:04
+ * @LastEditTime: 2025-03-19 14:41:10
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -92,12 +92,12 @@ const DayBlocks = ({ tasks }: DayTasksProps) => {
     };
 
     return (
-        <div className="flex justify-around items-center h-[75vh] mt-2">
+        <div className="flex justify-around items-start h-[75vh] mt-2">
             {Array.from(tasks.entries()).map(([date, daytasks]) => (
                 <div className={ `flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
                  onClick={() => handleClick(date)}>
                     <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
-                    <div className='my-2 mx-2'>
+                    <div className='my-2 mx-2 w-full overflow-y-auto'>
                         {
                             daytasks.map((task, index) => (
                                 <TaskItem key={index} dataItem={task} />
@@ -112,7 +112,7 @@ const DayBlocks = ({ tasks }: DayTasksProps) => {
 
 const TaskItem = ({ dataItem }: TaskItemProps) => {
     return (
-        <div className='flex justify-start items-center mt-2 max-h-10'>
+        <div className='flex justify-start items-center mt-2 mr-2 max-h-10'>
             <img src={dataItem.important ? star_selected : star_unselected} className='w-4' alt='important'></img>
             <div className={`ml-1.5 line-clamp-2 ${dataItem.checked ? 'line-through text-gray-500' : ''}`}>{dataItem.name}</div>
         </div>

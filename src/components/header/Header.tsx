@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 13:41:59
+ * @LastEditTime: 2025-03-19 14:18:36
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -18,8 +18,8 @@ export const Header: FC = () => {
   return (
     <div className='text-3xl font-bold text-start my-5'>
       <h1>ToDo List</h1>
-      <button className='border border-gray-400 hover:bg-gray-400 active:bg-gray-600 text-gray-900 hover:text-white active:text-white text-sm px-2 py-1 rounded-md font-normal' 
-      onClick={() => navigate('/task', { state: { date: new Date().toDateString() } })}> Jump to task</button>
+      {/* <button className='border border-gray-400 hover:bg-gray-400 active:bg-gray-600 text-gray-900 hover:text-white active:text-white text-sm px-2 py-1 rounded-md font-normal' 
+      onClick={() => navigate('/task', { state: { date: new Date().toDateString() } })}> Jump to task</button> */}
     </div>
   );
 }
