@@ -3,13 +3,13 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 16:59:24
+ * @LastEditTime: 2025-03-19 17:28:16
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-import { DayTasksProps, TaskItemProps, CurrentDateProps, DateRangeProps, SwitcherProps, HeaderProps } from './Calendar.types';
+import { DayTasksProps, TaskItemProps, SwitcherProps, HeaderProps, DisplaySwitcherProps } from './Calendar.types';
 import { ItemData } from '../../data/ItemData';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
@@ -20,13 +20,13 @@ import { addItem, getItems, getItemsByDayRange } from '../../data/api';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectCalendarState, setCurrentDate, setCurrentWeekDates, setTasksMap } from '../../features/calendar/calendarSlice';
+import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentWeekDates, setTasksMap, setDisplayMode } from '../../features/calendar/calendarSlice';
 
 export const Calendar = () => {
 
     const dispatch = useAppDispatch();
     const calendarState = useAppSelector(selectCalendarState);
-    const { selectDate, currentDate, currentWeekDates, tasksMap } = calendarState;
+    const { selectDate, currentDate, currentWeekDates, tasksMap, displayMode } = calendarState;
 
     const getTasks = async (currentWeekDays: Date[]) => {
         const tasks = await getItemsByDayRange(currentWeekDays[0].toISOString(), currentWeekDays[6].toISOString());
@@ -65,21 +65,21 @@ export const Calendar = () => {
 
     const handleSwitcher = (action: string) => {
         switch (action) {
-            case "goBack":{
+            case "goBack": {
                 const lastWeekDates = getLastWeekDatesArray(currentWeekDates);
                 dispatch(setCurrentWeekDates(lastWeekDates));
                 computeTargetDate(lastWeekDates);
                 getTasks(lastWeekDates);
             }
                 break;
-            case "goForward":{
+            case "goForward": {
                 const nextWeekDates = getNextWeekDatesArray(currentWeekDates);
                 dispatch(setCurrentWeekDates(nextWeekDates));
                 computeTargetDate(nextWeekDates);
                 getTasks(nextWeekDates);
             }
                 break;
-            case "today":{
+            case "today": {
                 const currentWeekDays = getCurrentWeekDatesArray();
                 dispatch(setCurrentWeekDates(currentWeekDays));
                 computeTargetDate(currentWeekDays);
@@ -88,12 +88,26 @@ export const Calendar = () => {
                 break;
         }
     };
+
+    const handleDisplaySwitcher = (action: string) => {
+        switch (action) {
+            case DisplayMode.WEEK: {
+                dispatch(setDisplayMode(DisplayMode.WEEK));
+            }
+                break;
+            case DisplayMode.MONTH: {
+                dispatch(setDisplayMode(DisplayMode.MONTH));
+            }
+                break;
+        }
+    };
+
     return (
         <div>
-            
-            <Header year={currentDate.year} month={currentDate.month} day={currentDate.day} handleSwitcher={handleSwitcher} />
+
+            <Header year={currentDate.year} month={currentDate.month} day={currentDate.day} handleSwitcher={handleSwitcher} handleDisplaySwitcher={handleDisplaySwitcher} />
             <WeekTitle />
-            <DayBlocks tasks={new Map(Object.entries(tasksMap))} />
+            <DayBlocks tasks={new Map(Object.entries(tasksMap))} displayMode={displayMode} />
 
         </div>
     );
@@ -106,7 +120,7 @@ const WeekTitle = () => {
         <div className="flex justify-around items-center">
             {dayTitle.map((day, index) => {
                 return (
-                    <div key={index} className={ `flex justify-center items-center w-full h-8 text-[16px] mx-1.5 bg-gray-200 rounded-sm`}>{day}</div>
+                    <div key={index} className={`flex justify-center items-center w-full h-8 text-[16px] mx-1.5 bg-gray-200 rounded-sm`}>{day}</div>
                 );
             })}
         </div>
@@ -114,7 +128,7 @@ const WeekTitle = () => {
 };
 
 
-const DayBlocks = ({ tasks }: DayTasksProps) => {
+const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
 
     const navigate = useNavigate();
 
@@ -123,21 +137,28 @@ const DayBlocks = ({ tasks }: DayTasksProps) => {
     };
 
     return (
-        <div className="flex justify-around items-start h-[75vh] mt-2">
-            {Array.from(tasks.entries()).map(([date, daytasks]) => (
-                <div className={ `flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
-                 onClick={() => handleClick(date)}>
-                    <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
-                    <div className='my-2 ml-2 mr-1 overflow-y-auto'>
-                        {
-                            daytasks.map((task, index) => (
-                                <TaskItem key={index} dataItem={task} />
-                            ))
-                        }
+        <>
+            {
+                displayMode === DisplayMode.WEEK ?
+                    <div className="flex justify-around items-start h-[75vh] mt-2">
+                        {Array.from(tasks.entries()).map(([date, daytasks]) => (
+                            <div className={`flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
+                                onClick={() => handleClick(date)}>
+                                <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
+                                <div className='my-2 ml-2 mr-1 overflow-y-auto'>
+                                    {
+                                        daytasks.map((task, index) => (
+                                            <TaskItem key={index} dataItem={task} />
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                </div>
-            ))}
-        </div>
+                    :
+                    <div>Month</div>
+            }
+        </>
     );
 };
 
@@ -150,26 +171,42 @@ const TaskItem = ({ dataItem }: TaskItemProps) => {
     );
 };
 
-const Header = ({ year, month, day, handleSwitcher }: HeaderProps) => {
+const Header = ({ year, month, day, handleSwitcher, handleDisplaySwitcher }: HeaderProps) => {
     return (
         <div className='flex justify-between items-center mb-4 ml-1'>
             <div className="text-2xl">{month} {year}</div>
-            <Switcher onGoBack={() => handleSwitcher("goBack")} onGoForward={() => handleSwitcher("goForward")} onToday={() => handleSwitcher("today")} />
+            <DirectionSwitcher onGoBack={() => handleSwitcher("goBack")} onGoForward={() => handleSwitcher("goForward")} onToday={() => handleSwitcher("today")} />
+            <DisplaySwitcher onList={() => handleDisplaySwitcher(DisplayMode.WEEK)} onGrid={() => handleDisplaySwitcher(DisplayMode.MONTH)} />
         </div>
     );
 };
 
-const Switcher = ({ onGoBack, onGoForward, onToday }: SwitcherProps) => {
+const DirectionSwitcher = ({ onGoBack, onGoForward, onToday }: SwitcherProps) => {
     return (
         <div className='flex justify-center items-center'>
-            <div onClick={onGoBack} className='w-8 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1'>
+            <div onClick={onGoBack} className='w-10 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-2'>
                 <img src={goBack} className='w-4' alt='go back'></img>
             </div>
             <div onClick={onToday} className='w-auto h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1 px-2'>
                 <span>Today</span>
             </div>
-            <div onClick={onGoForward} className='w-8 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1'>
+            <div onClick={onGoForward} className='w-10 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-2'>
                 <img src={goForward} className='w-4' alt='go forward'></img>
+            </div>
+        </div>
+    );
+};
+
+const DisplaySwitcher = ({ onList, onGrid }: DisplaySwitcherProps) => {
+    const calendarState = useAppSelector(selectCalendarState);
+    const { displayMode } = calendarState;
+    return (
+        <div className='flex justify-center items-center ml-5'>
+            <div onClick={onGrid} className={`w-auto h-8 border border-gray-400 hover:border-gray-950 hover:border-1 flex justify-center items-center px-2 rounded-l-md ${displayMode === DisplayMode.MONTH ? "bg-gray-600 text-white" : ""}`}>
+                <span>Month</span>
+            </div>
+            <div onClick={onList} className={`w-auto h-8 border border-l-0 border-gray-400 hover:border-gray-950 hover:border-1 flex justify-center items-center px-2 rounded-r-md ${displayMode === DisplayMode.WEEK ? "bg-gray-600 text-white" : ""}`}>
+                <span>Week</span>
             </div>
         </div>
     );
