@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:15:11
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 09:43:08
+ * @LastEditTime: 2025-03-19 15:35:22
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -38,3 +38,22 @@ export const getCurrentWeekDatesArray = (): Date[] => {
     return weekDates;
 };
 
+export const getLastWeekDatesArray = (currentWeekDates: Date[]): Date[] => {
+    const lastWeekDates: Date[] = [];
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(currentWeekDates[i]);
+        day.setDate(currentWeekDates[i].getDate() - 7);
+        lastWeekDates.push(day);
+    }
+    return lastWeekDates;
+}
+
+export const getNextWeekDatesArray = (currentWeekDates: Date[]): Date[] => {
+    const nextWeekDates: Date[] = [];
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(currentWeekDates[i]);
+        day.setDate(currentWeekDates[i].getDate() + 7);
+        nextWeekDates.push(day);
+    }
+    return nextWeekDates;
+}

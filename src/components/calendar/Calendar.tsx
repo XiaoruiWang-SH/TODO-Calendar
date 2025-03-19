@@ -3,19 +3,21 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 14:41:10
+ * @LastEditTime: 2025-03-19 16:02:50
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
-import { DayTasksProps, TaskItemProps, CurrentDateProps, DateRangeProps } from './Calendar.types';
+import { DayTasksProps, TaskItemProps, CurrentDateProps, DateRangeProps, SwitcherProps, HeaderProps } from './Calendar.types';
 import { ItemData } from '../../data/ItemData';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
-import { getToday, getCurrentWeekDatesArray, getCurrentDate } from './util';
+import goBack from '../../assets/goback.svg';
+import goForward from '../../assets/goforward.svg';
+import { getToday, getCurrentWeekDatesArray, getCurrentDate, getLastWeekDatesArray, getNextWeekDatesArray } from './util';
 import { addItem, getItems, getItemsByDayRange } from '../../data/api';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export const Calendar = () => {
@@ -25,42 +27,67 @@ export const Calendar = () => {
     const [currentWeekDates, setCurrentWeekDates] = useState<Date[]>([]);
     const [tasksMap, setTasksMap] = useState<Map<string, ItemData[]>>(new Map());
 
-    const getTasks = async ({startDate, endDate}: DateRangeProps) => {
-        const tasksMap = await getItemsByDayRange(startDate, endDate);
-        return tasksMap;
+    const getTasks = async (currentWeekDays: Date[]) => {
+        const tasks = await getItemsByDayRange(currentWeekDays[0].toISOString(), currentWeekDays[6].toISOString());
+        const tasksMap_ = new Map();
+        currentWeekDays.forEach(day => {
+            tasksMap_.set(day.toDateString(), []);
+        });
+        tasks.forEach(task => {
+            const date = new Date(task.createTime).toDateString();
+            if (tasksMap_.has(date)) {
+                tasksMap_.get(date).push(task);
+            }
+        });
+        setTasksMap(tasksMap_);
     };
 
     useEffect(() => {
-        const currentDate = getCurrentDate();
-        setCurrentDate(currentDate);
         const currentWeekDays = getCurrentWeekDatesArray();
         setCurrentWeekDates(currentWeekDays);
-        const fetchTasks = async (currentWeekDays: Date[]) => {
-            try {
-                const tasks = await getTasks({startDate: currentWeekDays[0].toISOString(), endDate: currentWeekDays[6].toISOString()});
-                const tasksMap_ = new Map();
-                currentWeekDays.forEach(day => {
-                    tasksMap_.set(day.toDateString(), []);
-                });
-                tasks.forEach(task => {
-                    const date = new Date(task.createTime).toDateString();
-                    if (tasksMap_.has(date)) {
-                        tasksMap_.get(date).push(task);
-                    }
-                });
-                
-                setTasksMap(tasksMap_);
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
-        fetchTasks(currentWeekDays);
+        computeTargetDate(currentWeekDays);
+        getTasks(currentWeekDays);
     }, []);
 
+    const computeTargetDate = (currentWeekDays: Date[]) => {
+        const targetDate = currentWeekDays[3];
+        const currentDate_ = {
+            year: targetDate.getFullYear().toString(),
+            month: targetDate.toLocaleString("en-US", { month: "short" }), // "Feb",
+            day: targetDate.getDate().toString()
+        };
+        setCurrentDate(currentDate_);
+    };
+
+    const handleSwitcher = (action: string) => {
+        switch (action) {
+            case "goBack":{
+                const lastWeekDates = getLastWeekDatesArray(currentWeekDates);
+                setCurrentWeekDates(lastWeekDates);
+                computeTargetDate(lastWeekDates);
+                getTasks(lastWeekDates);
+            }
+                break;
+            case "goForward":{
+                const nextWeekDates = getNextWeekDatesArray(currentWeekDates);
+                setCurrentWeekDates(nextWeekDates);
+                computeTargetDate(nextWeekDates);
+                getTasks(nextWeekDates);
+            }
+                break;
+            case "today":{
+                const currentWeekDays = getCurrentWeekDatesArray();
+                setCurrentWeekDates(currentWeekDays);
+                computeTargetDate(currentWeekDays);
+                getTasks(currentWeekDays);
+            }
+                break;
+        }
+    };
     return (
         <div>
             
-            <Header year={currentDate.year} month={currentDate.month} day={currentDate.day} />
+            <Header year={currentDate.year} month={currentDate.month} day={currentDate.day} handleSwitcher={handleSwitcher} />
             <WeekTitle />
             <DayBlocks tasks={tasksMap} />
 
@@ -97,7 +124,7 @@ const DayBlocks = ({ tasks }: DayTasksProps) => {
                 <div className={ `flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
                  onClick={() => handleClick(date)}>
                     <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
-                    <div className='my-2 mx-2 w-full overflow-y-auto'>
+                    <div className='my-2 ml-2 mr-1 overflow-y-auto'>
                         {
                             daytasks.map((task, index) => (
                                 <TaskItem key={index} dataItem={task} />
@@ -112,17 +139,34 @@ const DayBlocks = ({ tasks }: DayTasksProps) => {
 
 const TaskItem = ({ dataItem }: TaskItemProps) => {
     return (
-        <div className='flex justify-start items-center mt-2 mr-2 max-h-10'>
+        <div className='flex justify-start items-center mt-2 mr-1 max-h-10'>
             <img src={dataItem.important ? star_selected : star_unselected} className='w-4' alt='important'></img>
             <div className={`ml-1.5 line-clamp-2 ${dataItem.checked ? 'line-through text-gray-500' : ''}`}>{dataItem.name}</div>
         </div>
     );
 };
 
-const Header = ({ year, month, day }: CurrentDateProps) => {
+const Header = ({ year, month, day, handleSwitcher }: HeaderProps) => {
     return (
-        <div className='mb-4 ml-1'>
+        <div className='flex justify-between items-center mb-4 ml-1'>
             <div className="text-2xl">{month} {year}</div>
+            <Switcher onGoBack={() => handleSwitcher("goBack")} onGoForward={() => handleSwitcher("goForward")} onToday={() => handleSwitcher("today")} />
+        </div>
+    );
+};
+
+const Switcher = ({ onGoBack, onGoForward, onToday }: SwitcherProps) => {
+    return (
+        <div className='flex justify-center items-center'>
+            <div onClick={onGoBack} className='w-8 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1'>
+                <img src={goBack} className='w-4' alt='go back'></img>
+            </div>
+            <div onClick={onToday} className='w-auto h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1 px-2'>
+                <span>Today</span>
+            </div>
+            <div onClick={onGoForward} className='w-8 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1'>
+                <img src={goForward} className='w-4' alt='go forward'></img>
+            </div>
         </div>
     );
 };
