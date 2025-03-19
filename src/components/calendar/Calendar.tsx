@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 16:02:50
+ * @LastEditTime: 2025-03-19 16:59:24
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -19,13 +19,14 @@ import { getToday, getCurrentWeekDatesArray, getCurrentDate, getLastWeekDatesArr
 import { addItem, getItems, getItemsByDayRange } from '../../data/api';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectCalendarState, setCurrentDate, setCurrentWeekDates, setTasksMap } from '../../features/calendar/calendarSlice';
 
 export const Calendar = () => {
 
-    const [selectDate, setSelectDate] = useState<Date>(new Date());
-    const [currentDate, setCurrentDate] = useState<CurrentDateProps>({year: "", month: "", day: ""});
-    const [currentWeekDates, setCurrentWeekDates] = useState<Date[]>([]);
-    const [tasksMap, setTasksMap] = useState<Map<string, ItemData[]>>(new Map());
+    const dispatch = useAppDispatch();
+    const calendarState = useAppSelector(selectCalendarState);
+    const { selectDate, currentDate, currentWeekDates, tasksMap } = calendarState;
 
     const getTasks = async (currentWeekDays: Date[]) => {
         const tasks = await getItemsByDayRange(currentWeekDays[0].toISOString(), currentWeekDays[6].toISOString());
@@ -39,15 +40,18 @@ export const Calendar = () => {
                 tasksMap_.get(date).push(task);
             }
         });
-        setTasksMap(tasksMap_);
+        dispatch(setTasksMap(Object.fromEntries(tasksMap_)));
     };
 
     useEffect(() => {
-        const currentWeekDays = getCurrentWeekDatesArray();
-        setCurrentWeekDates(currentWeekDays);
-        computeTargetDate(currentWeekDays);
-        getTasks(currentWeekDays);
-    }, []);
+        // Only initialize if currentWeekDates is empty
+        if (currentWeekDates.length === 0) {
+            const currentWeekDays = getCurrentWeekDatesArray();
+            dispatch(setCurrentWeekDates(currentWeekDays));
+            computeTargetDate(currentWeekDays);
+            getTasks(currentWeekDays);
+        }
+    }, [currentWeekDates.length, dispatch]);
 
     const computeTargetDate = (currentWeekDays: Date[]) => {
         const targetDate = currentWeekDays[3];
@@ -56,28 +60,28 @@ export const Calendar = () => {
             month: targetDate.toLocaleString("en-US", { month: "short" }), // "Feb",
             day: targetDate.getDate().toString()
         };
-        setCurrentDate(currentDate_);
+        dispatch(setCurrentDate(currentDate_));
     };
 
     const handleSwitcher = (action: string) => {
         switch (action) {
             case "goBack":{
                 const lastWeekDates = getLastWeekDatesArray(currentWeekDates);
-                setCurrentWeekDates(lastWeekDates);
+                dispatch(setCurrentWeekDates(lastWeekDates));
                 computeTargetDate(lastWeekDates);
                 getTasks(lastWeekDates);
             }
                 break;
             case "goForward":{
                 const nextWeekDates = getNextWeekDatesArray(currentWeekDates);
-                setCurrentWeekDates(nextWeekDates);
+                dispatch(setCurrentWeekDates(nextWeekDates));
                 computeTargetDate(nextWeekDates);
                 getTasks(nextWeekDates);
             }
                 break;
             case "today":{
                 const currentWeekDays = getCurrentWeekDatesArray();
-                setCurrentWeekDates(currentWeekDays);
+                dispatch(setCurrentWeekDates(currentWeekDays));
                 computeTargetDate(currentWeekDays);
                 getTasks(currentWeekDays);
             }
@@ -89,7 +93,7 @@ export const Calendar = () => {
             
             <Header year={currentDate.year} month={currentDate.month} day={currentDate.day} handleSwitcher={handleSwitcher} />
             <WeekTitle />
-            <DayBlocks tasks={tasksMap} />
+            <DayBlocks tasks={new Map(Object.entries(tasksMap))} />
 
         </div>
     );
