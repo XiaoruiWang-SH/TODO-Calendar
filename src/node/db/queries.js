@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 13:35:28
+ * @LastEditTime: 2025-03-19 14:10:12
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -14,7 +14,7 @@ import poolPromise from "./config.js";
 const getItems = async () => {
   try {
     const pool = await poolPromise;
-    const [rows] = await pool.query("SELECT * FROM calendar ORDER BY important DESC, updateTime DESC");
+    const [rows] = await pool.query("SELECT * FROM calendar ORDER BY checked ASC, important DESC, updateTime DESC");
     return rows;
   } catch (err) {
     console.error("Error fetching items:", err);
@@ -36,7 +36,7 @@ const getItemById = async (id) => {
   const getItemsByDate = async (date) => {
     try {
       const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE createDate = ? ORDER BY important DESC, updateTime DESC", [date]);
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE createDate = ? ORDER BY checked ASC, important DESC, updateTime DESC", [date]);
       return rows;
     } catch (err) {
       console.error("Error fetching items by date:", err);
@@ -47,7 +47,7 @@ const getItemById = async (id) => {
   const getItemsByDayRange = async (startDate, endDate) => {
     try {
       const pool = await poolPromise;
-      const [rows] = await pool.query("SELECT * FROM calendar WHERE createTime BETWEEN ? AND ? ORDER BY important DESC, updateTime DESC", [startDate, endDate]);
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE createTime BETWEEN ? AND ? ORDER BY checked ASC, important DESC, updateTime DESC", [startDate, endDate]);
       return rows;
     } catch (err) { 
       console.error("Error fetching items by day range:", err);

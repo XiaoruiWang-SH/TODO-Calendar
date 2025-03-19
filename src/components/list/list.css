@@ -3,12 +3,13 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-11 14:33:38
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-13 12:06:32
+ * @LastEditTime: 2025-03-19 14:17:10
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
+@import "tailwindcss";
 
 .list-area {
     background-color: white;
@@ -28,6 +29,7 @@ li {
 }
 
 .list-checked {
+    @apply text-gray-500;
     text-decoration: line-through;
 }
 

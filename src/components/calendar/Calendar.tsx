@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 13:55:03
+ * @LastEditTime: 2025-03-19 14:13:04
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -113,8 +113,8 @@ const DayBlocks = ({ tasks }: DayTasksProps) => {
 const TaskItem = ({ dataItem }: TaskItemProps) => {
     return (
         <div className='flex justify-start items-center mt-2 max-h-10'>
-            <img src={dataItem.important ? star_unselected : star_unselected} className='w-4' alt='important'></img>
-            <div className='ml-1.5 line-clamp-2'>{dataItem.name}</div>
+            <img src={dataItem.important ? star_selected : star_unselected} className='w-4' alt='important'></img>
+            <div className={`ml-1.5 line-clamp-2 ${dataItem.checked ? 'line-through text-gray-500' : ''}`}>{dataItem.name}</div>
         </div>
     );
 };
