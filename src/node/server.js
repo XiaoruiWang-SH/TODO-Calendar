@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:49:09
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 15:50:40
+ * @LastEditTime: 2025-03-19 10:54:07
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -14,7 +14,7 @@ import multer from "multer";
 import { join, dirname, extname } from "path";
 import { fileURLToPath } from "url";
 
-import { getItems, getItemById, addItem, getItemsByDay, getItemsByMonth, getItemsByYear, updateItemByBid } from "./db/queries.js";
+import { getItems, getItemById, addItem, getItemsByDay, getItemsByDayRange, getItemsByMonth, getItemsByYear, updateItemByBid } from "./db/queries.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -117,6 +117,27 @@ app.get("/getitemsbyday", async (req, res) => {
   let tasks = [];
   try {
     tasks = await getItemsByDay(day);
+    res.json({
+      success: true,
+      message: "Items fetched successfully",
+      data: tasks
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.json({
+      success: false,
+      message: "Failed to fetch items",
+      data: null
+    });
+  }
+});
+
+app.get("/getitemsbydayrange", async (req, res) => {
+  const { startDate, endDate } = req.query;
+  console.log("Request Details - startDate:" + startDate + " endDate:" + endDate);
+  let tasks = [];
+  try {
+    tasks = await getItemsByDayRange(startDate, endDate);
     res.json({
       success: true,
       message: "Items fetched successfully",

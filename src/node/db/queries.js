@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:51:00
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 17:50:51
+ * @LastEditTime: 2025-03-19 10:34:17
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -43,6 +43,18 @@ const getItemById = async (id) => {
       throw err;
     }
   };
+
+  const getItemsByDayRange = async (startDate, endDate) => {
+    try {
+      const pool = await poolPromise;
+      const [rows] = await pool.query("SELECT * FROM calendar WHERE createTime BETWEEN ? AND ? ORDER BY important DESC, updateTime DESC", [startDate, endDate]);
+      return rows;
+    } catch (err) { 
+      console.error("Error fetching items by day range:", err);
+      throw err;
+    }
+  };
+  
 
   const getItemsByMonth = async (month) => {
     try {
@@ -97,5 +109,5 @@ const addItem = async (name, checked, important, createTime, expireTime, updateT
   }
 };
 
-export { getItems, getItemById, getItemsByDay, getItemsByMonth, getItemsByYear, updateItemByBid, addItem };
+export { getItems, getItemById, getItemsByDay, getItemsByDayRange, getItemsByMonth, getItemsByYear, updateItemByBid, addItem };
 

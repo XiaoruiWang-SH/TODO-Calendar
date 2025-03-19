@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 18:17:37
+ * @LastEditTime: 2025-03-18 18:43:34
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -32,8 +32,8 @@ export const List: FC<ListProps> = ({day}) => {
 
     const fetchItems = async () => {
         const items = await getItemsByDay(day);
-            dispatch(add_normalTasks(items));
-            dispatch(add_completedTasks(items));
+        dispatch(add_normalTasks(items));
+        dispatch(add_completedTasks(items));
     };
 
     useEffect(() => {

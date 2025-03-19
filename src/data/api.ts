@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 17:08:43
+ * @LastEditTime: 2025-03-19 11:43:56
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -91,5 +91,21 @@ export const getItemsByDay = async (day: string): Promise<ItemData[]> => {
         const axiosError = error as AxiosError;
         console.error("Error fetching items by day:", axiosError.message);
         throw new Error(`Failed to fetch items by day: ${axiosError.message}`);
+    }
+};
+
+
+export const getItemsByDayRange = async (startDate: string, endDate: string): Promise<ItemData[]> => {
+    try {
+        const response = await axios.get<ApiResponse<ItemData[]>>(`${API_URL}/getitemsbydayrange?startDate=${startDate}&endDate=${endDate}`);
+        if (response.data.success && response.data.data) {
+            return response.data.data;
+        } else {
+            throw new Error(response.data.message || "Failed to fetch items by day range");
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        console.error("Error fetching items by day range:", axiosError.message);
+        throw new Error(`Failed to fetch items by day range: ${axiosError.message}`);
     }
 };
