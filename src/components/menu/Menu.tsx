@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-20 14:34:54
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 16:36:53
+ * @LastEditTime: 2025-03-20 17:41:46
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -11,7 +11,7 @@
 import { DayTasksProps } from '../calendar/Calendar.types';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode } from '../../features/calendar/calendarSlice';
+import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode, setSelectDate } from '../../features/calendar/calendarSlice';
 import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, complementMonthDiaplayDates, IsValidDate } from '../calendar/util';
 import { TaskItem } from '../calendar/Calendar';
 import close from '../../assets/close.svg';
@@ -30,10 +30,12 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
 
     const navigate = useNavigate();
     const calendarState = useAppSelector(selectCalendarState);
-    const { currentRangeDates } = calendarState;
+    const dispatch = useAppDispatch();
+    const { currentRangeDates, selectDate } = calendarState;
 
     const handleClick = (date: string) => {
-        navigate('/task', { state: { date: date } });
+        const newDate = new Date(date);
+        dispatch(setSelectDate(newDate));
     };
 
     return (
@@ -45,7 +47,8 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
                 <div className="grid grid-cols-7 grid-rows-6 mt-2 w-full">
                     {Array.from(tasks.entries()).map(([date, daytasks], index) => (
                         <div className={`flex flex-col items-center justify-center w-full aspect-square hover:bg-gray-300
-                        ${date === new Date().toDateString() ? " border " : ""}             
+                        ${date === new Date().toDateString() ? " border " : ""}   
+                        ${date === selectDate.toDateString() ? " bg-red-200 " : ""}           
                                 ${IsValidDate(new Date(date), currentRangeDates) ? "text-gray-300" : "text-gray-700"}`} key={date}
                             onClick={() => handleClick(date)}>
                             <div className={`flex items-center justify-center w-full text-center font-light`}>{new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>

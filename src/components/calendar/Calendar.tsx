@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 17:29:06
+ * @LastEditTime: 2025-03-20 17:51:36
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -125,13 +125,13 @@ export const Calendar = () => {
     }
 
     return (
-        <div className='h-[100vh]'>
+        <div>
             <div className={`${isMenuOpen ? "flex" : ""}`}>
-                {isMenuOpen && <div className="flex-1 h-[100vh] pt-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
+                {isMenuOpen && <div className="flex-1 h-[100vh] py-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
                     displayMode={displayMode}
                     handleDisplayMenu={handleDisplayMenu}
                     handleSwitcher={handleSwitcher} /></div>}
-                <div className="flex-4 h-[100vh] bg-white pl-4 pt-5 ">
+                <div className="flex-4 h-[100vh] bg-white pl-4 py-5 overflow-y-scroll">
                     <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
                     <Container />
                 </div>
@@ -248,3 +248,10 @@ const DisplaySwitcher = ({ onList, onGrid }: DisplaySwitcherProps) => {
         </div>
     );
 };
+
+const Footer = () => {
+    return (
+      <div className='bg-gray-100 h-[30px] border-t border-gray-200'>
+      </div>
+    )
+  }

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 17:17:33
+ * @LastEditTime: 2025-03-20 17:55:07
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -64,7 +64,7 @@ export const List = () => {
     }
 
     return (
-        <div className='container'>
+        <div>
         {normalTasks.length == 0 ? <></> : 
         <ul className='list-area'>
             {normalTasks.map((item) => 
@@ -109,7 +109,7 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     return (
         <div className='flex justify-between items-center my-1 bg-gray-100 rounded-md py-2'>
             <CheckBox change={item.checked} handleChange={handleChange} />
-            <div className='flex-1'>{item.name}</div>
+            <div className='flex-1 mr-2.5'>{item.name}</div>
             <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
 
         </div>
@@ -158,7 +158,7 @@ const ComponentComplete = () => {
     }
 
     return (
-        <div className='container-complete'>
+        <div className='-complete'>
             <ComponentCompleteHeader num={completedTasks.length} hiden={hiden} listShowClick={listShowClick}/>
             {hiden ? <></> : 
             <ul className='list-area'>
