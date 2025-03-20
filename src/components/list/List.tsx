@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 14:16:23
+ * @LastEditTime: 2025-03-20 17:17:33
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -22,9 +22,12 @@ import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps, ListProps
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, change_importance, complete, add_completed, undo, add_completedTasks, add_normalTasks, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
 import { getItemsByDate, updateItem } from '../../data/api';
+import { setSelectDate, selectCalendarState } from '../../features/calendar/calendarSlice';
 
+export const List = () => {
 
-export const List: FC<ListProps> = ({date}) => {
+    const calendarState = useAppSelector(selectCalendarState);
+    const { selectDate } = calendarState;
 
     const normalTasks = useAppSelector(selectNormalTasks);
     const completedTasks = useAppSelector(selectCompletedTasks);
@@ -37,8 +40,8 @@ export const List: FC<ListProps> = ({date}) => {
     };
 
     useEffect(() => {
-        fetchItems(date);
-    }, [date]);
+        fetchItems(selectDate.toDateString());
+    }, [selectDate]);
 
     // const { id, updateTime, expireTime, checked, important } = req.body
     const taskchange = async (item: ItemData) => {
@@ -104,9 +107,9 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     }
 
     return (
-        <div className='list-item'>
+        <div className='flex justify-between items-center my-1 bg-gray-100 rounded-md py-2'>
             <CheckBox change={item.checked} handleChange={handleChange} />
-            <span>{item.name}</span>
+            <div className='flex-1'>{item.name}</div>
             <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
 
         </div>

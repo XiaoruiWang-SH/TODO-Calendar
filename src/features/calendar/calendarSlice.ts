@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-19 16:37:15
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 18:05:50
+ * @LastEditTime: 2025-03-20 14:57:28
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -33,7 +33,7 @@ const initialCalendarState: CalendarState = {
     currentDate: {year: "", month: "", day: ""},
     currentRangeDates: [],
     tasksMap: {},
-    displayMode: DisplayMode.WEEK
+    displayMode: DisplayMode.MONTH
 };
 
 export const selectCalendarState = (state: RootState) => state.calendar;

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 12:21:31
+ * @LastEditTime: 2025-03-20 17:29:06
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -15,12 +15,18 @@ import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
 import goBack from '../../assets/goback.svg';
 import goForward from '../../assets/goforward.svg';
-import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, complementMonthDiaplayDates, IsValidDate } from './util';
+import calendar from '../../assets/calendar.svg';
+import menu from '../../assets/menu.svg';
+import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, 
+    complementMonthDiaplayDates, IsValidDate, computeDayInWeek, computeMonthInYear, computeDayInMonth } from './util';
 import { addItem, getItems, getItemsByDayRange } from '../../data/api';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode } from '../../features/calendar/calendarSlice';
+import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode, setSelectDate } from '../../features/calendar/calendarSlice';
+import { Container } from '../Container/Container';
+import { Drawer } from '../drawer/Drawer';
+import { Menu } from '../menu/Menu';
 
 export const Calendar = () => {
     const dispatch = useAppDispatch();
@@ -28,6 +34,7 @@ export const Calendar = () => {
     const { selectDate, currentDate, currentRangeDates, tasksMap, displayMode } = calendarState;
     const [prevDisplayMode, setPrevDisplayMode] = useState(displayMode);
     const [prevRangeDates, setPrevRangeDates] = useState(currentRangeDates);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const getTasks = async (currentRangeDays: Date[]) => {
         const currentRangeDays_ = complementMonthDiaplayDates(currentRangeDays, displayMode);
@@ -94,40 +101,41 @@ export const Calendar = () => {
         }
     };
 
-    const handleDisplaySwitcher = (action: string) => {
+    const daySwitcher = (action: string) => {
         switch (action) {
-            case DisplayMode.WEEK: {
-                dispatch(setDisplayMode(DisplayMode.WEEK));
+            case "goBack": {
+                const newDate = new Date(selectDate);
+                newDate.setDate(selectDate.getDate() - 1);
+                dispatch(setSelectDate(newDate));
             }
-                break;
-            case DisplayMode.MONTH: {
-                dispatch(setDisplayMode(DisplayMode.MONTH));
+            break;
+            case "goForward": {
+                const newDate = new Date(selectDate);
+                newDate.setDate(selectDate.getDate() + 1);
+                dispatch(setSelectDate(newDate));
             }
-                break;
+            break;
+            case "today": {
+                dispatch(setSelectDate(new Date()));
+            }
         }
-    };
+    }
+    const handleDisplayMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    }
 
     return (
-        <div>
-
-            <Header year={currentDate.year} month={currentDate.month} day={currentDate.day} handleSwitcher={handleSwitcher} handleDisplaySwitcher={handleDisplaySwitcher} />
-            <WeekTitle />
-            <DayBlocks tasks={new Map(Object.entries(tasksMap))} displayMode={displayMode} />
-
-        </div>
-    );
-};
-
-const WeekTitle = () => {
-    const dayTitle: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const currentDay = new Date().getDay();
-    return (
-        <div className="flex justify-around items-center">
-            {dayTitle.map((day, index) => {
-                return (
-                    <div key={index} className={`flex justify-center items-center w-full h-8 text-[16px] mx-1.5 bg-gray-200 rounded-sm`}>{day}</div>
-                );
-            })}
+        <div className='h-[100vh]'>
+            <div className={`${isMenuOpen ? "flex" : ""}`}>
+                {isMenuOpen && <div className="flex-1 h-[100vh] pt-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
+                    displayMode={displayMode}
+                    handleDisplayMenu={handleDisplayMenu}
+                    handleSwitcher={handleSwitcher} /></div>}
+                <div className="flex-4 h-[100vh] bg-white pl-4 pt-5 ">
+                    <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
+                    <Container />
+                </div>
+            </div>
         </div>
     );
 };
@@ -186,7 +194,7 @@ const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
     );
 };
 
-const TaskItem = ({ dataItem }: TaskItemProps) => {
+export const TaskItem = ({ dataItem }: TaskItemProps) => {
     return (
         <div className='flex justify-start items-center mt-2 mr-1 max-h-10'>
             <img src={dataItem.important ? star_selected : star_unselected} className='w-4' alt='important'></img>
@@ -195,12 +203,17 @@ const TaskItem = ({ dataItem }: TaskItemProps) => {
     );
 };
 
-const Header = ({ year, month, day, handleSwitcher, handleDisplaySwitcher }: HeaderProps) => {
+const Header = ({daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
+    const calendarState = useAppSelector(selectCalendarState);
+    const { selectDate } = calendarState;
     return (
         <div className='flex justify-between items-center mb-4 ml-1'>
-            <div className="text-2xl">{month} {year}</div>
-            <DirectionSwitcher onGoBack={() => handleSwitcher("goBack")} onGoForward={() => handleSwitcher("goForward")} onToday={() => handleSwitcher("today")} />
-            <DisplaySwitcher onList={() => handleDisplaySwitcher(DisplayMode.WEEK)} onGrid={() => handleDisplaySwitcher(DisplayMode.MONTH)} />
+            <div onClick={handleDisplayMenu} className='w-auto flex justify-center items-center mx-2'>
+                <img src={menu} className='w-7' alt='menu' hidden={isMenuOpen}></img>
+                <div className='text-2xl mx-2.5'>My day</div>
+            </div>
+            <div className="text-xl font-normal"> {computeDayInWeek(selectDate)} {computeMonthInYear(selectDate)} {computeDayInMonth(selectDate)}</div>
+                <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
         </div>
     );
 };

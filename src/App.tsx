@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-18 11:49:22
+ * @LastEditTime: 2025-03-20 15:44:43
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -19,7 +19,7 @@ function App() {
 
   return (
     <Provider store={store}>
-      <div className='text-start mx-5 bg-white font-sans text-gray-900 font-medium'>
+      <div className='text-start bg-gray-100 font-sans text-gray-900 font-medium'>
         <Header />
         {/* <MyAppNav /> */}
         <Outlet />

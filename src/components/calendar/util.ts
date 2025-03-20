@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:15:11
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 11:43:55
+ * @LastEditTime: 2025-03-20 17:06:10
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -26,6 +26,7 @@ enum NumberDaysForMonth {
     NOVEMBER = 30,
     DECEMBER = 31
 }
+
 
 export const getToday = () => {
     const today = new Date();
@@ -193,3 +194,16 @@ export const complementMonthDiaplayDates = (dates: Date[], displayMode: DisplayM
 export const IsValidDate = (date: Date, currentRangeDates: Date[]) => {
     return date < currentRangeDates[0] || date > currentRangeDates[currentRangeDates.length - 1];
 }
+
+
+export const computeDayInWeek = (date: Date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'long' }); // Returns "Sunday", "Monday", etc.
+};
+
+export const computeMonthInYear = (date: Date) => {
+    return date.toLocaleString("en-US", { month: "short" });
+};
+
+export const computeDayInMonth = (date: Date) => {
+    return date.toLocaleDateString('en-US', { day: 'numeric' });
+};

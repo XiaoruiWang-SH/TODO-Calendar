@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 13:42:23
+ * @LastEditTime: 2025-03-20 17:17:41
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -23,7 +23,7 @@ export function Container() {
     return (
         <div>
             <Input />
-            <List date={date} />
+            <List/>
         </div>
     );
 }

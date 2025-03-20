@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:32
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 17:27:04
+ * @LastEditTime: 2025-03-20 16:58:21
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -14,6 +14,8 @@ import { DisplayMode } from '../../features/calendar/calendarSlice';
 export interface DayTasksProps {
     tasks: Map<string, ItemData[]>;
     displayMode: DisplayMode;
+    handleDisplayMenu: () => void;
+    handleSwitcher: (action: string) => void;
 };
 
 export interface TaskItemProps {
@@ -28,11 +30,9 @@ export interface CurrentDateProps {
 };
 
 export interface HeaderProps {
-    year: string;
-    month: string;
-    day: string;
-    handleSwitcher: (action: string) => void;
-    handleDisplaySwitcher: (action: string) => void;
+    daySwitcher: (action: string) => void;
+    handleDisplayMenu: () => void;
+    isMenuOpen: boolean;
 };
 
 export interface DateRangeProps {
