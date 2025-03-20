@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 11:01:12
+ * @LastEditTime: 2025-03-20 12:21:31
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -15,7 +15,7 @@ import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
 import goBack from '../../assets/goback.svg';
 import goForward from '../../assets/goforward.svg';
-import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, complementMonthDiaplayDates } from './util';
+import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, complementMonthDiaplayDates, IsValidDate } from './util';
 import { addItem, getItems, getItemsByDayRange } from '../../data/api';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -136,6 +136,8 @@ const WeekTitle = () => {
 const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
 
     const navigate = useNavigate();
+    const calendarState = useAppSelector(selectCalendarState);
+    const { currentRangeDates } = calendarState;
 
     const handleClick = (date: string) => {
         navigate('/task', { state: { date: date } });
@@ -161,11 +163,14 @@ const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
                         ))}
                     </div>
                     :
-                    <div className="grid grid-cols-7 grid-rows-6 gap-1 h-[75vh] mt-2">
-                        {Array.from(tasks.entries()).map(([date, daytasks]) => (
-                            <div className={`flex flex-col justify-start items-start w-full h-full bg-gray-100 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
+                    <div className="grid grid-cols-7 grid-rows-6 h-[75vh] mt-2">
+                        {Array.from(tasks.entries()).map(([date, daytasks], index) => (
+                            <div className={`flex flex-col justify-start items-start w-full h-full text-black border-t border-r border-gray-300
+                                ${new Date(date).getDay() === 1 ? "border-l" : ""}
+                                ${index >= 35 ? "border-b" : ""}
+                                ${IsValidDate(new Date(date), currentRangeDates) ? "text-gray-300" : ""}`} key={date}
                                 onClick={() => handleClick(date)}>
-                                <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
+                                <div className={`w-full text-center font-medium ${date === new Date().toDateString() ? "bg-gray-200" : ""}`}>{new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
                                 <div className='my-2 ml-2 mr-1 overflow-y-auto'>
                                     {
                                         daytasks.map((task, index) => (

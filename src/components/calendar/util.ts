@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 15:15:11
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 11:31:15
+ * @LastEditTime: 2025-03-20 11:43:55
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -187,4 +187,9 @@ export const complementMonthDiaplayDates = (dates: Date[], displayMode: DisplayM
     }
     
     return newDates;
+}
+
+
+export const IsValidDate = (date: Date, currentRangeDates: Date[]) => {
+    return date < currentRangeDates[0] || date > currentRangeDates[currentRangeDates.length - 1];
 }
