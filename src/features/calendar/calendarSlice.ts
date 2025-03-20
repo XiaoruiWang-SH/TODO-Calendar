@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-19 16:37:15
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 17:25:50
+ * @LastEditTime: 2025-03-19 18:05:50
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -16,14 +16,14 @@ import { RootState } from '../../app/store';
 import { CurrentDateProps } from '../../components/calendar/Calendar.types';
 
 export enum DisplayMode {
+    WEEK = "week",
     MONTH = "month",
-    WEEK = "week"
 }
 
 export interface CalendarState {
     selectDate: Date;
     currentDate: CurrentDateProps;
-    currentWeekDates: Date[];
+    currentRangeDates: Date[];
     tasksMap: Record<string, ItemData[]>;
     displayMode: DisplayMode;
 }
@@ -31,7 +31,7 @@ export interface CalendarState {
 const initialCalendarState: CalendarState = {
     selectDate: new Date(),
     currentDate: {year: "", month: "", day: ""},
-    currentWeekDates: [],
+    currentRangeDates: [],
     tasksMap: {},
     displayMode: DisplayMode.WEEK
 };
@@ -48,8 +48,8 @@ export const calendarSlice = createSlice({
         setCurrentDate: (state, action: PayloadAction<{year: string, month: string, day: string}>) => {
             state.currentDate = action.payload;
         },
-        setCurrentWeekDates: (state, action: PayloadAction<Date[]>) => {
-            state.currentWeekDates = action.payload;
+        setCurrentRangeDates: (state, action: PayloadAction<Date[]>) => {
+            state.currentRangeDates = action.payload;
         },
         setTasksMap: (state, action: PayloadAction<Record<string, ItemData[]>>) => {
             state.tasksMap = action.payload;
@@ -60,5 +60,5 @@ export const calendarSlice = createSlice({
     }
 });
 
-export const { setSelectDate, setCurrentDate, setCurrentWeekDates, setTasksMap, setDisplayMode } = calendarSlice.actions;
+export const { setSelectDate, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode } = calendarSlice.actions;
 export const calendarReducer = calendarSlice.reducer;

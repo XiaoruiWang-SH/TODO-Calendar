@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 17:28:16
+ * @LastEditTime: 2025-03-20 11:01:12
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -15,23 +15,25 @@ import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
 import goBack from '../../assets/goback.svg';
 import goForward from '../../assets/goforward.svg';
-import { getToday, getCurrentWeekDatesArray, getCurrentDate, getLastWeekDatesArray, getNextWeekDatesArray } from './util';
+import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, complementMonthDiaplayDates } from './util';
 import { addItem, getItems, getItemsByDayRange } from '../../data/api';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentWeekDates, setTasksMap, setDisplayMode } from '../../features/calendar/calendarSlice';
+import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode } from '../../features/calendar/calendarSlice';
 
 export const Calendar = () => {
-
     const dispatch = useAppDispatch();
     const calendarState = useAppSelector(selectCalendarState);
-    const { selectDate, currentDate, currentWeekDates, tasksMap, displayMode } = calendarState;
+    const { selectDate, currentDate, currentRangeDates, tasksMap, displayMode } = calendarState;
+    const [prevDisplayMode, setPrevDisplayMode] = useState(displayMode);
+    const [prevRangeDates, setPrevRangeDates] = useState(currentRangeDates);
 
-    const getTasks = async (currentWeekDays: Date[]) => {
-        const tasks = await getItemsByDayRange(currentWeekDays[0].toISOString(), currentWeekDays[6].toISOString());
+    const getTasks = async (currentRangeDays: Date[]) => {
+        const currentRangeDays_ = complementMonthDiaplayDates(currentRangeDays, displayMode);
+        const tasks = await getItemsByDayRange(currentRangeDays_[0].toISOString(), currentRangeDays_[currentRangeDays_.length - 1].toISOString());
         const tasksMap_ = new Map();
-        currentWeekDays.forEach(day => {
+        currentRangeDays_.forEach(day => {
             tasksMap_.set(day.toDateString(), []);
         });
         tasks.forEach(task => {
@@ -44,14 +46,17 @@ export const Calendar = () => {
     };
 
     useEffect(() => {
-        // Only initialize if currentWeekDates is empty
-        if (currentWeekDates.length === 0) {
-            const currentWeekDays = getCurrentWeekDatesArray();
-            dispatch(setCurrentWeekDates(currentWeekDays));
-            computeTargetDate(currentWeekDays);
-            getTasks(currentWeekDays);
+        if (currentRangeDates.length === 0 || displayMode !== prevDisplayMode) {
+            const currentRangeDays = getCurrentRangeDatesArray(displayMode);
+            dispatch(setCurrentRangeDates(currentRangeDays));
+            computeTargetDate(currentRangeDays);
+            getTasks(currentRangeDays);
+        } else if (JSON.stringify(currentRangeDates) !== JSON.stringify(prevRangeDates)) {
+            getTasks(currentRangeDates);
         }
-    }, [currentWeekDates.length, dispatch]);
+        setPrevDisplayMode(displayMode);
+        setPrevRangeDates(currentRangeDates);
+    }, [dispatch, displayMode, currentRangeDates]);
 
     const computeTargetDate = (currentWeekDays: Date[]) => {
         const targetDate = currentWeekDays[3];
@@ -66,24 +71,24 @@ export const Calendar = () => {
     const handleSwitcher = (action: string) => {
         switch (action) {
             case "goBack": {
-                const lastWeekDates = getLastWeekDatesArray(currentWeekDates);
-                dispatch(setCurrentWeekDates(lastWeekDates));
-                computeTargetDate(lastWeekDates);
-                getTasks(lastWeekDates);
+                const lastRangeDates = getLastRangeDatesArray(currentRangeDates, displayMode);
+                dispatch(setCurrentRangeDates(lastRangeDates));
+                computeTargetDate(lastRangeDates);
+                getTasks(lastRangeDates);
             }
                 break;
             case "goForward": {
-                const nextWeekDates = getNextWeekDatesArray(currentWeekDates);
-                dispatch(setCurrentWeekDates(nextWeekDates));
-                computeTargetDate(nextWeekDates);
-                getTasks(nextWeekDates);
+                const nextRangeDates = getNextRangeDatesArray(currentRangeDates, displayMode);
+                dispatch(setCurrentRangeDates(nextRangeDates));
+                computeTargetDate(nextRangeDates);
+                getTasks(nextRangeDates);
             }
                 break;
             case "today": {
-                const currentWeekDays = getCurrentWeekDatesArray();
-                dispatch(setCurrentWeekDates(currentWeekDays));
-                computeTargetDate(currentWeekDays);
-                getTasks(currentWeekDays);
+                const currentRangeDays = getCurrentRangeDatesArray(displayMode);
+                dispatch(setCurrentRangeDates(currentRangeDays));
+                computeTargetDate(currentRangeDays);
+                getTasks(currentRangeDays);
             }
                 break;
         }
@@ -114,7 +119,7 @@ export const Calendar = () => {
 };
 
 const WeekTitle = () => {
-    const dayTitle: string[] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayTitle: string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const currentDay = new Date().getDay();
     return (
         <div className="flex justify-around items-center">
@@ -140,9 +145,9 @@ const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
         <>
             {
                 displayMode === DisplayMode.WEEK ?
-                    <div className="flex justify-around items-start h-[75vh] mt-2">
+                    <div className="flex justify-around items-start gap-1 h-[75vh] mt-2">
                         {Array.from(tasks.entries()).map(([date, daytasks]) => (
-                            <div className={`flex flex-col justify-start items-start bg-gray-100 w-full h-full mx-1.5 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
+                            <div className={`flex flex-col justify-start items-start bg-gray-100 w-full h-full rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
                                 onClick={() => handleClick(date)}>
                                 <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
                                 <div className='my-2 ml-2 mr-1 overflow-y-auto'>
@@ -156,7 +161,21 @@ const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
                         ))}
                     </div>
                     :
-                    <div>Month</div>
+                    <div className="grid grid-cols-7 grid-rows-6 gap-1 h-[75vh] mt-2">
+                        {Array.from(tasks.entries()).map(([date, daytasks]) => (
+                            <div className={`flex flex-col justify-start items-start w-full h-full bg-gray-100 rounded-sm ${date === new Date().toDateString() ? "border border-gray-400" : ""}`} key={date}
+                                onClick={() => handleClick(date)}>
+                                <div className="w-full text-center">{date === new Date().toDateString() ? "Today" : new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
+                                <div className='my-2 ml-2 mr-1 overflow-y-auto'>
+                                    {
+                                        daytasks.map((task, index) => (
+                                            <TaskItem key={index} dataItem={task} />
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        ))}
+                    </div>
             }
         </>
     );
