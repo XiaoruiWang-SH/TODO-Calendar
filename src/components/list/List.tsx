@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 17:55:07
+ * @LastEditTime: 2025-03-21 10:56:20
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -66,7 +66,7 @@ export const List = () => {
     return (
         <div>
         {normalTasks.length == 0 ? <></> : 
-        <ul className='list-area'>
+        <ul>
             {normalTasks.map((item) => 
             <li className={item.checked ? 'list-checked' : 'list-unchecked'} key={item.id}>
                 <ListItem item={item} taskChange={taskchange} handleImportanceChange={handleImportanceChange} />
@@ -107,7 +107,7 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     }
 
     return (
-        <div className='flex justify-between items-center my-1 bg-gray-100 rounded-md py-2'>
+        <div className='flex justify-between items-center my-2 bg-gray-100 rounded-md py-2 border border-gray-200 shadow-sm'>
             <CheckBox change={item.checked} handleChange={handleChange} />
             <div className='flex-1 mr-2.5'>{item.name}</div>
             <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
@@ -158,10 +158,10 @@ const ComponentComplete = () => {
     }
 
     return (
-        <div className='-complete'>
+        <div>
             <ComponentCompleteHeader num={completedTasks.length} hiden={hiden} listShowClick={listShowClick}/>
             {hiden ? <></> : 
-            <ul className='list-area'>
+            <ul>
                 {completedTasks.map((item) => 
                 <li className={item.checked ? 'list-checked' : 'list-unchecked'}
                 key={item.id}>

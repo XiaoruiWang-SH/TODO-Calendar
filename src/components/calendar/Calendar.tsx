@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 17:51:36
+ * @LastEditTime: 2025-03-21 10:32:27
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -131,7 +131,7 @@ export const Calendar = () => {
                     displayMode={displayMode}
                     handleDisplayMenu={handleDisplayMenu}
                     handleSwitcher={handleSwitcher} /></div>}
-                <div className="flex-4 h-[100vh] bg-white pl-4 py-5 overflow-y-scroll">
+                <div className="flex-4 h-[100vh] bg-white p-4 py-5 overflow-y-scroll">
                     <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
                     <Container />
                 </div>
@@ -212,7 +212,7 @@ const Header = ({daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
                 <img src={menu} className='w-7' alt='menu' hidden={isMenuOpen}></img>
                 <div className='text-2xl mx-2.5'>My day</div>
             </div>
-            <div className="text-xl font-normal"> {computeDayInWeek(selectDate)} {computeMonthInYear(selectDate)} {computeDayInMonth(selectDate)}</div>
+            <div className="text-lg font-light"> {computeDayInWeek(selectDate)}, {computeMonthInYear(selectDate)} {computeDayInMonth(selectDate)}</div>
                 <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
         </div>
     );
