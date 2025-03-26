@@ -3,15 +3,16 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 13:48:56
+ * @LastEditTime: 2025-03-26 21:38:20
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
 import axios, { AxiosError } from "axios";
 import { ItemData } from "./ItemData";
+import moment from "moment";
 
-const API_URL = "http://localhost:3030";
+const API_URL = "http://localhost:8080/api/tasks";
 
 interface ApiResponse<T> {
     success: boolean;
@@ -21,11 +22,11 @@ interface ApiResponse<T> {
 
 export const getItems = async (): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ApiResponse<ItemData[]>>(`${API_URL}/allitems`);
-        if (response.data.success && response.data.data) {
-            return response.data.data;
+        const response = await axios.get<ItemData[]>(`${API_URL}`);
+        if (response.status === 200 && response.data) {
+            return response.data;
         } else {
-            throw new Error(response.data.message || "Failed to fetch items");
+            throw new Error("Failed to fetch items");
         }
     } catch (error) {
         const axiosError = error as AxiosError;
@@ -34,30 +35,32 @@ export const getItems = async (): Promise<ItemData[]> => {
     }
 };
 
-export const addItem = async (item: ItemData): Promise<ItemData> => {
+export const addItem = async (item: ItemData): Promise<number> => {
     const purgedItem = {
         name: item.name,
         checked: item.checked,
         important: item.important,
-        createTime: item.createTime,
-        expireTime: item.expireTime,
-        updateTime: item.updateTime,
-        createDate: item.createDate
+        createTime: moment(item.createTime).format('YYYY-MM-DD HH:mm:ss'),
+        expireTime: item.expireTime ? moment(item.expireTime).format('YYYY-MM-DD HH:mm:ss') : null,
+        updateTime: moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'),
+        createDate: moment(item.createDate).format('YYYY-MM-DD')
     };
 
+    console.log(purgedItem);
+
     try {
-        const response = await axios.post<ApiResponse<ItemData>>(`${API_URL}/additem`, purgedItem);
+        const response = await axios.post<number>(`${API_URL}`, purgedItem);
         
-        if (response.data.success && response.data.data) {
-            return response.data.data;
+        if (response.status === 200 && response.data) {
+            return response.data;
         } else {
-            throw new Error(response.data.message || "Failed to add item");
+            throw new Error("Failed to add item");
         }
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<ApiResponse<ItemData>>;
+            const axiosError = error as AxiosError<ItemData>;
             if (axiosError.response?.data) {
-                throw new Error(axiosError.response.data.message || "Failed to add item");
+                throw new Error("Failed to add item");
             }
             throw new Error(`Network error: ${axiosError.message}`);
         }
@@ -66,12 +69,21 @@ export const addItem = async (item: ItemData): Promise<ItemData> => {
 };
 
 export const updateItem = async (item: ItemData): Promise<ItemData> => {
+    const purgedItem = {
+        name: item.name,
+        checked: item.checked,
+        important: item.important,
+        updateTime: moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss'),
+        expireTime: item.expireTime ? moment(item.expireTime).format('YYYY-MM-DD HH:mm:ss') : null,
+        createDate: moment(item.createDate).format('YYYY-MM-DD'),
+        createTime: moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
+    };
     try {
-        const response = await axios.post<ApiResponse<ItemData>>(`${API_URL}/updateitem`, item);
-        if (response.data.success && response.data.data) {
-            return response.data.data;
+        const response = await axios.post<ItemData>(`${API_URL}/${item.id}`, purgedItem);
+        if (response.status === 200 && response.data) {
+            return response.data;
         } else {
-            throw new Error(response.data.message || "Failed to update item");
+            throw new Error("Failed to update item");
         }
     } catch (error) {
         const axiosError = error as AxiosError;
@@ -80,13 +92,13 @@ export const updateItem = async (item: ItemData): Promise<ItemData> => {
     }
 };
 
-export const getItemsByDate = async (date: string): Promise<ItemData[]> => {
+export const getItemsByDate = async (date: Date): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ApiResponse<ItemData[]>>(`${API_URL}/getitemsbydate?date=${date}`);
-        if (response.data.success && response.data.data) {
-            return response.data.data;
+        const response = await axios.get<ItemData[]>(`${API_URL}?date=${moment(date).format('YYYY-MM-DD')}`);
+        if (response.status === 200 && response.data) {
+            return response.data;
         } else {
-            throw new Error(response.data.message || "Failed to fetch items by day");
+            throw new Error("Failed to fetch items by day");
         }
     } catch (error) {
         const axiosError = error as AxiosError;
@@ -96,13 +108,13 @@ export const getItemsByDate = async (date: string): Promise<ItemData[]> => {
 };
 
 
-export const getItemsByDayRange = async (startDate: string, endDate: string): Promise<ItemData[]> => {
+export const getItemsByDayRange = async (startDate: Date, endDate: Date): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ApiResponse<ItemData[]>>(`${API_URL}/getitemsbydayrange?startDate=${startDate}&endDate=${endDate}`);
-        if (response.data.success && response.data.data) {
-            return response.data.data;
+        const response = await axios.get<ItemData[]>(`${API_URL}?startDate=${moment(startDate).format('YYYY-MM-DD HH:mm:ss')}&endDate=${moment(endDate).format('YYYY-MM-DD HH:mm:ss')}`);
+        if (response.status === 200 && response.data) {
+            return response.data;
         } else {
-            throw new Error(response.data.message || "Failed to fetch items by day range");
+            throw new Error("Failed to fetch items by day range");
         }
     } catch (error) {
         const axiosError = error as AxiosError;

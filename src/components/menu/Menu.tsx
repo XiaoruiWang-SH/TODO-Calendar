@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-20 14:34:54
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-20 17:41:46
+ * @LastEditTime: 2025-03-26 21:15:45
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -35,7 +35,7 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
 
     const handleClick = (date: string) => {
         const newDate = new Date(date);
-        dispatch(setSelectDate(newDate));
+        dispatch(setSelectDate(newDate.toISOString()));
     };
 
     return (
@@ -48,8 +48,8 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
                     {Array.from(tasks.entries()).map(([date, daytasks], index) => (
                         <div className={`flex flex-col items-center justify-center w-full aspect-square hover:bg-gray-300
                         ${date === new Date().toDateString() ? " border " : ""}   
-                        ${date === selectDate.toDateString() ? " bg-red-200 " : ""}           
-                                ${IsValidDate(new Date(date), currentRangeDates) ? "text-gray-300" : "text-gray-700"}`} key={date}
+                        ${date === new Date(selectDate).toDateString() ? " bg-red-200 " : ""}           
+                                ${IsValidDate(new Date(date), currentRangeDates.map(date => new Date(date))) ? "text-gray-300" : "text-gray-700"}`} key={date}
                             onClick={() => handleClick(date)}>
                             <div className={`flex items-center justify-center w-full text-center font-light`}>{new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
                         </div>

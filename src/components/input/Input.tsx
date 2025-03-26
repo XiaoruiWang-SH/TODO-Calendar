@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-21 11:25:52
+ * @LastEditTime: 2025-03-26 21:50:38
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -52,11 +52,15 @@ export const Input: FC = () => {
             createTime: new Date().toISOString(),
             expireTime: null,
             updateTime: new Date().toISOString(),
-            createDate: new Date().toDateString()
+            createDate: new Date().toISOString()
         };
-        const result: ItemData = await addItem(newItem);
-        console.log(result);
-        dispatch(add_normal(result));
+        const result: number = await addItem(newItem);
+        if (result != -1) {
+            const insertedItem: ItemData = {...newItem, id: result};
+            console.log(`insertedItem: ${JSON.stringify(insertedItem)}`);
+            dispatch(add_normal(insertedItem));
+        }
+        
         setTask('');
     }
 

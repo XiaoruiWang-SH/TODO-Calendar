@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-21 10:32:27
+ * @LastEditTime: 2025-03-26 21:15:33
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -38,7 +38,7 @@ export const Calendar = () => {
 
     const getTasks = async (currentRangeDays: Date[]) => {
         const currentRangeDays_ = complementMonthDiaplayDates(currentRangeDays, displayMode);
-        const tasks = await getItemsByDayRange(currentRangeDays_[0].toISOString(), currentRangeDays_[currentRangeDays_.length - 1].toISOString());
+        const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1]);
         const tasksMap_ = new Map();
         currentRangeDays_.forEach(day => {
             tasksMap_.set(day.toDateString(), []);
@@ -55,11 +55,11 @@ export const Calendar = () => {
     useEffect(() => {
         if (currentRangeDates.length === 0 || displayMode !== prevDisplayMode) {
             const currentRangeDays = getCurrentRangeDatesArray(displayMode);
-            dispatch(setCurrentRangeDates(currentRangeDays));
+            dispatch(setCurrentRangeDates(currentRangeDays.map(date => date.toISOString())));
             computeTargetDate(currentRangeDays);
             getTasks(currentRangeDays);
         } else if (JSON.stringify(currentRangeDates) !== JSON.stringify(prevRangeDates)) {
-            getTasks(currentRangeDates);
+            getTasks(currentRangeDates.map(date => new Date(date)));
         }
         setPrevDisplayMode(displayMode);
         setPrevRangeDates(currentRangeDates);
@@ -78,24 +78,24 @@ export const Calendar = () => {
     const handleSwitcher = (action: string) => {
         switch (action) {
             case "goBack": {
-                const lastRangeDates = getLastRangeDatesArray(currentRangeDates, displayMode);
-                dispatch(setCurrentRangeDates(lastRangeDates));
+                const lastRangeDates = getLastRangeDatesArray(currentRangeDates.map(date => new Date(date)), displayMode);
+                dispatch(setCurrentRangeDates(lastRangeDates.map(date => date.toISOString())));
                 computeTargetDate(lastRangeDates);
-                getTasks(lastRangeDates);
+                getTasks(lastRangeDates.map(date => new Date(date)));
             }
                 break;
             case "goForward": {
-                const nextRangeDates = getNextRangeDatesArray(currentRangeDates, displayMode);
-                dispatch(setCurrentRangeDates(nextRangeDates));
+                const nextRangeDates = getNextRangeDatesArray(currentRangeDates.map(date => new Date(date)), displayMode);
+                dispatch(setCurrentRangeDates(nextRangeDates.map(date => date.toISOString())));
                 computeTargetDate(nextRangeDates);
-                getTasks(nextRangeDates);
+                getTasks(nextRangeDates.map(date => new Date(date)));
             }
                 break;
             case "today": {
                 const currentRangeDays = getCurrentRangeDatesArray(displayMode);
-                dispatch(setCurrentRangeDates(currentRangeDays));
+                dispatch(setCurrentRangeDates(currentRangeDays.map(date => date.toISOString())));
                 computeTargetDate(currentRangeDays);
-                getTasks(currentRangeDays);
+                getTasks(currentRangeDays.map(date => new Date(date)));
             }
                 break;
         }
@@ -105,18 +105,18 @@ export const Calendar = () => {
         switch (action) {
             case "goBack": {
                 const newDate = new Date(selectDate);
-                newDate.setDate(selectDate.getDate() - 1);
-                dispatch(setSelectDate(newDate));
+                newDate.setDate(newDate.getDate() - 1);
+                dispatch(setSelectDate(newDate.toISOString()));
             }
             break;
             case "goForward": {
                 const newDate = new Date(selectDate);
-                newDate.setDate(selectDate.getDate() + 1);
-                dispatch(setSelectDate(newDate));
+                newDate.setDate(newDate.getDate() + 1);
+                dispatch(setSelectDate(newDate.toISOString()));
             }
             break;
             case "today": {
-                dispatch(setSelectDate(new Date()));
+                dispatch(setSelectDate(new Date().toISOString()));
             }
         }
     }
@@ -176,7 +176,7 @@ const DayBlocks = ({ tasks, displayMode }: DayTasksProps) => {
                             <div className={`flex flex-col justify-start items-start w-full h-full text-black border-t border-r border-gray-300
                                 ${new Date(date).getDay() === 1 ? "border-l" : ""}
                                 ${index >= 35 ? "border-b" : ""}
-                                ${IsValidDate(new Date(date), currentRangeDates) ? "text-gray-300" : ""}`} key={date}
+                                ${IsValidDate(new Date(date), currentRangeDates.map(date => new Date(date))) ? "text-gray-300" : ""}`} key={date}
                                 onClick={() => handleClick(date)}>
                                 <div className={`w-full text-center font-medium ${date === new Date().toDateString() ? "bg-gray-200" : ""}`}>{new Date(date).toLocaleDateString('en-US', { day: 'numeric' })}</div>
                                 <div className='my-2 ml-2 mr-1 overflow-y-auto'>
@@ -212,7 +212,7 @@ const Header = ({daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
                 <img src={menu} className='w-7' alt='menu' hidden={isMenuOpen}></img>
                 <div className='text-2xl mx-2.5'>My day</div>
             </div>
-            <div className="text-lg font-light"> {computeDayInWeek(selectDate)}, {computeMonthInYear(selectDate)} {computeDayInMonth(selectDate)}</div>
+            <div className="text-lg font-light"> {computeDayInWeek(new Date(selectDate))}, {computeMonthInYear(new Date(selectDate))} {computeDayInMonth(new Date(selectDate))}</div>
                 <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
         </div>
     );

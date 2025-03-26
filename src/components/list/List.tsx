@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-21 10:56:20
+ * @LastEditTime: 2025-03-26 21:49:28
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -33,14 +33,14 @@ export const List = () => {
     const completedTasks = useAppSelector(selectCompletedTasks);
     const dispatch = useAppDispatch();
 
-    const fetchItems = async (date: string) => {
+    const fetchItems = async (date: Date) => {
         const items = await getItemsByDate(date);
         dispatch(add_normalTasks(items));
         dispatch(add_completedTasks(items));
     };
 
     useEffect(() => {
-        fetchItems(selectDate.toDateString());
+        fetchItems(new Date(selectDate));
     }, [selectDate]);
 
     // const { id, updateTime, expireTime, checked, important } = req.body
@@ -59,7 +59,7 @@ export const List = () => {
 
     const handleImportanceChange = async (item: ItemData) => {
         const updatedItem = await updateItem(item);
-        console.log(updatedItem);
+        console.log(item);
         dispatch(change_importance(item));
     }
 
@@ -101,7 +101,7 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
             ...item,
             important: !item.important,
             updateTime: new Date().toISOString()
-        };
+        };  
         handleImportanceChange(updatedItem);
         e.stopPropagation();
     }
