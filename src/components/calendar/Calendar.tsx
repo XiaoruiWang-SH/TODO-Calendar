@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-26 21:15:33
+ * @LastEditTime: 2025-03-27 17:30:22
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -24,6 +24,7 @@ import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode, setSelectDate } from '../../features/calendar/calendarSlice';
+import { selectUser } from '../../features/user/userSlice';
 import { Container } from '../Container/Container';
 import { Drawer } from '../drawer/Drawer';
 import { Menu } from '../menu/Menu';
@@ -31,14 +32,16 @@ import { Menu } from '../menu/Menu';
 export const Calendar = () => {
     const dispatch = useAppDispatch();
     const calendarState = useAppSelector(selectCalendarState);
+    const user = useAppSelector(selectUser);
     const { selectDate, currentDate, currentRangeDates, tasksMap, displayMode } = calendarState;
     const [prevDisplayMode, setPrevDisplayMode] = useState(displayMode);
     const [prevRangeDates, setPrevRangeDates] = useState(currentRangeDates);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const getTasks = async (currentRangeDays: Date[]) => {
+        if (!user) return;
         const currentRangeDays_ = complementMonthDiaplayDates(currentRangeDays, displayMode);
-        const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1]);
+        const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1], user.id);
         const tasksMap_ = new Map();
         currentRangeDays_.forEach(day => {
             tasksMap_.set(day.toDateString(), []);

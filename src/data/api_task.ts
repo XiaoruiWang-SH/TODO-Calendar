@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 14:16:27
+ * @LastEditTime: 2025-03-27 17:59:53
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -20,9 +20,11 @@ interface ApiResponse<T> {
     data: T | null;
 }
 
-export const getItems = async (): Promise<ItemData[]> => {
+export const getItems = async (userId: number): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ItemData[]>(`${API_URL}`);
+        const response = await axios.post<ItemData[]>(`${API_URL}`,{
+            userId: userId
+        });
         if (response.status === 200 && response.data) {
             return response.data;
         } else {
@@ -35,7 +37,7 @@ export const getItems = async (): Promise<ItemData[]> => {
     }
 };
 
-export const addItem = async (item: ItemData): Promise<number> => {
+export const addItem = async (item: ItemData, userId: number): Promise<number> => {
     const purgedItem = {
         name: item.name,
         checked: item.checked,
@@ -49,7 +51,7 @@ export const addItem = async (item: ItemData): Promise<number> => {
     console.log(purgedItem);
 
     try {
-        const response = await axios.post<number>(`${API_URL}`, purgedItem);
+        const response = await axios.post<number>(`${API_URL}/create`, {userId: userId, task: purgedItem});
         
         if (response.status === 200 && response.data) {
             return response.data;
@@ -68,7 +70,7 @@ export const addItem = async (item: ItemData): Promise<number> => {
     }
 };
 
-export const updateItem = async (item: ItemData): Promise<ItemData> => {
+export const updateItem = async (item: ItemData, userId: number): Promise<ItemData> => {
     const purgedItem = {
         name: item.name,
         checked: item.checked,
@@ -79,7 +81,7 @@ export const updateItem = async (item: ItemData): Promise<ItemData> => {
         createTime: moment(item.createTime).format('YYYY-MM-DD HH:mm:ss')
     };
     try {
-        const response = await axios.post<ItemData>(`${API_URL}/${item.id}`, purgedItem);
+        const response = await axios.post<ItemData>(`${API_URL}/update/${item.id}`, {userId: userId, task: purgedItem});
         if (response.status === 200 && response.data) {
             return response.data;
         } else {
@@ -92,9 +94,12 @@ export const updateItem = async (item: ItemData): Promise<ItemData> => {
     }
 };
 
-export const getItemsByDate = async (date: Date): Promise<ItemData[]> => {
+export const getItemsByDate = async (date: Date, userId: number): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ItemData[]>(`${API_URL}?date=${moment(date).format('YYYY-MM-DD')}`);
+        const response = await axios.post<ItemData[]>(`${API_URL}?date=${moment(date).format('YYYY-MM-DD')}&userId=${userId}`, {
+            date: moment(date).format('YYYY-MM-DD'),
+            userId: userId
+        });
         if (response.status === 200 && response.data) {
             return response.data;
         } else {
@@ -107,10 +112,13 @@ export const getItemsByDate = async (date: Date): Promise<ItemData[]> => {
     }
 };
 
-
-export const getItemsByDayRange = async (startDate: Date, endDate: Date): Promise<ItemData[]> => {
+export const getItemsByDayRange = async (startDate: Date, endDate: Date, userId: number): Promise<ItemData[]> => {
     try {
-        const response = await axios.get<ItemData[]>(`${API_URL}?startDate=${moment(startDate).format('YYYY-MM-DD HH:mm:ss')}&endDate=${moment(endDate).format('YYYY-MM-DD HH:mm:ss')}`);
+        const response = await axios.post<ItemData[]>(`${API_URL}`, {
+            startDate: moment(startDate).format('YYYY-MM-DD HH:mm:ss'),
+            endDate: moment(endDate).format('YYYY-MM-DD HH:mm:ss'),
+            userId: userId
+        });
         if (response.status === 200 && response.data) {
             return response.data;
         } else {

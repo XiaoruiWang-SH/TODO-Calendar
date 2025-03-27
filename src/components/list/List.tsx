@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-26 21:49:28
+ * @LastEditTime: 2025-03-27 17:31:37
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -23,10 +23,12 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, change_importance, complete, add_completed, undo, add_completedTasks, add_normalTasks, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
 import { getItemsByDate, updateItem } from '../../data/api_task';
 import { setSelectDate, selectCalendarState } from '../../features/calendar/calendarSlice';
+import { selectUser } from '../../features/user/userSlice';
 
 export const List = () => {
 
     const calendarState = useAppSelector(selectCalendarState);
+    const user = useAppSelector(selectUser);
     const { selectDate } = calendarState;
 
     const normalTasks = useAppSelector(selectNormalTasks);
@@ -34,7 +36,8 @@ export const List = () => {
     const dispatch = useAppDispatch();
 
     const fetchItems = async (date: Date) => {
-        const items = await getItemsByDate(date);
+        if (!user) return;
+        const items = await getItemsByDate(date, user.id);
         dispatch(add_normalTasks(items));
         dispatch(add_completedTasks(items));
     };
@@ -45,7 +48,8 @@ export const List = () => {
 
     // const { id, updateTime, expireTime, checked, important } = req.body
     const taskchange = async (item: ItemData) => {
-        const updatedItem = await updateItem(item);
+        if (!user) return;
+        const updatedItem = await updateItem(item, user.id);
         console.log(updatedItem);
         
         if (item.checked) {
@@ -58,7 +62,8 @@ export const List = () => {
     }
 
     const handleImportanceChange = async (item: ItemData) => {
-        const updatedItem = await updateItem(item);
+        if (!user) return;
+        const updatedItem = await updateItem(item, user.id);
         console.log(item);
         dispatch(change_importance(item));
     }
@@ -138,6 +143,7 @@ const ComponentComplete = () => {
     const [hiden, setHiden] = useState<boolean>(true);
     const normalTasks = useAppSelector(selectNormalTasks);
     const completedTasks = useAppSelector(selectCompletedTasks);
+    const user = useAppSelector(selectUser);
     const dispatch = useAppDispatch();
 
     const listShowClick = () => {
@@ -145,7 +151,8 @@ const ComponentComplete = () => {
     }
 
     const taskchange = async (item: ItemData) => {
-        const updatedItem = await updateItem(item);
+        if (!user) return;
+        const updatedItem = await updateItem(item, user.id);
         console.log(updatedItem);
 
         if (item.checked) {

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-26 21:50:38
+ * @LastEditTime: 2025-03-27 17:30:59
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -18,10 +18,12 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, change_importance } from '../../features/task/taskSlice';
 import { addItem } from '../../data/api_task';
 import { selectCalendarState } from '../../features/calendar/calendarSlice';
+import { selectUser } from '../../features/user/userSlice';
 
 export const Input: FC = () => {
     const dispatch = useAppDispatch();
     const calendarState = useAppSelector(selectCalendarState);
+    const user = useAppSelector(selectUser);
     const { selectDate} = calendarState;
     
     const [task, setTask] = useState<string>('');
@@ -40,7 +42,7 @@ export const Input: FC = () => {
     }, [selectDate]);
 
     const addTask = async () => {
-        if (task === '') {
+        if (task === '' || !user) {
             return;
         }
         console.log(`add task ${task}`);
@@ -54,7 +56,7 @@ export const Input: FC = () => {
             updateTime: new Date().toISOString(),
             createDate: new Date().toISOString()
         };
-        const result: number = await addItem(newItem);
+        const result: number = await addItem(newItem, user.id);
         if (result != -1) {
             const insertedItem: ItemData = {...newItem, id: result};
             console.log(`insertedItem: ${JSON.stringify(insertedItem)}`);
