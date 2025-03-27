@@ -3,18 +3,18 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 15:31:02
+ * @LastEditTime: 2025-03-27 16:35:41
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
 // import './Header.css';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useNavigate } from 'react-router';
 import userIcon from '../../assets/user.svg';
-import { useAppSelector } from '../../app/hooks';
-import { selectUser } from '../../features/user/userSlice';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { selectUser, logout } from '../../features/user/userSlice';
 
 export const Header: FC = () => {
   const navigate = useNavigate();
@@ -30,11 +30,60 @@ export const Header: FC = () => {
 
 const UserInfo: FC = () => {
   const navigate = useNavigate();
-  const user = useAppSelector(selectUser)!;
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLogin = () => {
+    if (!user) {
+      navigate('/login');
+    } else {
+      setIsModalOpen(true);
+    }
+  }
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsModalOpen(false);
+  }
+
+  const handleChangePassword = () => {
+    console.log("change password");
+    setIsModalOpen(false);
+  }
+
   return (
-    <div className='flex items-center justify-center h-[50px]' onClick={() => navigate('/login')}>
-      <div className='text-sm font-light text-gray-700 italic mr-2'>Welcome, {user.name}</div>
+    <div>
+    <div className='flex items-center justify-center h-[50px] relative' onClick={handleLogin}>
+      { user && <div className='text-sm font-light text-gray-700 italic mr-2'>Welcome, {user.name}</div> }
       <img className='w-[30px] h-[30px]' src={userIcon} alt="user" />
+    </div>
+    <Modal isOpen={isModalOpen} onClose={() => {
+      setIsModalOpen(false);
+    }}>
+      <div className='text-[12px] font-normal p-2 border-b border-gray-400 hover:bg-gray-300' onClick={handleChangePassword}>Change password</div>
+      <div className='text-[12px] font-normal p-2  hover:bg-gray-300' onClick={handleLogout}>Logout</div>
+    </Modal>
     </div>
   );
 }
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    // 蒙版层（点击关闭弹窗）
+    <div className="fixed inset-0 z-100" onClick={onClose}>
+      {/* 弹窗内容（阻止事件冒泡） */}
+      <div className="absolute top-[70px] right-[10px] bg-gray-200 rounded-md  border-gray-400 p-2" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
+};
