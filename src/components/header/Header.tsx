@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 10:04:07
+ * @LastEditTime: 2025-03-27 15:31:02
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -12,7 +12,9 @@
 // import './Header.css';
 import { FC } from 'react';
 import { useNavigate } from 'react-router';
-import user from '../../assets/user.svg';
+import userIcon from '../../assets/user.svg';
+import { useAppSelector } from '../../app/hooks';
+import { selectUser } from '../../features/user/userSlice';
 
 export const Header: FC = () => {
   const navigate = useNavigate();
@@ -28,9 +30,11 @@ export const Header: FC = () => {
 
 const UserInfo: FC = () => {
   const navigate = useNavigate();
+  const user = useAppSelector(selectUser)!;
   return (
-    <div className='flex items-center justify-center w-[50px] h-[50px]' onClick={() => navigate('/login')}>
-      <img className='w-[30px] h-[30px]' src={user} alt="user" />
+    <div className='flex items-center justify-center h-[50px]' onClick={() => navigate('/login')}>
+      <div className='text-sm font-light text-gray-700 italic mr-2'>Welcome, {user.name}</div>
+      <img className='w-[30px] h-[30px]' src={userIcon} alt="user" />
     </div>
   );
 }

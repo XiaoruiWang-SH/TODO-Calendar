@@ -16,7 +16,7 @@ import { ItemData } from '../../data/ItemData';
 import { ComponentInputProps } from './Input.types'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, change_importance } from '../../features/task/taskSlice';
-import { addItem } from '../../data/api';
+import { addItem } from '../../data/api_task';
 import { selectCalendarState } from '../../features/calendar/calendarSlice';
 
 export const Input: FC = () => {

@@ -21,7 +21,7 @@ import {ItemData} from '../../data/ItemData';
 import { ListItemProps, ItemChangeProps, ComponentCompleteHeaderProps, ListProps } from './List.type';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { add_normal, change_importance, complete, add_completed, undo, add_completedTasks, add_normalTasks, selectNormalTasks, selectCompletedTasks } from '../../features/task/taskSlice';
-import { getItemsByDate, updateItem } from '../../data/api';
+import { getItemsByDate, updateItem } from '../../data/api_task';
 import { setSelectDate, selectCalendarState } from '../../features/calendar/calendarSlice';
 
 export const List = () => {

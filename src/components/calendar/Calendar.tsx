@@ -19,7 +19,7 @@ import calendar from '../../assets/calendar.svg';
 import menu from '../../assets/menu.svg';
 import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, 
     complementMonthDiaplayDates, IsValidDate, computeDayInWeek, computeMonthInYear, computeDayInMonth } from './util';
-import { addItem, getItems, getItemsByDayRange } from '../../data/api';
+import { addItem, getItems, getItemsByDayRange } from '../../data/api_task';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
