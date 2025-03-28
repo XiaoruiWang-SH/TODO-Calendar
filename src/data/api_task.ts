@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 17:59:53
+ * @LastEditTime: 2025-03-28 10:16:14
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -53,7 +53,7 @@ export const addItem = async (item: ItemData, userId: number): Promise<number> =
     try {
         const response = await axios.post<number>(`${API_URL}/create`, {userId: userId, task: purgedItem});
         
-        if (response.status === 200 && response.data) {
+        if (response.status === 200) {
             return response.data;
         } else {
             throw new Error("Failed to add item");
