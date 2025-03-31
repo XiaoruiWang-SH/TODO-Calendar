@@ -10,7 +10,7 @@
  */
 
 import { JSX, useContext, useEffect, useState, FC } from 'react';
-import './List.css';
+import './list.css';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
 import checkbox_unchecked from '../../assets/checkbox-unselected.svg';

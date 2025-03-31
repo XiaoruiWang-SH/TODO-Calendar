@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode, setSelectDate } from '../../features/calendar/calendarSlice';
 import { selectUser } from '../../features/user/userSlice';
-import { Container } from '../Container/Container';
+import { Container } from '../container/Container';
 import { Drawer } from '../drawer/Drawer';
 import { Menu } from '../menu/Menu';
 

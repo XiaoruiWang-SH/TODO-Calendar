@@ -18,7 +18,7 @@ import './index.css'
 import App from './App.js'
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Calendar } from './components/calendar/Calendar';
-import { Container } from './components/Container/Container';
+import { Container } from './components/container/Container';
 import { Login, Register } from './components/user/Login';
 
 const rootElement = document.getElementById('root');
