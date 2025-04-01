@@ -12,7 +12,7 @@ import axios, { AxiosError } from "axios";
 import { ItemData } from "./ItemData";
 import moment from "moment";
 
-const API_URL = "http://localhost:8080/api/users";
+const API_URL = "http://api.todocalendar.live/api/users";
 // const API_URL = "http://140.238.222.115:8080/api/users";
 
 export interface UserData {
