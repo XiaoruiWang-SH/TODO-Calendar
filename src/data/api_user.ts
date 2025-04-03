@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-29 09:18:04
+ * @LastEditTime: 2025-04-03 13:09:02
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -11,9 +11,9 @@
 import axios, { AxiosError } from "axios";
 import { ItemData } from "./ItemData";
 import moment from "moment";
+import env from "../config/env";
 
-const API_URL = "https://api.todocalendar.live/api/users";
-// const API_URL = "http://140.238.222.115:8080/api/users";
+const API_URL = env.API_HOST + "/api/users";
 
 export interface UserData {
     id: number;
