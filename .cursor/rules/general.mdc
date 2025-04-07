@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Project tech stacks
+- React
+- Vite
+- Tpyescript
+- Redux
+- axios
+
+# Running environment
+- It maybe running locally or remove server connected through ssh.
+- Always use existing terminal window, because it probably has already entered into right environment(local or remote)
+- If you can't find the correct existing terminal, try to use ssh to connect to remote environment, using this command "ssh -i /Users/raywang/.ssh/id_ed25519 root@164.92.198.234" to connect.
+
+
+# Git Commitment
+- Always generate simple sentence
+- Just say what I did, don't say for something or purpose
+- only one sentence, if content of commitment is a lot, onlysummarize main feature modification.
