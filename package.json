@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode dev",
-    "dev_build": "tsc -b && vite build --mode dev",
-    "build": "tsc -b && vite build --mode prod",
+    "dev": "vite --mode dev --config vite.config.dev.js",
+    "dev_build": "tsc -b && vite build --mode dev --config vite.config.dev.js",
+    "build": "tsc -b && vite build --mode prod --config vite.config.prod.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "start_node": "node src/node/server.js"
