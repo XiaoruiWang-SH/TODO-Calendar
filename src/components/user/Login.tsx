@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 10:05:53
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 15:10:28
+ * @LastEditTime: 2025-04-06 15:14:10
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -12,9 +12,11 @@ import { FC, useEffect, useState, useContext, createContext } from 'react';
 import { useNavigate } from 'react-router';
 import password_hidden from '../../assets/password_hidden.svg';
 import password_visible from '../../assets/password_visible.svg';
-import { addUser, login, UserData } from '../../data/api_user';
+import { UserData } from '../../data/api_user';
+import { register, RegisterData, AuthResponse, RegisterResponse, LoginData, login } from '../../data/api_register';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../features/user/userSlice';
+import { toast } from 'react-toastify';
 
 interface UserContextType {
     isLogin: boolean;
@@ -66,14 +68,32 @@ export const Login: FC = () => {
 
     const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        console.log(formData);
-        login(formData.email, formData.password).then((res) => {
-            console.log("login res: ", res);
-            dispatch(setUser(res));
-            navigate("/");
+        // console.log(formData);
+        // login(formData.email, formData.password).then((res) => {
+        //     console.log("login res: ", res);
+        //     dispatch(setUser(res));
+        //     navigate("/");
+        // }).catch((err) => {
+        //     console.log("login err: ", err);
+        // });
+
+
+        const user: LoginData = {
+            email: formData.email,
+            password: formData.password
+        }
+        login(user).then((res: AuthResponse) => {
+            if (res.success) {
+                toast.success(res.message);
+                // dispatch(setUser(res.data));
+                // navigate("/");
+            } else {
+                toast.error(res.message);
+            }
         }).catch((err) => {
             console.log("login err: ", err);
         });
+
     }
 
     return <div className='h-[100vh] bg-white flex items-center justify-center'>
@@ -140,21 +160,20 @@ export const Register: FC = () => {
 
     const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        const user: UserData = {
-            id: 0,
+        const user: RegisterData = {
             name: formData.username,
             email: formData.email,
             password: formData.password
         }
-        console.log(formData);
-        addUser(user).then((res) => {
-            console.log("add user res: ", res);
-            // setIsRegister(true);
-            alert("Register success, please login");
-            navigate(-1);
+        register(user).then((res: AuthResponse) => {
+            if (res.success) {
+                toast.success(res.message);
+                navigate(-1);
+            } else {
+                toast.error(res.message);
+            }
         }).catch((err) => {
-            // setIsRegister(false);
-            alert("Failed to register");
+            console.log("register err: ", err);
         });
 
     }

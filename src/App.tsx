@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 15:21:52
+ * @LastEditTime: 2025-04-06 14:18:38
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -16,6 +16,8 @@ import { Outlet } from 'react-router';
 import { MyAppNav } from './Nav';
 import { setUser } from './features/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ function App() {
       <Header />
       {/* <MyAppNav /> */}
       <Outlet />
+      <ToastContainer autoClose={3000} hideProgressBar />
     </div>
   )
 }
