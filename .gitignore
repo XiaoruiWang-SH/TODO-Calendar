@@ -2,9 +2,12 @@
 node_modules/
 dist/
 build/
+.env.dev
+.env.prod
 .vscode/
 .idea/
 .DS_Store
+
 tsconfig.tsbuildinfo
-.env.dev
-.env.prod
+
+
