@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-06 08:26:37
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-07 14:56:00
+ * @LastEditTime: 2025-04-08 13:44:41
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -72,6 +72,16 @@ export const login = async (user: LoginData): Promise<HttpResponse<UserData>> =>
         return authResponse;
     } catch (error) {
         return transformError<UserData>(error);
+    }
+}
+
+export const logout = async (): Promise<HttpResponse<boolean>> => {
+    try {
+        const response = await axiosInstance.post(`${API_URL}/logout`);
+        const authResponse = transformResponse<boolean>(response);
+        return authResponse;
+    } catch (error) {
+        return transformError<boolean>(error);
     }
 }
 

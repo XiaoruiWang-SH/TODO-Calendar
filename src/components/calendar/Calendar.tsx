@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 09:47:23
+ * @LastEditTime: 2025-04-08 14:09:25
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -39,20 +39,19 @@ export const Calendar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const getTasks = async (currentRangeDays: Date[]) => {
-        if (!user) return;
         const currentRangeDays_ = complementMonthDiaplayDates(currentRangeDays, displayMode);
-        const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1]);
-        if (!tasks.success) return;
+        // const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1]);
+        // if (!tasks.success) return;
         const tasksMap_ = new Map();
         currentRangeDays_.forEach(day => {
             tasksMap_.set(day.toDateString(), []);
         });
-        tasks.data?.forEach(task => {
-            const date = new Date(task.createTime).toDateString();
-            if (tasksMap_.has(date)) {
-                tasksMap_.get(date).push(task);
-            }
-        });
+        // tasks.data?.forEach(task => {
+        //     const date = new Date(task.createTime).toDateString();
+        //     if (tasksMap_.has(date)) {
+        //         tasksMap_.get(date).push(task);
+        //     }
+        // });
         dispatch(setTasksMap(Object.fromEntries(tasksMap_)));
     };
 

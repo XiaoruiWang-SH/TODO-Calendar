@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 12:23:56
+ * @LastEditTime: 2025-04-08 13:45:33
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router';
 import userIcon from '../../assets/user.svg';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { selectUser, logout } from '../../features/user/userSlice';
+import { logout as logoutApi } from '../../data/api_register';
 
 export const Header: FC = () => {
   const navigate = useNavigate();
@@ -42,10 +43,13 @@ const UserInfo: FC = () => {
     }
   }
 
-  const handleLogout = () => {
-    dispatch(logout());
-    setIsModalOpen(false);
-    navigate('/login');
+  const handleLogout = async () => {
+    const logoutResponse = await logoutApi();
+    if (logoutResponse.success) {
+      dispatch(logout());
+      setIsModalOpen(false);
+      navigate('/login');
+    }
   }
 
   const handleChangePassword = () => {

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-20 14:34:54
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-26 21:15:45
+ * @LastEditTime: 2025-04-08 14:28:16
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -17,6 +17,9 @@ import { TaskItem } from '../calendar/Calendar';
 import close from '../../assets/close.svg';
 import arrow_last from '../../assets/arrow_last.svg';
 import arrow_next from '../../assets/arrow_next.svg';
+import { toast } from 'react-toastify';
+import { selectUser } from '../../features/user/userSlice';
+
 
 export const Menu = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: DayTasksProps) => {
     return (
@@ -32,8 +35,13 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
     const calendarState = useAppSelector(selectCalendarState);
     const dispatch = useAppDispatch();
     const { currentRangeDates, selectDate } = calendarState;
+    const user = useAppSelector(selectUser);
 
     const handleClick = (date: string) => {
+        if (!user) {
+            toast.info("Please login first");
+            return;
+        }
         const newDate = new Date(date);
         dispatch(setSelectDate(newDate.toISOString()));
     };

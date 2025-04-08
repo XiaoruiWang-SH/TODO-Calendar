@@ -45,6 +45,7 @@ export const Input: FC = () => {
 
     const addTask = async () => {
         if (task === '' || !user) {
+            toast.info("Please login first");
             return;
         }
         console.log(`add task ${task}`);
