@@ -6,3 +6,5 @@ build/
 .idea/
 .DS_Store
 tsconfig.tsbuildinfo
+.env.dev
+.env.prod
