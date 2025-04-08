@@ -14,7 +14,9 @@
 // src/config/env.ts
 const env = {
     API_HOST: import.meta.env.VITE_API_HOST,
-    DEBUG_MODE: import.meta.env.VITE_DEBUG_MODE === 'true'
+    DEBUG_MODE: import.meta.env.VITE_DEBUG_MODE === 'true',
+    USER_NAME: import.meta.env.VITE_USER_NAME,
+    PASSWORD: import.meta.env.VITE_PASSWORD
   };
   
   export default env;

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 17:30:22
+ * @LastEditTime: 2025-04-08 09:47:23
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -19,7 +19,7 @@ import calendar from '../../assets/calendar.svg';
 import menu from '../../assets/menu.svg';
 import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, 
     complementMonthDiaplayDates, IsValidDate, computeDayInWeek, computeMonthInYear, computeDayInMonth } from './util';
-import { addItem, getItems, getItemsByDayRange } from '../../data/api_task';
+import { addItem, getItemsByDayRange } from '../../data/api_task';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -41,12 +41,13 @@ export const Calendar = () => {
     const getTasks = async (currentRangeDays: Date[]) => {
         if (!user) return;
         const currentRangeDays_ = complementMonthDiaplayDates(currentRangeDays, displayMode);
-        const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1], user.id);
+        const tasks = await getItemsByDayRange(currentRangeDays_[0], currentRangeDays_[currentRangeDays_.length - 1]);
+        if (!tasks.success) return;
         const tasksMap_ = new Map();
         currentRangeDays_.forEach(day => {
             tasksMap_.set(day.toDateString(), []);
         });
-        tasks.forEach(task => {
+        tasks.data?.forEach(task => {
             const date = new Date(task.createTime).toDateString();
             if (tasksMap_.has(date)) {
                 tasksMap_.get(date).push(task);
@@ -201,7 +202,7 @@ export const TaskItem = ({ dataItem }: TaskItemProps) => {
     return (
         <div className='flex justify-start items-center mt-2 mr-1 max-h-10'>
             <img src={dataItem.important ? star_selected : star_unselected} className='w-4' alt='important'></img>
-            <div className={`ml-1.5 line-clamp-2 ${dataItem.checked ? 'line-through text-gray-500' : ''}`}>{dataItem.name}</div>
+            <div className={`ml-1.5 line-clamp-2 ${dataItem.checked ? 'line-through text-gray-500' : ''}`}>{dataItem.title}</div>
         </div>
     );
 };

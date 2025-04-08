@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 17:31:37
+ * @LastEditTime: 2025-04-08 09:47:59
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -24,6 +24,7 @@ import { add_normal, change_importance, complete, add_completed, undo, add_compl
 import { getItemsByDate, updateItem } from '../../data/api_task';
 import { setSelectDate, selectCalendarState } from '../../features/calendar/calendarSlice';
 import { selectUser } from '../../features/user/userSlice';
+import { toast } from 'react-toastify';
 
 export const List = () => {
 
@@ -37,9 +38,14 @@ export const List = () => {
 
     const fetchItems = async (date: Date) => {
         if (!user) return;
-        const items = await getItemsByDate(date, user.id);
-        dispatch(add_normalTasks(items));
-        dispatch(add_completedTasks(items));
+        const items = await getItemsByDate(date);
+        if (items.success && items.data) {
+            dispatch(add_normalTasks(items.data));
+            dispatch(add_completedTasks(items.data));
+        } else {
+            console.error(items.message);
+            toast.error(items.message);
+        }
     };
 
     useEffect(() => {
@@ -49,8 +55,11 @@ export const List = () => {
     // const { id, updateTime, expireTime, checked, important } = req.body
     const taskchange = async (item: ItemData) => {
         if (!user) return;
-        const updatedItem = await updateItem(item, user.id);
-        console.log(updatedItem);
+        const updatedItem = await updateItem(item);
+        if (!updatedItem.success) {
+            console.error(updatedItem.message);
+            toast.error(updatedItem.message);
+        }
         
         if (item.checked) {
             dispatch(complete(item));
@@ -63,8 +72,11 @@ export const List = () => {
 
     const handleImportanceChange = async (item: ItemData) => {
         if (!user) return;
-        const updatedItem = await updateItem(item, user.id);
-        console.log(item);
+        const updatedItem = await updateItem(item);
+        if (!updatedItem.success) {
+            console.error(updatedItem.message);
+            toast.error(updatedItem.message);
+        }
         dispatch(change_importance(item));
     }
 
@@ -114,7 +126,7 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     return (
         <div className='flex justify-between items-center my-2 bg-gray-100 rounded-md py-2 border border-gray-200 shadow-sm'>
             <CheckBox change={item.checked} handleChange={handleChange} />
-            <div className='flex-1 mr-2.5'>{item.name}</div>
+            <div className='flex-1 mr-2.5'>{item.title}</div>
             <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
 
         </div>
@@ -152,8 +164,11 @@ const ComponentComplete = () => {
 
     const taskchange = async (item: ItemData) => {
         if (!user) return;
-        const updatedItem = await updateItem(item, user.id);
-        console.log(updatedItem);
+        const updatedItem = await updateItem(item);
+        if (!updatedItem.success) {
+            console.error(updatedItem.message);
+            toast.error(updatedItem.message);
+        }
 
         if (item.checked) {
             dispatch(complete(item));

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 10:05:53
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-06 15:14:10
+ * @LastEditTime: 2025-04-08 11:52:42
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -13,11 +13,12 @@ import { useNavigate } from 'react-router';
 import password_hidden from '../../assets/password_hidden.svg';
 import password_visible from '../../assets/password_visible.svg';
 import { UserData } from '../../data/api_user';
-import { register, RegisterData, AuthResponse, RegisterResponse, LoginData, login } from '../../data/api_register';
+import { register, RegisterData, LoginData, login } from '../../data/api_register';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../features/user/userSlice';
 import { toast } from 'react-toastify';
-
+import { HttpResponse } from '../../data/api';
+import env from '../../config/env';
 interface UserContextType {
     isLogin: boolean;
     setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,8 +49,8 @@ export const Login: FC = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        email: env.DEBUG_MODE ? env.USER_NAME : '',
+        password: env.DEBUG_MODE ? env.PASSWORD : ''
     });
 
     const [isDisabled, setIsDisabled] = useState(true);
@@ -82,11 +83,11 @@ export const Login: FC = () => {
             email: formData.email,
             password: formData.password
         }
-        login(user).then((res: AuthResponse) => {
+        login(user).then((res: HttpResponse<UserData>) => {
             if (res.success) {
                 toast.success(res.message);
-                // dispatch(setUser(res.data));
-                // navigate("/");
+                dispatch(setUser(res.data));
+                navigate("/");
             } else {
                 toast.error(res.message);
             }
@@ -104,7 +105,7 @@ export const Login: FC = () => {
                     <InputCell
                         title="Email"
                         id="email"
-                        value={formData.email}
+                        value={ formData.email}
                         isPassword={false}
                         tip={null}
                         handleChange={handleChange} />
@@ -132,6 +133,7 @@ export const Login: FC = () => {
 }
 
 export const Register: FC = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // const { isRegister, setIsRegister } = useContext(UserContext)!;
@@ -165,10 +167,11 @@ export const Register: FC = () => {
             email: formData.email,
             password: formData.password
         }
-        register(user).then((res: AuthResponse) => {
+        register(user).then((res: HttpResponse<UserData>) => {
             if (res.success) {
                 toast.success(res.message);
-                navigate(-1);
+                dispatch(setUser(res.data));
+                navigate("/");
             } else {
                 toast.error(res.message);
             }

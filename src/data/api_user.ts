@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-03 13:09:02
+ * @LastEditTime: 2025-04-08 07:20:59
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -11,79 +11,41 @@
 import axios, { AxiosError } from "axios";
 import { ItemData } from "./ItemData";
 import moment from "moment";
-import env from "../config/env";
+import { axiosInstance, HttpResponse, transformResponse, transformError } from "./api";
 
-const API_URL = env.API_HOST + "/api/users";
+
+const API_URL = "/api/users";
 
 export interface UserData {
     id: number;
     name: string;
     email: string;
-    password: string;
+    role: string;
 }
 
-export const getUsers = async (): Promise<UserData[]> => {
+export const getUsers = async (): Promise<HttpResponse<UserData[]>> => {
     try {
-        const response = await axios.get<UserData[]>(`${API_URL}`);
-        if (response.status === 200 && response.data) {
-            return response.data;
-        } else {
-            throw new Error("Failed to fetch items");
+        const response = await axiosInstance.get<UserData[]>(`${API_URL}`);
+        const userResponse = transformResponse<UserData[]>(response);
+        if (!userResponse.success) {
+            return userResponse;
         }
+        return userResponse;
     } catch (error) {
-        const axiosError = error as AxiosError;
-        console.error("Error fetching items:", axiosError.message);
-        throw new Error(`Failed to fetch items: ${axiosError.message}`);
+        return transformError<UserData[]>(error);
     }
 };
 
-export const addUser = async (user: UserData): Promise<number> => {
-    try {
-        const response = await axios.post<number>(`${API_URL}/register`, user);
-        
-        if (response.status === 200 && response.data) {
-            return response.data;
-        } else {
-            throw new Error("Failed to add item");
-        }
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<ItemData>;
-            if (axiosError.response?.data) {
-                throw new Error("Failed to add item");
-            }
-            throw new Error(`Network error: ${axiosError.message}`);
-        }
-        throw error;
-    }
-};
 
-export const updateUser = async (user: UserData): Promise<number> => {
+export const updateUser = async (user: UserData): Promise<HttpResponse<Number>> => {
     try {
-        const response = await axios.post<number>(`${API_URL}/${user.id}`, user);
-        if (response.status === 200 && response.data) {
-            return response.data;
-        } else {
-            throw new Error("Failed to update item");
+        const response = await axiosInstance.post<number>(`${API_URL}/${user.id}`, user);
+        const userResponse = transformResponse<number>(response);
+        if (!userResponse.success) {
+            return userResponse;
         }
+        return userResponse;
     } catch (error) {
-        const axiosError = error as AxiosError;
-        console.error("Error updating item:", axiosError.message);
-        throw new Error(`Failed to update item: ${axiosError.message}`);
-    }
-};
-
-export const login = async (email: string, password: string): Promise<UserData> => {
-    try {
-        const response = await axios.post<UserData>(`${API_URL}/user`, { email, password });
-        if (response.status === 200 && response.data) {
-            return response.data;
-        } else {
-            throw new Error("Failed to login");
-        }
-    } catch (error) {
-        const axiosError = error as AxiosError;
-        console.error("Error logging in:", axiosError.message);
-        throw new Error(`Failed to login: ${axiosError.message}`);
+        return transformError<number>(error);
     }
 };

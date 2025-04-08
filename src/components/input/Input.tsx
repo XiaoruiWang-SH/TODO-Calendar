@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 17:30:59
+ * @LastEditTime: 2025-04-08 09:47:48
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -19,6 +19,8 @@ import { add_normal, change_importance } from '../../features/task/taskSlice';
 import { addItem } from '../../data/api_task';
 import { selectCalendarState } from '../../features/calendar/calendarSlice';
 import { selectUser } from '../../features/user/userSlice';
+import { HttpResponse } from '../../data/api';
+import { toast } from 'react-toastify';
 
 export const Input: FC = () => {
     const dispatch = useAppDispatch();
@@ -48,7 +50,8 @@ export const Input: FC = () => {
         console.log(`add task ${task}`);
         const newItem: ItemData = {
             id: 0,
-            name: task,
+            title: task,
+            details: '',
             checked: false,
             important: false,
             createTime: new Date().toISOString(),
@@ -56,13 +59,17 @@ export const Input: FC = () => {
             updateTime: new Date().toISOString(),
             createDate: new Date().toISOString()
         };
-        const result: number = await addItem(newItem, user.id);
-        if (result != -1) {
-            const insertedItem: ItemData = {...newItem, id: result};
+        
+        const result: HttpResponse<number> = await addItem(newItem);
+        if (result.success && result.data) {
+            const insertedItem: ItemData = {...newItem, id: result.data};
             console.log(`insertedItem: ${JSON.stringify(insertedItem)}`);
             dispatch(add_normal(insertedItem));
+        } else {
+            console.error(result.message);
+            toast.error(result.message);
         }
-        
+
         setTask('');
     }
 

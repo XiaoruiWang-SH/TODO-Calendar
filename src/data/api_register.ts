@@ -3,17 +3,18 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-06 08:26:37
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-06 15:29:25
+ * @LastEditTime: 2025-04-07 14:56:00
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
 import axios, { AxiosError } from "axios";
-import { ItemData } from "./ItemData";
-import moment from "moment";
-import env from "../config/env";
+import { HttpResponse, axiosInstance, transformResponse, transformError } from "./api";
+import { UserData } from "./api_user";
 
-const API_URL = env.API_HOST + "/api/auth";
+
+const API_URL = "/api/auth";
+
 
 export interface RegisterData {
     name: string;
@@ -26,89 +27,51 @@ export interface LoginData {
     password: string;
 }
 
-export interface RegisterResponse {
-    accessToken: string;
-    expiresIn: number;
-}
 
-export interface AuthResponse {
-    success: boolean;
-    status: number;
-    message: string;
-    data: RegisterResponse | null;
-}
-
-export const register = async (user: RegisterData): Promise<AuthResponse> => {
+export const register = async (user: RegisterData): Promise<HttpResponse<UserData>> => {
     try {
-        const response = await axios.post(`${API_URL}/register`, user);
-        const authResponse = {
-            success: true,
-            status: response.status,
-            message: "Registration succeeded",
-            data: response.data
+        const response = await axiosInstance.post(`${API_URL}/register`, user);
+        const authResponse = transformResponse<UserData>(response);
+        if (!authResponse.success) {
+            return authResponse;
         }
         
-        if (!response.data 
-            || typeof response.data !== 'object' 
-            || !('accessToken' in response.data) 
-            || !('expiresIn' in response.data)) {
+        if (!authResponse.data 
+            || typeof authResponse.data !== 'object' 
+            || !('id' in authResponse.data) 
+            || !('name' in authResponse.data)
+            || !('email' in authResponse.data)
+            || !('role' in authResponse.data)) {
             authResponse.success = false;
             authResponse.message = "Registration succeeded but no data received";  
         } 
         return authResponse;
     } catch (error) {
-        const authResponse = {
-            success: false,
-            status: 500,
-            message: "Registration failed",
-            data: null
-        }
-        if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<string>;
-            if (axiosError.response) {
-                authResponse.status = axiosError.response.status;
-                authResponse.message = axiosError.response.data;
-            }
-        }
-        return authResponse;
+        return transformError<UserData>(error);
     }
 };
 
 
-export const login = async (user: LoginData): Promise<AuthResponse> => {
+export const login = async (user: LoginData): Promise<HttpResponse<UserData>> => {
     try {
-        const response = await axios.post(`${API_URL}/login`, user, {
-            withCredentials: true
-        });
-        const authResponse = {
-            success: true,
-            status: response.status,
-            message: "Login succeeded",
-            data: response.data
+        const response = await axiosInstance.post(`${API_URL}/login`, user);
+        const authResponse = transformResponse<UserData>(response);
+        if (!authResponse.success) {
+            return authResponse;
         }
-        if (!response.data 
-            || typeof response.data !== 'object' 
-            || !('accessToken' in response.data) 
-            || !('expiresIn' in response.data)) {
+        
+        if (!authResponse.data 
+            || typeof authResponse.data !== 'object' 
+            || !('id' in authResponse.data) 
+            || !('name' in authResponse.data)
+            || !('email' in authResponse.data)
+            || !('role' in authResponse.data)) {
             authResponse.success = false;
             authResponse.message = "Login succeeded but no data received";  
         } 
         return authResponse;
     } catch (error) {
-        const authResponse = {
-            success: false,
-            status: 500,
-            message: "Login failed",
-            data: null
-        }
-        if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<string>;
-            if (axiosError.response) {
-                authResponse.status = axiosError.response.status;
-                authResponse.message = axiosError.response.data;
-            }
-        }
-        return authResponse;
+        return transformError<UserData>(error);
     }
 }
 
