@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 14:14:28
+ * @LastEditTime: 2025-04-08 15:04:59
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -37,10 +37,6 @@ export const List = () => {
     const dispatch = useAppDispatch();
 
     const fetchItems = async (date: Date) => {
-        if (!user) {
-            toast.info("Please login first");
-            return;
-        }
         const items = await getItemsByDate(date);
         if (items.success && items.data) {
             dispatch(add_normalTasks(items.data));
@@ -57,7 +53,6 @@ export const List = () => {
 
     // const { id, updateTime, expireTime, checked, important } = req.body
     const taskchange = async (item: ItemData) => {
-        if (!user) return;
         const updatedItem = await updateItem(item);
         if (!updatedItem.success) {
             console.error(updatedItem.message);
@@ -74,7 +69,6 @@ export const List = () => {
     }
 
     const handleImportanceChange = async (item: ItemData) => {
-        if (!user) return;
         const updatedItem = await updateItem(item);
         if (!updatedItem.success) {
             console.error(updatedItem.message);
@@ -166,7 +160,6 @@ const ComponentComplete = () => {
     }
 
     const taskchange = async (item: ItemData) => {
-        if (!user) return;
         const updatedItem = await updateItem(item);
         if (!updatedItem.success) {
             console.error(updatedItem.message);

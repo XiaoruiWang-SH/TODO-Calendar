@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 14:24:52
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-27 16:35:14
+ * @LastEditTime: 2025-04-08 14:54:54
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -33,9 +33,10 @@ const userSlice = createSlice({
         },
         logout: (state) => {
             state.userData = null;
-            console.log("logout");
+            // console.log("logout");
             localStorage.removeItem('user');
         }
+        
     }
 });
 
