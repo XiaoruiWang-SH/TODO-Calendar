@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-20 14:34:54
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 14:28:16
+ * @LastEditTime: 2025-04-09 20:52:45
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -24,7 +24,18 @@ import { selectUser } from '../../features/user/userSlice';
 export const Menu = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: DayTasksProps) => {
     return (
         <div className='mx-5'>
-            <DayBlocks tasks={tasks} displayMode={displayMode} handleDisplayMenu={handleDisplayMenu} handleSwitcher={handleSwitcher} />
+            <Header handleDisplayMenu={handleDisplayMenu} />
+            <MenuItem>
+                <DayBlocks tasks={tasks} displayMode={displayMode} handleDisplayMenu={handleDisplayMenu} handleSwitcher={handleSwitcher} />
+            </MenuItem>
+        </div>
+    );
+}
+
+const MenuItem = ({children}: {children: React.ReactNode}) => {
+    return (
+        <div className='border-t border-gray-200'>
+            {children}
         </div>
     );
 }
@@ -38,6 +49,7 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
     const user = useAppSelector(selectUser);
 
     const handleClick = (date: string) => {
+        handleDisplayMenu();
         if (!user) {
             toast.info("Please login first");
             return;
@@ -48,8 +60,7 @@ const DayBlocks = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: Da
 
     return (
         <>
-            <Header handleDisplayMenu={handleDisplayMenu} />
-            <div className='border-t border-gray-200'>
+            <div>
                 <DateSwitcher handleSwitcher={handleSwitcher} />
                 <WeekTitle />
                 <div className="grid grid-cols-7 grid-rows-6 mt-2 w-full">
@@ -85,8 +96,8 @@ const WeekTitle = () => {
 
 const Header = ({ handleDisplayMenu }: { handleDisplayMenu: () => void }) => {
     return (
-        <div className='flex justify-between items-center'>
-            <div className='text-xl font-medium'>Calendar</div>
+        <div className='flex justify-between items-center text-2xl font-bold text-start py-5 ' >
+            <div>ToDo Calendar</div>
             <div className='w-10 h-10 flex justify-center items-center' onClick={handleDisplayMenu}>
                 <img src={close} alt="close" className='w-6 h-6' />
             </div>

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 14:09:25
+ * @LastEditTime: 2025-04-09 20:31:18
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -17,8 +17,10 @@ import goBack from '../../assets/goback.svg';
 import goForward from '../../assets/goforward.svg';
 import calendar from '../../assets/calendar.svg';
 import menu from '../../assets/menu.svg';
-import { getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray, 
-    complementMonthDiaplayDates, IsValidDate, computeDayInWeek, computeMonthInYear, computeDayInMonth } from './util';
+import {
+    getToday, getCurrentDate, getCurrentRangeDatesArray, getLastRangeDatesArray, getNextRangeDatesArray,
+    complementMonthDiaplayDates, IsValidDate, computeDayInWeek, computeMonthInYear, computeDayInMonth
+} from './util';
 import { addItem, getItemsByDayRange } from '../../data/api_task';
 import { use, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -26,8 +28,10 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { DisplayMode, selectCalendarState, setCurrentDate, setCurrentRangeDates, setTasksMap, setDisplayMode, setSelectDate } from '../../features/calendar/calendarSlice';
 import { selectUser } from '../../features/user/userSlice';
 import { Container } from '../container/Container';
-import { Drawer } from '../drawer/Drawer';
+// import { Drawer as DrawerCustom } from '../drawer/Drawer';
 import { Menu } from '../menu/Menu';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
 
 export const Calendar = () => {
     const dispatch = useAppDispatch();
@@ -111,13 +115,13 @@ export const Calendar = () => {
                 newDate.setDate(newDate.getDate() - 1);
                 dispatch(setSelectDate(newDate.toISOString()));
             }
-            break;
+                break;
             case "goForward": {
                 const newDate = new Date(selectDate);
                 newDate.setDate(newDate.getDate() + 1);
                 dispatch(setSelectDate(newDate.toISOString()));
             }
-            break;
+                break;
             case "today": {
                 dispatch(setSelectDate(new Date().toISOString()));
             }
@@ -130,10 +134,17 @@ export const Calendar = () => {
     return (
         <div>
             <div className={`${isMenuOpen ? "flex" : ""}`}>
-                {isMenuOpen && <div className="flex-1 h-[100vh] py-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
+                {/* {isMenuOpen && <div className="flex-1 h-[100vh] py-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
                     displayMode={displayMode}
                     handleDisplayMenu={handleDisplayMenu}
-                    handleSwitcher={handleSwitcher} /></div>}
+                    handleSwitcher={handleSwitcher} /></div>} */}
+                <Drawer open={isMenuOpen} onClose={handleDisplayMenu}>
+                    {/* {DrawerList} */}
+                    <Menu tasks={new Map(Object.entries(tasksMap))}
+                        displayMode={displayMode}
+                        handleDisplayMenu={handleDisplayMenu}
+                        handleSwitcher={handleSwitcher} />
+                </Drawer>
                 <div className="flex-4 h-[100vh] bg-white p-4 py-5 overflow-y-scroll">
                     <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
                     <Container />
@@ -206,7 +217,7 @@ export const TaskItem = ({ dataItem }: TaskItemProps) => {
     );
 };
 
-const Header = ({daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
+const Header = ({ daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
     const calendarState = useAppSelector(selectCalendarState);
     const { selectDate } = calendarState;
     return (
@@ -216,7 +227,7 @@ const Header = ({daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
                 <div className='text-2xl mx-2.5'>My day</div>
             </div>
             <div className="text-lg font-light"> {computeDayInWeek(new Date(selectDate))}, {computeMonthInYear(new Date(selectDate))} {computeDayInMonth(new Date(selectDate))}</div>
-                <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
+            <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
         </div>
     );
 };
@@ -254,7 +265,7 @@ const DisplaySwitcher = ({ onList, onGrid }: DisplaySwitcherProps) => {
 
 const Footer = () => {
     return (
-      <div className='bg-gray-100 h-[30px] border-t border-gray-200'>
-      </div>
+        <div className='bg-gray-100 h-[30px] border-t border-gray-200'>
+        </div>
     )
-  }
+}
