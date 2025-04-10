@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 10:05:53
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 11:52:42
+ * @LastEditTime: 2025-04-10 16:52:45
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -19,6 +19,13 @@ import { setUser } from '../../features/user/userSlice';
 import { toast } from 'react-toastify';
 import { HttpResponse } from '../../data/api';
 import env from '../../config/env';
+import google from '../../assets/google.svg';
+import github from '../../assets/github.svg';
+import Divider from '@mui/material/Divider';
+import { styled } from '@mui/material/styles';
+
+
+
 interface UserContextType {
     isLogin: boolean;
     setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,21 +34,6 @@ interface UserContextType {
 }
 
 export const UserContext = createContext<UserContextType | null>(null);
-
-// export const Login: FC = () => {
-//     const [isLogin, setIsLogin] = useState(false);
-//     const [isRegister, setIsRegister] = useState(false);
-
-//     return (
-//         <>
-//             <UserContext.Provider value={{ isLogin, setIsLogin, isRegister, setIsRegister }}>
-//                 <LoginSection />
-//                 <RegisterSection />
-//             </UserContext.Provider>
-//         </>
-//     );
-// };
-
 
 export const Login: FC = () => {
     const dispatch = useDispatch();
@@ -69,16 +61,6 @@ export const Login: FC = () => {
 
     const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        // console.log(formData);
-        // login(formData.email, formData.password).then((res) => {
-        //     console.log("login res: ", res);
-        //     dispatch(setUser(res));
-        //     navigate("/");
-        // }).catch((err) => {
-        //     console.log("login err: ", err);
-        // });
-
-
         const user: LoginData = {
             email: formData.email,
             password: formData.password
@@ -97,20 +79,27 @@ export const Login: FC = () => {
 
     }
 
-    return <div className='h-[100vh] bg-white flex items-center justify-center'>
-        <div className='flex flex-col items-center justify-center self-start px-10 py-5  rounded-lg'>
-            <div className="font-semibold text-2xl">Welcome, please login</div>
-            <div className='flex flex-col self-start items-stretch mt-5'>
-                <div className='mt-[10px]'>
+    return (
+        <div className='h-[100vh] bg-white flex items-center justify-center bg-slate-50'>
+            <div className='items-center justify-center self-start px-10 py-5 rounded-lg w-[100vw] md:w-[35vw] md:border md:border-gray-300 md:shadow-md md:mt-10'>
+                <div className='text-xl font-semibold text-center'>Sign In</div>
+                <div className="text-sm text-gray-500 font-light my-2 text-center">Welcome user, please sign in to contine</div>
+                <div className='flex flex-col gap-2 my-5'>
+                    <SignInItem logo={google} text="Sign in with Google" onClick={() => { }} />
+                    <SignInItem logo={github} text="Sign in with Github" onClick={() => { }} />
+                </div>
+                <Divider>
+                    <div className='text-gray-500'>Or</div>
+                </Divider>
+
+                <div className='flex flex-col gap-2 my-2'>
                     <InputCell
                         title="Email"
                         id="email"
-                        value={ formData.email}
+                        value={formData.email}
                         isPassword={false}
                         tip={null}
                         handleChange={handleChange} />
-                </div>
-                <div className='mt-[20px]'>
                     <InputCell
                         title="Password"
                         id="password"
@@ -119,17 +108,41 @@ export const Login: FC = () => {
                         tip={"At least 8 characters, one uppercase, one lowercase, one number"}
                         handleChange={handleChange} />
                 </div>
-                <button className={`mt-[40px] p-2 w-full bg-gray-400  disabled:bg-gray-300  text-white rounded-md ${!isDisabled ? 'hover:border hover:border-gray-700 active:bg-gray-500' : ''}`}
-                    type="submit"
-                    onClick={handleSubmit}
-                    disabled={isDisabled}>Login</button>
-                <button className='mt-[10px] p-1.5 text-center w-full text-blue-500' type="button" onClick={() => navigate(-1)}>Cancel</button>
-                <button className='mt-[10px] p-1.5 text-center w-full text-gray-700' type="button"
-                    onClick={() => navigate("/register")}
-                >Have no account? go to <span className='text-blue-500'>Register</span></button>
+                <div className='flex flex-col gap-2 my-10'>
+                    <button className={`p-2 w-full bg-gray-900 disabled:bg-gray-500 text-white rounded-md ${!isDisabled ? 'hover:border hover:bg-gray-700' : ''}`}
+                        type="submit"
+                        onClick={handleSubmit}
+                        disabled={isDisabled}>Login</button>
+                    <button className='p-1 text-center w-full text-blue-500' type="button" onClick={() => navigate(-1)}>Cancel</button>
+                    <button className='p-1 text-center w-full text-gray-700' type="button"
+                        onClick={() => navigate("/register")}
+                    >Have no account? go to <span className='text-blue-500'>Register</span></button>
+                </div>
             </div>
         </div>
-    </div>;
+    );
+}
+
+interface SignInItemProps {
+    logo: string;
+    text: string;
+    onClick: () => void;
+}
+
+const SignInItem = ({ logo, text, onClick }: SignInItemProps) => {
+    return (
+        <div>
+            <div className='flex justify-center items-center gap-2 font-normal border border-gray-300 rounded-md p-2'
+                onClick={onClick}>
+                <div>
+                    <img src={logo} alt="logo" className='w-5 h-5' />
+                </div>
+                <div>
+                    {text}
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export const Register: FC = () => {
@@ -181,53 +194,51 @@ export const Register: FC = () => {
 
     }
     return (
-        <div className='h-[100vh] bg-white flex items-center justify-center'>
-            <div className='flex flex-col items-center justify-center self-start px-10 py-5  rounded-lg'>
-                <div className='font-semibold text-2xl'>Welcome, please Register</div>
-                <div className='flex flex-col self-start items-stretch mt-5'>
-                    <div className='mt-[10px]'>
-                        <InputCell
-                            title="Email"
-                            id="email"
-                            value={formData.email}
-                            isPassword={false}
-                            tip={null}
-                            handleChange={handleChange} />
-                    </div>
-                    <div className='mt-[10px]'>
-                        <InputCell
-                            title="Username"
-                            id="username"
-                            value={formData.username}
-                            isPassword={false}
-                            tip={null}
-                            handleChange={handleChange} />
-                    </div>
-                    <div className='mt-[20px]'>
-                        <InputCell
-                            title="Password"
-                            id="password"
-                            value={formData.password}
-                            isPassword={true}
-                            tip={"At least 8 characters, one uppercase, one lowercase, one number"}
-                            handleChange={handleChange} />
-                    </div>
-                    <div className='mt-[20px]'>
-                        <InputCell
-                            title='Confirm Password'
-                            id="confirmPassword"
-                            value={formData.confirmPassword}
-                            isPassword={true}
-                            tip={"At least 8 characters, one uppercase, one lowercase, one number"}
-                            handleChange={handleChange} />
-                    </div>
+        <div className='h-[100vh] bg-white flex items-center justify-center bg-slate-50'>
+            <div className='items-center justify-center self-start px-10 py-5 rounded-lg w-[100vw] md:w-[35vw] md:border md:border-gray-300 md:shadow-md md:mt-10'>
+                <div className='text-xl font-semibold text-center'>Register</div>
+                <div className="text-sm text-gray-500 font-light my-2 text-center">Welcome user, please register to contine</div>
+                <div className='flex flex-col gap-2'>
+                    <InputCell
+                        title="Email"
+                        id="email"
+                        value={formData.email}
+                        isPassword={false}
+                        tip={null}
+                        handleChange={handleChange} />
+                    <InputCell
+                        title="Username"
+                        id="username"
+                        value={formData.username}
+                        isPassword={false}
+                        tip={null}
+                        handleChange={handleChange} />
+                    <InputCell
+                        title="Password"
+                        id="password"
+                        value={formData.password}
+                        isPassword={true}
+                        tip={"At least 8 characters, one uppercase, one lowercase, one number"}
+                        handleChange={handleChange} />
+                    <InputCell
+                        title='Confirm Password'
+                        id="confirmPassword"
+                        value={formData.confirmPassword}
+                        isPassword={true}
+                        tip={"At least 8 characters, one uppercase, one lowercase, one number"}
+                        handleChange={handleChange} />
+                </div>
 
-                    <button className={`mt-[40px] p-2 w-full bg-gray-400  disabled:bg-gray-300  text-white rounded-md ${!isDisabled ? 'hover:border hover:border-gray-700 active:bg-gray-500' : ''}`}
-                        disabled={isDisabled}
+                <div className='flex flex-col gap-2 my-10'>
+                    <button className={`p-2 w-full bg-gray-900 disabled:bg-gray-500 text-white rounded-md ${!isDisabled ? 'hover:border hover:bg-gray-700' : ''}`}
+                        type="submit"
                         onClick={handleSubmit}
-                    >Register</button>
-                    <button className='mt-[10px] p-1.5 text-center w-full text-blue-500' type="button" onClick={() => navigate(-1)}>Cancel</button>
-                    <button className='mt-[10px] p-1.5 text-center w-full text-gray-700' type="button">Have a account? go to <span className='text-blue-500'>Login</span></button>
+                        disabled={isDisabled}>Register</button>
+                    <button className='p-1 text-center w-full text-blue-500' type="button" onClick={() => navigate(-1)}>Cancel</button>
+                    <button className='p-1 text-center w-full text-gray-700' type="button"
+                        onClick={() => navigate("/login")}
+                    >Have no account? go to <span className='text-blue-500'>Login</span></button>
+
 
 
                 </div>
@@ -251,9 +262,9 @@ const InputCell = ({ title, id, value, isPassword, tip, handleChange }: InputCel
     const [showTip, setShowTip] = useState(false);
     return (
         <div className='flex flex-col'>
-            <div className='flex justify-between items-center'>
-                <label htmlFor="password">{title}:</label>
-                <div className='flex items-center justify-center ml-4 w-[20vw]  border border-gray-300 rounded-md'>
+            <div>
+                <label htmlFor="password" className='text-sm text-gray-500'>{title}:</label>
+                <div className='flex items-center justify-center w-full border border-gray-300 rounded-md'>
                     <input className='p-1.5 w-full focus:outline-none'
                         type={isPassword ? (showPassword ? "text" : "password") : "text"}
                         id={id}

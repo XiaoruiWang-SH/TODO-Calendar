@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-10 09:53:00
+ * @LastEditTime: 2025-04-10 15:28:51
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -86,7 +86,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
     // 蒙版层（点击关闭弹窗）
     <div className="fixed inset-0 z-100" onClick={onClose}>
       {/* 弹窗内容（阻止事件冒泡） */}
-      <div className="absolute top-[70px] right-[10px] bg-gray-200 rounded-md  border-gray-400 p-2" onClick={(e) => e.stopPropagation()}>
+      <div className="absolute md:top-[70px] top-[50px] right-[10px] bg-gray-200 rounded-md  border-gray-400 p-2  shadow-lg shadow-gray-400" onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>
