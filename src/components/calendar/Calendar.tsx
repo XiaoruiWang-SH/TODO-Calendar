@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-10 10:34:49
+ * @LastEditTime: 2025-04-10 12:15:38
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -38,6 +38,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 export const Calendar = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const dispatch = useAppDispatch();
     const calendarState = useAppSelector(selectCalendarState);
     const user = useAppSelector(selectUser);
@@ -136,25 +138,36 @@ export const Calendar = () => {
     }
 
     return (
-        <div>
-            <div className={`${isMenuOpen ? "flex" : ""}`}>
-                {/* {isMenuOpen && <div className="flex-1 h-[100vh] py-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
-                    displayMode={displayMode}
-                    handleDisplayMenu={handleDisplayMenu}
-                    handleSwitcher={handleSwitcher} /></div>} */}
-                <Drawer open={isMenuOpen} onClose={handleDisplayMenu}>
-                    {/* {DrawerList} */}
-                    <Menu tasks={new Map(Object.entries(tasksMap))}
+        <>
+            {isMobile ? (
+                <div>
+                    <div className={`${isMenuOpen ? "flex" : ""}`}>
+                        <Drawer open={isMenuOpen} onClose={handleDisplayMenu}>
+                            {/* {DrawerList} */}
+                            <Menu tasks={new Map(Object.entries(tasksMap))}
+                                displayMode={displayMode}
+                                handleDisplayMenu={handleDisplayMenu}
+                                handleSwitcher={handleSwitcher} />
+                        </Drawer>
+                        <div className="flex-4 h-[100vh] bg-white p-2 md:p-4 overflow-y-scroll">
+                            <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
+                            <Container />
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className={`${isMenuOpen ? "flex" : ""}`}>
+                    {isMenuOpen && <div className="flex-1 h-[100vh] py-5 border-r border-gray-200 "><Menu tasks={new Map(Object.entries(tasksMap))}
                         displayMode={displayMode}
                         handleDisplayMenu={handleDisplayMenu}
-                        handleSwitcher={handleSwitcher} />
-                </Drawer>
-                <div className="flex-4 h-[100vh] bg-white p-2 md:p-4 overflow-y-scroll">
-                    <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
-                    <Container />
+                        handleSwitcher={handleSwitcher} /></div>}
+                    <div className="flex-4 h-[100vh] bg-white p-4 py-5 overflow-y-scroll">
+                        <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
+                        <Container />
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </>
     );
 };
 

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-20 14:34:54
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-10 11:10:03
+ * @LastEditTime: 2025-04-10 11:35:12
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -19,6 +19,8 @@ import arrow_last from '../../assets/arrow_last.svg';
 import arrow_next from '../../assets/arrow_next.svg';
 import { toast } from 'react-toastify';
 import { selectUser } from '../../features/user/userSlice';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
 export const Menu = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: DayTasksProps) => {
@@ -32,7 +34,7 @@ export const Menu = ({ tasks, displayMode, handleDisplayMenu, handleSwitcher }: 
     );
 }
 
-const MenuItem = ({children}: {children: React.ReactNode}) => {
+const MenuItem = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className='border-t border-gray-200'>
             {children}
@@ -95,14 +97,27 @@ const WeekTitle = () => {
 };
 
 const Header = ({ handleDisplayMenu }: { handleDisplayMenu: () => void }) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <div className='flex justify-between items-center text-xl font-bold text-start py-5 ' >
-            <div>ToDo Calendar</div>
-            <div className='w-10 h-10 flex justify-center items-center' onClick={handleDisplayMenu}>
-                <img src={close} alt="close" className='w-6 h-6' />
-            </div>
-        </div>
+        <>
+            {isMobile ? (
+                <div className='flex justify-between items-center text-xl font-bold text-start py-5 ' >
+                    <div>ToDo Calendar</div>
+                    <div className='w-10 h-10 flex justify-center items-center' onClick={handleDisplayMenu}>
+                        <img src={close} alt="close" className='w-6 h-6' />
+                    </div>
+                </div>
+            ) : (
+                <div className='flex justify-end items-center text-xl font-bold text-start' >
+                    <div className='w-10 h-10 flex justify-center items-center' onClick={handleDisplayMenu}>
+                        <img src={close} alt="close" className='w-6 h-6' />
+                    </div>
+                </div>
+            )}
+        </>
     );
+
 };
 
 const DateSwitcher = ({ handleSwitcher }: { handleSwitcher: (action: string) => void }) => {
