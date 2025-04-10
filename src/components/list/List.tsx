@@ -3,14 +3,14 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 15:04:59
+ * @LastEditTime: 2025-04-10 11:07:44
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
 import { JSX, useContext, useEffect, useState, FC } from 'react';
-import './list.css';
+// import './list.css';
 import star_unselected from '../../assets/star-unselected.svg';
 import star_selected from '../../assets/star-selected.svg';
 import checkbox_unchecked from '../../assets/checkbox-unselected.svg';
@@ -80,9 +80,9 @@ export const List = () => {
     return (
         <div>
         {normalTasks.length == 0 ? <></> : 
-        <ul>
+        <ul className='my-2 md:my-4'>
             {normalTasks.map((item) => 
-            <li className={item.checked ? 'list-checked' : 'list-unchecked'} key={item.id}>
+            <li className={item.checked ? 'text-gray-500 line-through' : 'line-none'} key={item.id}>
                 <ListItem item={item} taskChange={taskchange} handleImportanceChange={handleImportanceChange} />
                 </li>
             )}
@@ -121,7 +121,7 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
     }
 
     return (
-        <div className='flex justify-between items-center my-2 bg-gray-100 rounded-md py-2 border border-gray-200 shadow-sm'>
+        <div className='flex justify-between items-center my-2 bg-gray-100 rounded-md py-1 md:py-2 border border-gray-200 shadow-sm'>
             <CheckBox change={item.checked} handleChange={handleChange} />
             <div className='flex-1 mr-2.5'>{item.title}</div>
             <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
@@ -133,16 +133,16 @@ const ListItem = ({item, taskChange, handleImportanceChange}: ListItemProps) => 
 const CheckBox = ({change: checked, handleChange: handleChange}: ItemChangeProps) => { // 参数本质上是一个对象，这里是结构赋值
 
     return (
-        <div className='round-checkbox' onClick={handleChange}>
-            <img src={checked ? checkbox_checked : checkbox_unchecked} className='icon_checkbox' alt='icon_checkbox'/>
+        <div className='flex items-center justify-center w-7 h-full ml-1 md:mx-2.5' onClick={handleChange}>
+            <img src={checked ? checkbox_checked : checkbox_unchecked} className='w-4 md:w-5' alt='icon_checkbox'/>
         </div>
     );
 }
 
 const LiftUPBtn = ({change: important,handleChange: handleLiftUp}: ItemChangeProps) => {
     return (
-        <div className='liftup-btn' onClick={handleLiftUp}> 
-            <img src={important ? star_selected : star_unselected} className='icon_liftup' alt='icon_liftup' />
+        <div className='flex items-center justify-center w-8 h-full md:mr-2.5' onClick={handleLiftUp}> 
+            <img src={important ? star_selected : star_unselected} className='w-5 md:w-6' alt='icon_liftup' />
         </div>
     );
 }
@@ -193,12 +193,12 @@ const ComponentComplete = () => {
 
 const ComponentCompleteHeader: FC<ComponentCompleteHeaderProps> = ({num, hiden, listShowClick}) => {
     return (
-        <div className='container-complete-header' onClick={listShowClick}>
+        <div className='flex items-center justify-start mt-2' onClick={listShowClick}>
             <div className='arrow-icon'>
-                <img src={hiden ? arrow_up : arrow_down} className='icon_checkbox' alt='icon_checkbox' />
+                <img src={hiden ? arrow_up : arrow_down} className='w-6 md:w-7' alt='icon_checkbox' />
             </div>
-            <div>Completed</div>
-             <div className='container-complete-header-num'>{num}</div>
+            <div className='text-gray-500'>Completed</div>
+             <div className='mx-2 text-gray-600'>({num})</div>
         </div>
     );
 }

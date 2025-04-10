@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 09:47:48
+ * @LastEditTime: 2025-04-10 10:37:23
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -100,7 +100,7 @@ export const Input: FC = () => {
 
     return (
         <>
-            <div className={`bg-white px-4 py-2 border border-gray-200 rounded-t-md ${isHiden ? 'rounded-b-md' : ''}`}>
+            <div className={`bg-white px-2 md:px-4 py-1 md:py-2 border border-gray-200 rounded-t-md ${isHiden ? 'rounded-b-md' : ''}`}>
                 <ComponentInput 
                     inputRef={inputRef} 
                     task={task} 
@@ -112,7 +112,7 @@ export const Input: FC = () => {
             </div>
             {
                 !isHiden && (
-                    <div className='bg-gray-100 px-4 py-2 border-b border-x border-gray-200 rounded-b-md'>
+                    <div className='bg-gray-100 px-2 md:px-4 py-2 border-b border-x border-gray-200 rounded-b-md'>
                         <button className='px-2 py-1 text-xs outline-none border disabled:border-gray-400 disabled:text-gray-400  border-gray-700 text-gray-700 rounded-sm disabled:opacity-50' onClick={addTask} disabled={isDisabled}>Add to</button>
                     </div>
                 )

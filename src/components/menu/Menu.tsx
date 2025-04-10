@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-20 14:34:54
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-09 20:52:45
+ * @LastEditTime: 2025-04-10 11:10:03
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -96,7 +96,7 @@ const WeekTitle = () => {
 
 const Header = ({ handleDisplayMenu }: { handleDisplayMenu: () => void }) => {
     return (
-        <div className='flex justify-between items-center text-2xl font-bold text-start py-5 ' >
+        <div className='flex justify-between items-center text-xl font-bold text-start py-5 ' >
             <div>ToDo Calendar</div>
             <div className='w-10 h-10 flex justify-center items-center' onClick={handleDisplayMenu}>
                 <img src={close} alt="close" className='w-6 h-6' />

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-09 15:26:43
+ * @LastEditTime: 2025-04-10 09:53:00
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -22,7 +22,7 @@ export const Header: FC = () => {
   const navigate = useNavigate();
   return (
     
-    <div className='flex justify-between items-center text-3xl font-bold text-start bg-gray-100 py-5 px-5 border-b border-gray-200'>
+    <div className='flex justify-between items-center text-xl md:text-2xl font-bold text-start bg-gray-100 py-2 md:py-5 px-2 md:px-5 border-b border-gray-200'>
       <h1>ToDo Calendar</h1>
       <UserInfo />
     </div>
@@ -59,7 +59,7 @@ const UserInfo: FC = () => {
 
   return (
     <div>
-    <div className='flex items-center justify-center h-[50px] relative' onClick={handleLogin}>
+    <div className='flex items-center justify-center h-[40px] md:h-[50px] relative' onClick={handleLogin}>
       { user && <div className='text-sm font-light text-gray-700 italic mr-2'>Welcome, {user.name}</div> }
       <img className='w-[30px] h-[30px]' src={userIcon} alt="user" />
     </div>

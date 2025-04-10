@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-15 14:27:06
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-09 20:31:18
+ * @LastEditTime: 2025-04-10 10:34:49
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -32,6 +32,10 @@ import { Container } from '../container/Container';
 import { Menu } from '../menu/Menu';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+
 
 export const Calendar = () => {
     const dispatch = useAppDispatch();
@@ -145,7 +149,7 @@ export const Calendar = () => {
                         handleDisplayMenu={handleDisplayMenu}
                         handleSwitcher={handleSwitcher} />
                 </Drawer>
-                <div className="flex-4 h-[100vh] bg-white p-4 py-5 overflow-y-scroll">
+                <div className="flex-4 h-[100vh] bg-white p-2 md:p-4 overflow-y-scroll">
                     <Header daySwitcher={daySwitcher} handleDisplayMenu={handleDisplayMenu} isMenuOpen={isMenuOpen} />
                     <Container />
                 </div>
@@ -218,30 +222,51 @@ export const TaskItem = ({ dataItem }: TaskItemProps) => {
 };
 
 const Header = ({ daySwitcher, handleDisplayMenu, isMenuOpen }: HeaderProps) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const calendarState = useAppSelector(selectCalendarState);
     const { selectDate } = calendarState;
     return (
-        <div className='flex justify-between items-center mb-4 ml-1'>
-            <div onClick={handleDisplayMenu} className='w-auto flex justify-center items-center mx-2'>
-                <img src={menu} className='w-7' alt='menu' hidden={isMenuOpen}></img>
-                <div className='text-2xl mx-2.5'>My day</div>
-            </div>
-            <div className="text-lg font-light"> {computeDayInWeek(new Date(selectDate))}, {computeMonthInYear(new Date(selectDate))} {computeDayInMonth(new Date(selectDate))}</div>
-            <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
-        </div>
+        <>
+            {isMobile ? (
+                <div>
+                    <div className='flex justify-between items-center my-2 mb-4'>
+                        <div onClick={handleDisplayMenu} className='flex justify-bwtween items-center'>
+                            <img src={menu} className='w-6 md:w-7 mr-1' alt='menu' hidden={isMenuOpen}></img>
+                            <div className="text-md md:text-lg font-light"> {computeDayInWeek(new Date(selectDate))}, {computeMonthInYear(new Date(selectDate))} {computeDayInMonth(new Date(selectDate))}</div>
+                        </div>
+                        <div>
+                            <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className='flex justify-between items-center mb-4'>
+                    <div onClick={handleDisplayMenu} className='flex justify-bwtween items-center'>
+                        <img src={menu} className='w-5 md:w-7' alt='menu' hidden={isMenuOpen}></img>
+                        <div className='text-sm md:text-2xl mx-1 md:mx-2.5'>My day</div>
+                    </div>
+                    <div className="text-sm md:text-lg font-light"> {computeDayInWeek(new Date(selectDate))}, {computeMonthInYear(new Date(selectDate))} {computeDayInMonth(new Date(selectDate))}</div>
+                    <div>
+                        <DirectionSwitcher onGoBack={() => daySwitcher("goBack")} onGoForward={() => daySwitcher("goForward")} onToday={() => daySwitcher("today")} />
+                    </div>
+                </div>
+            )}
+        </>
+
     );
 };
 
 const DirectionSwitcher = ({ onGoBack, onGoForward, onToday }: SwitcherProps) => {
     return (
         <div className='flex justify-center items-center'>
-            <div onClick={onGoBack} className='w-10 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-2'>
+            <div onClick={onGoBack} className='w-6 md:w-10 h-6 md:h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1 md:mx-2'>
                 <img src={goBack} className='w-4' alt='go back'></img>
             </div>
-            <div onClick={onToday} className='w-auto h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1 px-2'>
+            <div onClick={onToday} className='w-auto h-6 md:h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-1 px-2'>
                 <span>Today</span>
             </div>
-            <div onClick={onGoForward} className='w-10 h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center mx-2'>
+            <div onClick={onGoForward} className='w-6 md:w-10 h-6 md:h-8 border border-gray-400 hover:border-gray-950 rounded-md flex justify-center items-center ml-1 md:ml-2'>
                 <img src={goForward} className='w-4' alt='go forward'></img>
             </div>
         </div>
