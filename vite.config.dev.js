@@ -13,6 +13,22 @@ export default defineConfig({
   },
   server: {
     sourcemap: true,
+    proxy: {
+      '/api': {
+        target: 'https://dev.api.todocalendar.live',
+        changeOrigin: true,
+        // rewrite: (path) => path.replace(/^\/api/, ''), // 移除路径中的 /api
+        secure: false,
+        configure: (proxy, options) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log('[PROXY]', req.method, req.url, '->', proxyReq.host + proxyReq.path);
+            // console.log('proxyReq', proxyReq);
+            // console.log('req', req);
+            // console.log('res', res);
+          });
+        },
+      },
+    },
   },
   esbuild: {
     minifyIdentifiers: false,
@@ -20,5 +36,6 @@ export default defineConfig({
   },
   define: {
     'process.env.NODE_ENV': '"development"',
-  }
+  },
+  
 }) 

@@ -23,7 +23,7 @@ export interface HttpResponse<T> {
 
 // Create a custom axios instance with default configuration
 export const axiosInstance = axios.create({
-  baseURL: env.API_HOST,
+  baseURL: env.DEBUG_MODE ? '' : env.API_HOST,
   withCredentials: true, // Set withCredentials globally
   timeout: 10000,
   headers: {
