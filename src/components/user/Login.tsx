@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 10:05:53
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-10 16:52:45
+ * @LastEditTime: 2025-04-10 16:59:54
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -67,7 +67,7 @@ export const Login: FC = () => {
         }
         login(user).then((res: HttpResponse<UserData>) => {
             if (res.success) {
-                toast.success(res.message);
+                // toast.success(res.message);
                 dispatch(setUser(res.data));
                 navigate("/");
             } else {
@@ -109,7 +109,7 @@ export const Login: FC = () => {
                         handleChange={handleChange} />
                 </div>
                 <div className='flex flex-col gap-2 my-10'>
-                    <button className={`p-2 w-full bg-gray-900 disabled:bg-gray-500 text-white rounded-md ${!isDisabled ? 'hover:border hover:bg-gray-700' : ''}`}
+                    <button className={`p-2 w-full bg-gray-900 disabled:bg-gray-500 text-white rounded-md ${!isDisabled ? 'hover:bg-gray-700' : ''}`}
                         type="submit"
                         onClick={handleSubmit}
                         disabled={isDisabled}>Login</button>
@@ -132,7 +132,7 @@ interface SignInItemProps {
 const SignInItem = ({ logo, text, onClick }: SignInItemProps) => {
     return (
         <div>
-            <div className='flex justify-center items-center gap-2 font-normal border border-gray-300 rounded-md p-2'
+            <div className='flex justify-center items-center gap-2 font-normal border border-gray-300 rounded-md p-2 hover:bg-gray-100'
                 onClick={onClick}>
                 <div>
                     <img src={logo} alt="logo" className='w-5 h-5' />
@@ -182,7 +182,7 @@ export const Register: FC = () => {
         }
         register(user).then((res: HttpResponse<UserData>) => {
             if (res.success) {
-                toast.success(res.message);
+                // toast.success(res.message);
                 dispatch(setUser(res.data));
                 navigate("/");
             } else {
