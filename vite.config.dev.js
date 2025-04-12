@@ -26,6 +26,18 @@ export default defineConfig({
             // console.log('req', req);
             // console.log('res', res);
           });
+          
+          // Handle redirect responses
+          // proxy.on('proxyRes', function(proxyRes, req, res) {
+          //   if (proxyRes.headers.location) {
+          //     console.log('[REDIRECT]', 'Original location:', proxyRes.headers.location);
+          //     proxyRes.headers.location = proxyRes.headers.location.replace(
+          //       'http://dev.api.todocalendar.live', 
+          //       'http://localhost:5173'
+          //     );
+          //     console.log('[REDIRECT]', 'Modified location:', proxyRes.headers.location);
+          //   }
+          // });
         },
       },
     },

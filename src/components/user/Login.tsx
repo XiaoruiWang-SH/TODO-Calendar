@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 10:05:53
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-10 16:59:54
+ * @LastEditTime: 2025-04-12 16:47:46
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router';
 import password_hidden from '../../assets/password_hidden.svg';
 import password_visible from '../../assets/password_visible.svg';
 import { UserData } from '../../data/api_user';
-import { register, RegisterData, LoginData, login } from '../../data/api_register';
+import { register, RegisterData, LoginData, login, loginWithGoogle } from '../../data/api_register';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../features/user/userSlice';
 import { toast } from 'react-toastify';
@@ -79,13 +79,21 @@ export const Login: FC = () => {
 
     }
 
+    const handleGoogleLogin = () => {
+        loginWithGoogle().then((res: HttpResponse<any>) => {
+            if (res.success) {
+                dispatch(setUser(res.data));
+                navigate("/");
+            }
+        });
+    }
     return (
         <div className='h-[100vh] bg-white flex items-center justify-center bg-slate-50'>
             <div className='items-center justify-center self-start px-10 py-5 rounded-lg w-[100vw] md:w-[35vw] md:border md:border-gray-300 md:shadow-md md:mt-10'>
                 <div className='text-xl font-semibold text-center'>Sign In</div>
                 <div className="text-sm text-gray-500 font-light my-2 text-center">Welcome user, please sign in to contine</div>
                 <div className='flex flex-col gap-2 my-5'>
-                    <SignInItem logo={google} text="Sign in with Google" onClick={() => { }} />
+                    <SignInItem logo={google} text="Sign in with Google" onClick={() => { loginWithGoogle() }} />
                     <SignInItem logo={github} text="Sign in with Github" onClick={() => { }} />
                 </div>
                 <Divider>
@@ -264,7 +272,7 @@ const InputCell = ({ title, id, value, isPassword, tip, handleChange }: InputCel
         <div className='flex flex-col'>
             <div>
                 <label htmlFor="password" className='text-sm text-gray-500'>{title}:</label>
-                <div className='flex items-center justify-center w-full border border-gray-300 rounded-md'>
+                <div className='flex items-center justify-center w-full border border-gray-300 rounded-md hover:border-gray-400'>
                     <input className='p-1.5 w-full focus:outline-none'
                         type={isPassword ? (showPassword ? "text" : "password") : "text"}
                         id={id}

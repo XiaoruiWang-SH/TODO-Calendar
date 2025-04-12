@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-07 14:35:33
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 15:46:33
+ * @LastEditTime: 2025-04-12 17:24:10
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -42,7 +42,7 @@ axiosInstance.interceptors.request.use(
     if (!config.url) {
       return config;
     }
-    if (config.url.includes('/api/auth/')) {
+    if (premissionUrls.find(url => config.url?.includes(url))) {
       return config;
     }
     if (!user) {
