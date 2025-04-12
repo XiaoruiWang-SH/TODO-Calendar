@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-07 14:35:33
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-12 17:24:10
+ * @LastEditTime: 2025-04-12 20:07:09
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -23,7 +23,7 @@ export interface HttpResponse<T> {
 
 // Create a custom axios instance with default configuration
 export const axiosInstance = axios.create({
-  baseURL: env.DEBUG_MODE ? '' : env.API_HOST,
+  baseURL: env.API_HOST,
   withCredentials: true, // Set withCredentials globally
   timeout: 10000,
   headers: {

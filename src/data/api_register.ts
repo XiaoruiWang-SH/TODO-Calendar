@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-06 08:26:37
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-12 17:22:08
+ * @LastEditTime: 2025-04-12 20:20:28
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -11,7 +11,7 @@
 import axios, { AxiosError } from "axios";
 import { HttpResponse, axiosInstance, transformResponse, transformError } from "./api";
 import { UserData } from "./api_user";
-
+import env from "../config/env";
 
 const API_URL = "/api/auth";
 const OAUTH_URL = "/api/oauth2";
@@ -90,7 +90,7 @@ export const loginWithGoogle = async (): Promise<HttpResponse<any>> => {
         console.log('Starting Google login flow');
         // Instead of using axios which creates CORS issues with OAuth redirects,
         // directly open the authorization URL in a new window or redirect
-        const authUrl = `${window.location.origin}/api/oauth2/authorize`;
+        const authUrl = `${env.API_HOST}/api/oauth2/authorize/google`;
         console.log('Redirecting to:', authUrl);
         
         // Redirect the browser to the auth page
