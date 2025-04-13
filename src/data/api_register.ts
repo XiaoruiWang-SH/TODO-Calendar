@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-06 08:26:37
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-12 20:20:28
+ * @LastEditTime: 2025-04-13 15:08:23
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -109,3 +109,32 @@ export const loginWithGoogle = async (): Promise<HttpResponse<any>> => {
     }
 }
 
+
+// Add this function to your auth utils
+export const handleAuthRedirect = () => {
+    // Parse URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAuthSuccess = urlParams.get('auth') === 'success';
+    
+    if (isAuthSuccess) {
+      // Extract user data from URL
+      const userData = {
+        id: urlParams.get('id'),
+        name: urlParams.get('name'),
+        email: urlParams.get('email'),
+        role: urlParams.get('role')
+      };
+      
+      // Store user data in local storage or state management
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      // Clean up URL (remove parameters)
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      // Return the user data
+      return userData;
+    }
+    
+    return null;
+  };
+  
