@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-06 08:26:37
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-13 15:08:23
+ * @LastEditTime: 2025-04-13 14:13:20
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -85,12 +85,17 @@ export const logout = async (): Promise<HttpResponse<boolean>> => {
     }
 }
 
-export const loginWithGoogle = async (): Promise<HttpResponse<any>> => {
+export enum OAuthProvider {
+    GOOGLE = "google",
+    GITHUB = "github"
+}
+
+export const loginWithOAuth = async (provider: OAuthProvider): Promise<HttpResponse<any>> => {
     try {
         console.log('Starting Google login flow');
         // Instead of using axios which creates CORS issues with OAuth redirects,
         // directly open the authorization URL in a new window or redirect
-        const authUrl = `${env.API_HOST}/api/oauth2/authorize/google`;
+        const authUrl = `${env.API_HOST}/api/oauth2/authorize/${provider}`;
         console.log('Redirecting to:', authUrl);
         
         // Redirect the browser to the auth page
@@ -100,11 +105,11 @@ export const loginWithGoogle = async (): Promise<HttpResponse<any>> => {
         return {
             success: true,
             data: { redirectUrl: authUrl },
-            message: 'Redirecting to Google OAuth',
+            message: 'Redirecting to OAuth',
             status: 302
         };
     } catch (error) {
-        console.error('Google login error:', error);
+        console.error('OAuth login error:', error);
         return transformError<UserData>(error);
     }
 }
