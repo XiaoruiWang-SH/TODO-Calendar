@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 10:05:53
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-13 14:14:05
+ * @LastEditTime: 2025-04-13 21:25:32
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -80,7 +80,7 @@ export const Login: FC = () => {
     }
 
     return (
-        <div className='h-[100vh] bg-white flex items-center justify-center bg-slate-50'>
+        <div className='h-[100vh] flex items-center justify-center bg-slate-50'>
             <div className='items-center justify-center self-start px-10 py-5 rounded-lg w-[100vw] md:w-[35vw] md:border md:border-gray-300 md:shadow-md md:mt-10'>
                 <div className='text-xl font-semibold text-center'>Sign In</div>
                 <div className="text-sm text-gray-500 font-light my-2 text-center">Welcome user, please sign in to contine</div>
@@ -123,13 +123,13 @@ export const Login: FC = () => {
     );
 }
 
-interface SignInItemProps {
+export interface SignInItemProps {
     logo: string;
     text: string;
     onClick: () => void;
 }
 
-const SignInItem = ({ logo, text, onClick }: SignInItemProps) => {
+export const SignInItem = ({ logo, text, onClick }: SignInItemProps) => {
     return (
         <div>
             <div className='flex justify-center items-center gap-2 font-normal border border-gray-300 rounded-md p-2 hover:bg-gray-100'
