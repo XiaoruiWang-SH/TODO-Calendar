@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-14 08:35:45
+ * @LastEditTime: 2025-04-14 11:30:05
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -27,13 +27,18 @@ import close from './assets/close.svg';
 import { SignInItem } from './components/user/Login';
 import { useNavigate } from 'react-router';
 import { useAppSelector } from './app/hooks';
-
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Modal from '@mui/material/Modal';
 
 function App() {
   const [showSignInBar, setShowSignInBar] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useAppSelector(selectUser);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const getUserData = async () => {
     const userData = await getUser();
@@ -56,10 +61,21 @@ function App() {
       {/* <MyAppNav /> */}
       <Outlet />
       <ToastContainer autoClose={2000} hideProgressBar position='bottom-center' />
-      {showSignInBar && (
-        <div className='fixed top-3 right-3'>
-          <SignInBar handleClose={() => setShowSignInBar(false)} handleSignIn={() => { navigate('/login') }} />
-        </div>
+      {isMobile ? (
+        <Modal className='flex items-center justify-center'
+        open={showSignInBar}
+        onClose={() => setShowSignInBar(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <SignInBar handleClose={() => setShowSignInBar(false)} handleSignIn={() => { navigate('/login') }} />
+      </Modal>
+      ) : (
+        showSignInBar && (
+          <div className='fixed top-3 right-3'>
+            <SignInBar handleClose={() => setShowSignInBar(false)} handleSignIn={() => { navigate('/login') }} />
+          </div>
+        )
       )}
     </div>
   )
@@ -72,11 +88,11 @@ interface SignInBarProps {
 
 const SignInBar: FC<SignInBarProps> = ({ handleClose, handleSignIn }) => {
   return (
-    <div className=' flex items-center justify-center bg-slate-50 relative'>
-      <button className='absolute top-2 right-2 w-8 h-8 flex items-center justify-center' onClick={handleClose}>
+    <div className='w-[70vw] md:w-[20vw] flex items-center justify-center bg-slate-50 relative rounded-lg border border-gray-300 shadow-md'>
+      <button className='absolute top-2 right-2 md:w-8 md:h-8 w-6 h-6 flex items-center justify-center' onClick={handleClose}>
         <img src={close} alt='close' className='w-5 h-5' />
       </button>
-      <div className='w-[20vw] items-center justify-center self-start px-4 py-2 rounded-lg border border-gray-300 shadow-md'>
+      <div className='w-full items-center justify-center self-start px-4 py-2 '>
         <div className='text-[17px] font-medium text-center'>Sign In</div>
         <div className='flex flex-col gap-2 my-2'>
           <SignInItem logo={google} text="Sign in with Google" onClick={() => { loginWithOAuth(OAuthProvider.GOOGLE) }} />
