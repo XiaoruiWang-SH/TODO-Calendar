@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 16:49:10
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 12:03:57
+ * @LastEditTime: 2025-04-14 15:39:19
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -99,5 +99,15 @@ export const getItemsByDayRange = async (startDate: Date, endDate: Date): Promis
         return userResponse;
     } catch (error) {
         return transformError<ItemData[]>(error);
+    }
+};
+
+export const deleteItem = async (item: ItemData): Promise<HttpResponse<string>> => {
+    try {
+        const response = await axiosInstance.post<string>(`${API_URL}/delete/${item.id}`);
+        const userResponse = transformResponse<string>(response);
+        return userResponse;
+    } catch (error) {
+        return transformError<string>(error);
     }
 };

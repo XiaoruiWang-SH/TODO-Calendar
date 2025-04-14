@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-17 11:45:25
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-19 14:06:18
+ * @LastEditTime: 2025-04-14 19:12:41
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -76,11 +76,14 @@ export const normalTasksSlice = createSlice({
                 // Then sort by updateTime (most recent first)
                 return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
             });
+        },
+        delete_normalTask: (state, action: PayloadAction<ItemData>) => {
+            state.tasks = state.tasks.filter((t: ItemData) => t.id !== action.payload.id);
         }
     }
 });
 
-export const { add_normal, change_importance, complete, add_normalTasks, sort_tasks } = normalTasksSlice.actions;
+export const { add_normal, change_importance, complete, add_normalTasks, sort_tasks, delete_normalTask } = normalTasksSlice.actions;
 export const normalTasksReducer = normalTasksSlice.reducer;
 
 export const completedTasksSlice = createSlice({
@@ -113,9 +116,12 @@ export const completedTasksSlice = createSlice({
                 // Then sort by updateTime (most recent first)
                 return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
             });
+        },
+        delete_completedTask: (state, action: PayloadAction<ItemData>) => {
+            state.tasks = state.tasks.filter((t: ItemData) => t.id !== action.payload.id);
         }
     }
 });
 
-export const { add_completed, undo, add_completedTasks } = completedTasksSlice.actions;
+export const { add_completed, undo, add_completedTasks, delete_completedTask } = completedTasksSlice.actions;
 export const completedTasksReducer = completedTasksSlice.reducer;

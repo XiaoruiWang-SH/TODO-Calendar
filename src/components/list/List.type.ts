@@ -15,6 +15,7 @@ export interface ListItemProps {
     item: ItemData;
     taskChange: (item: ItemData) => void;
     handleImportanceChange: (item: ItemData) => void;
+    handleDelete: (item: ItemData) => void;
 }
 
 export interface ItemChangeProps {
