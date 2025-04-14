@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-14 19:28:48
+ * @LastEditTime: 2025-04-14 21:41:09
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -146,20 +146,21 @@ const ListItem = ({ item, taskChange, handleImportanceChange, handleDelete }: Li
             <div className='flex justify-between items-center my-2 bg-gray-100 rounded-md py-1 md:py-2 border border-gray-200 shadow-sm'>
                 <CheckBox change={item.checked} handleChange={handleChange} />
                 <div className='flex-1 mr-2.5'>{item.title}</div>
-                <div>
-                <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
-                <button className='w-6 md:w-8 h-full flex items-center justify-center'
-                    onClick={() => {
-                        setIsModalOpen(true);
-                    }}
-                >
-                    <img src={icon_more} className='w-5 md:w-6' alt='icon_more' />
-                </button>
-                </div>
-                
-                <div className="top-[5px] right-[10px] bg-gray-700 rounded-sm py-2 shadow-sm shadow-gray-400 text-white flex flex-col items-center justify-center gap-2">
-                    <div className='text-[12px] font-normal hover:bg-gray-500 text-center py-1' onClick={handleDeleteClick}>Delete</div>
-                </div>
+                {isModalOpen ?
+                    (<div className="flex items-center justify-center gap-2 mr-2.5">
+                        <div className='text-[12px] font-normal text-red-500 bg-white border border-gray-300 rounded-sm hover:border-gray-500 text-center py-1 px-2' onClick={handleDeleteClick}>Delete</div>
+                        <div className='text-[13px] font-normal text-blue-600' onClick={() => setIsModalOpen(false)}>Cancel</div>
+                    </div>
+                    ) : (
+                        <div className='flex items-center justify-center gap-2'>
+                            <LiftUPBtn change={item.important} handleChange={handleLiftUp} />
+                            <button className='w-6 md:w-8 h-full flex items-center justify-center'
+                                onClick={() => {setIsModalOpen(true);}}
+                            >
+                                <img src={icon_more} className='w-5 md:w-6' alt='icon_more' />
+                            </button>
+                        </div>)
+                }
             </div>
         </div>
 
