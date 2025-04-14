@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-14 11:41:24
+ * @LastEditTime: 2025-04-14 09:50:29
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -66,7 +66,7 @@ function App() {
       {isMobile ? (
         <Modal className='flex items-center justify-center'
         open={showSignInBar}
-        onClose={() => setShowSignInBar(false)}
+        onClose={() => dispatch(setShowSignInBar(false))}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
