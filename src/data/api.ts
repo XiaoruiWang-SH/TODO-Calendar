@@ -3,15 +3,13 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-07 14:35:33
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-12 20:07:09
+ * @LastEditTime: 2025-04-14 08:48:20
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
 
 import axios, { AxiosError } from "axios";
 import env from '../config/env';
-import { logout } from "../features/user/userSlice";
-import { store } from '../app/store';
 import { toast } from "react-toastify";
 
 export interface HttpResponse<T> {
@@ -36,24 +34,31 @@ const premissionUrls = ['/api/auth/login', '/api/auth/register'];
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const state = store.getState();
-    const user = state.user.userData;
-
-    if (!config.url) {
-      return config;
-    }
-    if (premissionUrls.find(url => config.url?.includes(url))) {
-      return config;
-    }
-    if (!user) {
-      toast.info("Please login first");
-    }
     return config;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
+
+// Throttle function - ensures function executes at most once in the specified period
+const throttle = <T extends (...args: any[]) => any>(func: T, limit: number): ((...args: Parameters<T>) => void) => {
+  let inThrottle = false;
+  return function(this: any, ...args: Parameters<T>) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  };
+};
+
+// Create a throttled handler for 401 errors
+const handleUnauthorized = throttle(() => {
+  toast.info("Please login first");
+}, 3000);
 
 // Response interceptor
 axiosInstance.interceptors.response.use(
@@ -64,7 +69,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Handle global error responses (e.g., 401 Unauthorized)
     if (error.response?.status === 401) {
-      store.dispatch(logout());
+      handleUnauthorized();
     }
     return Promise.reject(error);
   }
@@ -100,4 +105,4 @@ export const transformError = <T>(error: any): HttpResponse<T> => {
         }
     }
     return errorResponse;
-  };
+};

@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-27 14:24:52
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-08 14:54:54
+ * @LastEditTime: 2025-04-14 08:32:57
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -29,12 +29,9 @@ const userSlice = createSlice({
         setUser: (state, action) => {
             state.userData = action.payload;
             console.log("setUser: ", state.userData);
-            localStorage.setItem('user', JSON.stringify(state.userData));
         },
         logout: (state) => {
             state.userData = null;
-            // console.log("logout");
-            localStorage.removeItem('user');
         }
         
     }

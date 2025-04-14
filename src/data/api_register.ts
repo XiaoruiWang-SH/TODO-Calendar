@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-04-06 08:26:37
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-13 14:13:20
+ * @LastEditTime: 2025-04-14 07:17:42
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
  */
@@ -130,9 +130,6 @@ export const handleAuthRedirect = () => {
         role: urlParams.get('role')
       };
       
-      // Store user data in local storage or state management
-      localStorage.setItem('user', JSON.stringify(userData));
-      
       // Clean up URL (remove parameters)
       window.history.replaceState({}, document.title, window.location.pathname);
       
@@ -142,4 +139,16 @@ export const handleAuthRedirect = () => {
     
     return null;
   };
+
+
+export const getUser = async (): Promise<HttpResponse<UserData>> => {
+    try {
+        const response = await axiosInstance.get(`${API_URL}/user`);
+        const authResponse = transformResponse<UserData>(response);
+        return authResponse;
+    } catch (error) {
+        return transformError<UserData>(error);
+    }
+}
+
   
