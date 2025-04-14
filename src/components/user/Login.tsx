@@ -15,7 +15,7 @@ import password_visible from '../../assets/password_visible.svg';
 import { UserData } from '../../data/api_user';
 import { register, RegisterData, LoginData, login, loginWithOAuth, OAuthProvider } from '../../data/api_register';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../features/user/userSlice';
+import { selectShowSignInBar, setShowSignInBar, setUser } from '../../features/user/userSlice';
 import { toast } from 'react-toastify';
 import { HttpResponse } from '../../data/api';
 import env from '../../config/env';
@@ -23,6 +23,7 @@ import google from '../../assets/google.svg';
 import github from '../../assets/github.svg';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
+import { useAppSelector } from '../../app/hooks';
 
 
 
@@ -53,7 +54,10 @@ export const Login: FC = () => {
         setIsDisabled(!emailRegex.test(formData.email) || !passwordRegex.test(formData.password));
     }, [formData]);
 
-
+    const showSignInBar = useAppSelector(selectShowSignInBar);
+    useEffect(() => {
+        dispatch(setShowSignInBar(false));
+    }, []);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });

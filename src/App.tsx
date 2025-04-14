@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-13 10:48:47
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-14 11:30:05
+ * @LastEditTime: 2025-04-14 11:41:24
  * @Description: 
  * 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
@@ -14,7 +14,7 @@
 import { Header } from './components/header/Header';
 import { Outlet } from 'react-router';
 import { MyAppNav } from './Nav';
-import { selectUser, setUser } from './features/user/userSlice';
+import { selectShowSignInBar, selectUser, setShowSignInBar, setUser } from './features/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,8 +31,10 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Modal from '@mui/material/Modal';
 
+
+
 function App() {
-  const [showSignInBar, setShowSignInBar] = useState(false);
+  const showSignInBar = useAppSelector(selectShowSignInBar);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useAppSelector(selectUser);
@@ -44,9 +46,9 @@ function App() {
     const userData = await getUser();
     if (userData.success) {
       dispatch(setUser(userData.data));
-      setShowSignInBar(false);
+      dispatch(setShowSignInBar(false));
     } else {
-      setShowSignInBar(true);
+      dispatch(setShowSignInBar(true));
     }
   }
 
@@ -68,12 +70,12 @@ function App() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <SignInBar handleClose={() => setShowSignInBar(false)} handleSignIn={() => { navigate('/login') }} />
+        <SignInBar handleClose={() => dispatch(setShowSignInBar(false))} handleSignIn={() => { navigate('/login') }} />
       </Modal>
       ) : (
         showSignInBar && (
           <div className='fixed top-3 right-3'>
-            <SignInBar handleClose={() => setShowSignInBar(false)} handleSignIn={() => { navigate('/login') }} />
+            <SignInBar handleClose={() => dispatch(setShowSignInBar(false))} handleSignIn={() => { navigate('/login') }} />
           </div>
         )
       )}
