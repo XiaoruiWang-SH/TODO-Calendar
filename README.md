@@ -21,13 +21,13 @@ The project is split into two main components:
 - **Backend**: Spring Boot application providing RESTful APIs with JWT authentication and OAuth2 support
 
 PC:
-<div style="display: flex; justify-content: space-around;">
+<div style="display: flex; justify-content: space-between;">
   <img src="public/sample_v0.5.png" alt="Mobile Sign In" style="width: 45%;">
   <img src="public/sample_signIn.png" alt="Calendar Uncovered" style="width: 45%;">
 </div>
 
 Mobile:
-<div style="display: flex; justify-content: space-around;">
+<div style="display: flex; justify-content: space-between;">
   <img src="public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 25%;">
   <img src="public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 25%;">
   <img src="public/sample_v0.5_coverd.png" alt="Calendar Covered" style="width: 25%;">
