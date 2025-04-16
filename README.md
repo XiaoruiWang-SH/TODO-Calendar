@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-10 13:21:38
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-03-21 11:43:36
+ * @LastEditTime: 2025-04-16 10:59:46
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
 -->
@@ -11,7 +11,14 @@
 
 A modern and intuitive calendar application that helps you manage your tasks and schedule effectively. Built with React and TypeScript, this application combines the functionality of a traditional calendar with a powerful todo list manager.
 
-![TODO-Calendar Screenshot](/public/sample.png)
+![TODO-Calendar Screenshot](/public/sample_v0.5.png)
+![TODO-Calendar Screenshot](/public/sample_signIn.png)
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="/public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 32%;">
+  <img src="/public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 32%;">
+  <img src="/public/sample_v0.5_coverd.PNG.png" alt="Calendar Covered" style="width: 32%;">
+</div>
 
 ## Features
 
@@ -21,8 +28,6 @@ A modern and intuitive calendar application that helps you manage your tasks and
 - 🔄 Real-time Updates
 - 📱 Responsive Design
 - 🎨 Modern UI with Tailwind CSS
-- 🔍 Task Filtering and Search
-- 📊 Task Progress Tracking
 
 ## Technologies
 
@@ -35,10 +40,10 @@ A modern and intuitive calendar application that helps you manage your tasks and
 - Vite for build tooling
 
 ### Backend
-- Node.js with Express
-- MySQL database
+- Java application
+- Spring boot + Mybatis
 - RESTful API architecture
-- CORS enabled for cross-origin requests
+
 
 ## Getting Started
 
