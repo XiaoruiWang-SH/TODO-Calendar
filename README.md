@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-10 13:21:38
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-16 12:00:06
+ * @LastEditTime: 2025-04-16 12:05:11
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
 -->
@@ -28,9 +28,9 @@ PC:
 
 Mobile:
 <div style="display: flex; justify-content: space-between;">
-  <img src="public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 25%;">
-  <img src="public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 25%;">
-  <img src="public/sample_v0.5_coverd.png" alt="Calendar Covered" style="width: 25%;">
+  <img src="public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 30%;">
+  <img src="public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 30%;">
+  <img src="public/sample_v0.5_coverd.png" alt="Calendar Covered" style="width: 30%;">
 </div>
 
 ## Features
