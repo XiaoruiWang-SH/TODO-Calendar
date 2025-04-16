@@ -3,7 +3,7 @@
  * @Email: xiaorui.wang@usi.ch
  * @Date: 2025-03-10 13:21:38
  * @LastEditors: Xiaorui Wang
- * @LastEditTime: 2025-04-16 10:59:46
+ * @LastEditTime: 2025-04-16 11:14:34
  * @Description: 
  * Copyright (c) 2025 by Xiaorui Wang, All Rights Reserved. 
 -->
@@ -11,13 +11,17 @@
 
 A modern and intuitive calendar application that helps you manage your tasks and schedule effectively. Built with React and TypeScript, this application combines the functionality of a traditional calendar with a powerful todo list manager.
 
-![TODO-Calendar Screenshot](/public/sample_v0.5.png)
-![TODO-Calendar Screenshot](/public/sample_signIn.png)
+PC:
+<div style="display: flex; justify-content: space-around;">
+  <img src="public/sample_v0.5.png" alt="Mobile Sign In" style="width: 45%;">
+  <img src="public/sample_signIn.png" alt="Calendar Uncovered" style="width: 45%;">
+</div>
 
-<div style="display: flex; justify-content: space-between;">
-  <img src="public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 32%;">
-  <img src="public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 32%;">
-  <img src="public/sample_v0.5_coverd.png" alt="Calendar Covered" style="width: 32%;">
+Mobile:
+<div style="display: flex; justify-content: space-around;">
+  <img src="public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 25%;">
+  <img src="public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 25%;">
+  <img src="public/sample_v0.5_coverd.png" alt="Calendar Covered" style="width: 25%;">
 </div>
 
 ## Features
@@ -28,6 +32,7 @@ A modern and intuitive calendar application that helps you manage your tasks and
 - 🔄 Real-time Updates
 - 📱 Responsive Design
 - 🎨 Modern UI with Tailwind CSS
+- 🔐 OAuth2 Authentication with Google and GitHub
 
 ## Technologies
 
@@ -41,8 +46,10 @@ A modern and intuitive calendar application that helps you manage your tasks and
 
 ### Backend
 - Java application
-- Spring boot + Mybatis
+- Spring boot + Mybatis + Mysql
+- Docker deployment
 - RESTful API architecture
+- JWT & OAuth2.0 support
 
 
 ## Getting Started
