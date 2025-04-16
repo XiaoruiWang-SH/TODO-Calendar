@@ -15,9 +15,9 @@ A modern and intuitive calendar application that helps you manage your tasks and
 ![TODO-Calendar Screenshot](/public/sample_signIn.png)
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="/public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 32%;">
-  <img src="/public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 32%;">
-  <img src="/public/sample_v0.5_coverd.PNG.png" alt="Calendar Covered" style="width: 32%;">
+  <img src="./public/sample_signIn_mobile.png" alt="Mobile Sign In" style="width: 32%;">
+  <img src="./public/sample_v0.5_uncover.png" alt="Calendar Uncovered" style="width: 32%;">
+  <img src="./public/sample_v0.5_coverd.PNG.png" alt="Calendar Covered" style="width: 32%;">
 </div>
 
 ## Features
