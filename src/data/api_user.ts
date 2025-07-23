@@ -17,7 +17,6 @@ import { axiosInstance, HttpResponse, transformResponse, transformError } from "
 const API_URL = "/api/users";
 
 export interface UserData {
-    id: number;
     name: string;
     email: string;
     role: string;
@@ -39,7 +38,7 @@ export const getUsers = async (): Promise<HttpResponse<UserData[]>> => {
 
 export const updateUser = async (user: UserData): Promise<HttpResponse<Number>> => {
     try {
-        const response = await axiosInstance.post<number>(`${API_URL}/${user.id}`, user);
+        const response = await axiosInstance.post<number>(`${API_URL}/${user.email}`, user);
         const userResponse = transformResponse<number>(response);
         if (!userResponse.success) {
             return userResponse;

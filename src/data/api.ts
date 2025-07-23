@@ -11,6 +11,7 @@
 import axios, { AxiosError } from "axios";
 import env from '../config/env';
 import { toast } from "react-toastify";
+import { AnyActionArg } from "react";
 
 export interface HttpResponse<T> {
     success: boolean;
@@ -81,7 +82,7 @@ export const transformResponse = <T>(response: any): HttpResponse<T> => {
         success: true,
         status: response.status,
         message: "Request succeeded",
-        data: response.data
+        data: response.data.data
     };
     if (!response.data ) {
         httpResponse.success = false;
@@ -98,10 +99,10 @@ export const transformError = <T>(error: any): HttpResponse<T> => {
         data: null
     }
     if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError<string>;
+      const axiosError = error as AxiosError<any>;
         if (axiosError.response) {
             errorResponse.status = axiosError.response.status;
-            errorResponse.message = axiosError.response.data;
+            errorResponse.message = axiosError.response.data.message;
         }
     }
     return errorResponse;

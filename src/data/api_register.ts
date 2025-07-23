@@ -38,7 +38,6 @@ export const register = async (user: RegisterData): Promise<HttpResponse<UserDat
         
         if (!authResponse.data 
             || typeof authResponse.data !== 'object' 
-            || !('id' in authResponse.data) 
             || !('name' in authResponse.data)
             || !('email' in authResponse.data)
             || !('role' in authResponse.data)) {
@@ -62,7 +61,6 @@ export const login = async (user: LoginData): Promise<HttpResponse<UserData>> =>
         
         if (!authResponse.data 
             || typeof authResponse.data !== 'object' 
-            || !('id' in authResponse.data) 
             || !('name' in authResponse.data)
             || !('email' in authResponse.data)
             || !('role' in authResponse.data)) {
