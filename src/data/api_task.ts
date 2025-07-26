@@ -61,7 +61,7 @@ export const updateItem = async (item: ItemData): Promise<HttpResponse<string>> 
 
 export const getItemsByDate = async (date: Date): Promise<HttpResponse<ItemData[]>> => {
     try {
-        const response = await axiosInstance.post<ItemData[]>(`${API_URL}`, {
+        const response = await axiosInstance.post<ItemData[]>(`${API_URL}/all`, {
             date: moment(date).format('YYYY-MM-DD')
         });
         const userResponse = transformResponse<ItemData[]>(response);
@@ -82,7 +82,7 @@ export const getItemsByDate = async (date: Date): Promise<HttpResponse<ItemData[
 
 export const getItemsByDayRange = async (startDate: Date, endDate: Date): Promise<HttpResponse<ItemData[]>> => {
     try {
-        const response = await axiosInstance.post<ItemData[]>(`${API_URL}`, {
+        const response = await axiosInstance.post<ItemData[]>(`${API_URL}/all`, {
             startDate: moment(startDate).format('YYYY-MM-DD HH:mm:ss'),
             endDate: moment(endDate).format('YYYY-MM-DD HH:mm:ss')
         });

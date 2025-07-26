@@ -11,7 +11,6 @@
 import axios, { AxiosError } from "axios";
 import env from '../config/env';
 import { toast } from "react-toastify";
-import { AnyActionArg } from "react";
 
 export interface HttpResponse<T> {
     success: boolean;
